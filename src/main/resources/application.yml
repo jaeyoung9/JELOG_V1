@@ -1,0 +1,31 @@
+# 패턴 적용
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+---
+# MYSQL JaeYoung TEST. OK.
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ytti?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: qwe123
+  jpa:
+    show-sql: true # DDL출력
+    hibernate:
+      format_sql: true
+      ddl-auto: create # none , create
+      defer-datasource-initialization: false # dummy data
+    logging:    # 로깅
+      level:
+        org:
+          hibernate:
+            SQL: DEBUG
+            type:
+              false
+    sql:                                  # dummy data
+      init:
+        mode: always
+---
