@@ -1,6 +1,12 @@
 # JELOG_V1
-Dev_Blog
 
+Project Blog
+
+---
 
 # DB Relevant
+
+DataBase: MySql
+
+
 ---
