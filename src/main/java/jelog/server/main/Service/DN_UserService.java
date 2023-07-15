@@ -5,6 +5,7 @@ import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Repositories.DN_UserRepositories;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -47,8 +48,16 @@ public class DN_UserService {
         validateUser(entity);
 
         dn_userRepositories.save(entity);
-        log.info("Use : {} is saved.", entity.getDN_UID());
-        return dn_userRepositories.findById(entity.getDN_UID()).get();
+        log.info("Use : {} is saved.", entity.getDnUid());
+        return dn_userRepositories.findById(entity.getDnUid()).get();
+    }
+
+    /**
+     * [User]
+     * Sign-In
+     * */
+    public ResponseEntity<?> signUser(){
+        return null;
     }
 
 

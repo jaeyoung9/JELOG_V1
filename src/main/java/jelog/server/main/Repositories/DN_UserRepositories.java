@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 public interface DN_UserRepositories extends JpaRepository<DN_UserModel, Integer> {
 
-    List<DN_UserModel> findByDN_UID(Integer DN_UID);
+    //List<DN_UserModel> findDN_UserModelsByDnUid(Integer DnUid);
 }

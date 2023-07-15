@@ -24,8 +24,8 @@ import javax.persistence.Id;
 public class DN_UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int DN_UID;
-    private String DA_SignID;
-    private String DN_Passwd;
-    private String DN_Salt;
+    private int DnUid;
+    private String DaSignID;
+    private String DnPasswd;
+    private String DnSalt;
 }

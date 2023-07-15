@@ -1,23 +1,11 @@
 package jelog.server.main.Controller;
 
 
-import java.io.File;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequestMapping(value = "/api")
 public class BaseController {
-    static class request{
-        public String ID;
-        public result result;
-        public payload payload;
-    }
 
-    public static class result{
-        public String Status;
-        public String Message;
-        public String Request_Time;
-        public String Token;
-    }
-    public static class payload{
-        public String Body;
-        public File[] File;
-    }
 }
