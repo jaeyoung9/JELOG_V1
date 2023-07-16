@@ -7,10 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
-public interface DN_UserRepositories extends JpaRepository<DN_UserModel, Integer> {
+public interface DN_UserRepositories extends JpaRepository<DN_UserModel,Integer> {
 
-    //List<DN_UserModel> findDN_UserModelsByDnUid(Integer DnUid);
+    Optional<DN_UserModel> findByDaSignID(String daSignID);
+    boolean existsByDaSignID(String daSignID);
 }

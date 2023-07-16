@@ -29,15 +29,15 @@ public class DN_LogModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int DnLid;
+    public int dnLid;
 
     //@Enumerated(value = EnumType.STRING) 문자열 타입 사용
     //@Column(name = "DN_OS")
     @Convert(converter = OsEnumConverter.class)
-    public OsEnum DnOs;
+    public OsEnum dnOs;
 
-    public String UseSignID;
-    public String QueryString;
+    public String dseSignID;
+    public String queryString;
 
     @CreationTimestamp
     public LocalDateTime inDate;

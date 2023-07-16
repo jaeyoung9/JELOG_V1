@@ -37,6 +37,14 @@ public class DN_UserService {
         }
     }
 
+    public void validateUserId(final DN_UserModel _model){
+        boolean data = dn_userRepositories.existsByDaSignID(_model.getDaSignID());
+        if(false == data){
+            log.warn("sign data is check for cannot be null");
+            throw new RuntimeException("sign data is check for cannot be null");
+        }
+    }
+
     /**
      * [User]
      * Add
@@ -44,7 +52,7 @@ public class DN_UserService {
     //-------------------------------------------------------------------------------------------------------------------------------------
     public DN_UserModel createUser(final DN_UserModel entity){
 
-        // Data Check
+        // data check
         validateUser(entity);
 
         dn_userRepositories.save(entity);
@@ -56,9 +64,20 @@ public class DN_UserService {
      * [User]
      * Sign-In
      * */
-    public ResponseEntity<?> signUser(){
-        return null;
+    public DN_UserModel signUser(final String signUserID){
+
+        if(null == signUserID) return null;
+
+        DN_UserModel userModel = new DN_UserModel();
+        userModel.setDaSignID(signUserID);
+
+        validateUser(userModel);
+        validateUserId(userModel);
+
+        return dn_userRepositories.findByDaSignID(signUserID).get();
     }
+
+
 
 
 

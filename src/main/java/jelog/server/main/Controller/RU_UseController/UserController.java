@@ -2,11 +2,18 @@ package jelog.server.main.Controller.RU_UseController;
 
 import jelog.server.main.Controller.BaseController;
 import jelog.server.main.Global.GlobalExceptionHandler;
+import jelog.server.main.Global.ResponseDTO;
+import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Service.DN_UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -32,13 +39,30 @@ public class UserController extends BaseController {
     //-------------------------------------------------------------------------------------------------------------------------------------
     private DN_UserService userService;
 
+    public UserController(DN_UserService _userSerivce){
+        this.userService = _userSerivce;
+    }
+
 
     /**
      * [User]
      * User in Sign-In
      * */
     @PostMapping(value = "/ko-jy/path/sign/")
-    public ResponseEntity<?> signUser() {
+    public ResponseEntity<?> signUser(HttpServletRequest request) {
+
+        String signUserID = request.getParameter("daSignID");
+        DN_UserModel entity = userService.signUser(signUserID);
+
+        if(null == entity) return null;
+        else if(entity.getDnPasswd().equals(request.getParameter("dnPassword"))){
+
+            Map<String ,Object> map = new HashMap<>();
+            map.put("JY-ACCESS-TOKEN","");
+            map.put("JY-REFRESH-TOKEN","");
+            ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+            return ResponseEntity.ok().body(responseDTO);
+        }
         return null;
     }
 }

@@ -10,24 +10,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class DT_UserDto {
-    private int DnUid;
-    private String DaSignID;
-    private String DnPasswd;
-    private String DnSalt;
+    private int dnUid;
+    private String daSignID;
+    private String dnPasswd;
+    private String dnSalt;
 
 
     /* Table -> DTO **/
     public DT_UserDto(final DN_UserModel dataTo){
-        this.DnUid = dataTo.getDnUid();
-        this.DaSignID = dataTo.getDaSignID();
-        this.DnPasswd = dataTo.getDnPasswd();
-        this.DnSalt = dataTo.getDnSalt();
+        this.dnUid = dataTo.getDnUid();
+        this.daSignID = dataTo.getDaSignID();
+        this.dnPasswd = dataTo.getDnPasswd();
+        this.dnSalt = dataTo.getDnSalt();
     }
 
     /* DTO ->  Table **/
-    public static DN_UserModel DN_US_Entity(final DT_UserDto dto){
-        return DN_UserModel.builder().DnUid(dto.getDnUid())
-                .DaSignID(dto.getDaSignID()).DnPasswd(dto.getDnPasswd())
-                .DnSalt(dto.getDnSalt()).build();
+    public static DN_UserModel dnUserEntity(final DT_UserDto dto){
+        return DN_UserModel.builder().dnUid(dto.getDnUid())
+                .daSignID(dto.getDaSignID()).dnPasswd(dto.getDnPasswd())
+                .dnSalt(dto.getDnSalt()).build();
     }
 }
