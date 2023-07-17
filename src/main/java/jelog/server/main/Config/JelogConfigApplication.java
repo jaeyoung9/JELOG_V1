@@ -8,10 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 
 import javax.sql.DataSource;
 
@@ -22,6 +21,7 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(value = {"jelog.server.main.Mapper"})
 @EnableTransactionManagement
+@EnableWebSecurity
 public class JelogConfigApplication {
 
 
@@ -29,7 +29,10 @@ public class JelogConfigApplication {
      * Bane 설정
      * */
 
-    // 1. Sql data Base 쿼리 매퍼 사용시.
+    /**
+     * Sql data Base 쿼리 매퍼 사용시.
+     * @return Sql data Base 쿼리 매퍼 사용시.
+     * */
     @Bean
     public SqlSessionFactory sqlSession(DataSource dataSource) throws Exception{
         SqlSessionFactoryBean sqlOptions = new SqlSessionFactoryBean();
@@ -46,7 +49,10 @@ public class JelogConfigApplication {
 
     // TODO: 2. Web Security 개발 예정 실험필요
 
-    // 3. File 빈등록
+    /**
+     * File Option 파일서비스 담당
+     * @return multipartResolver
+     * */ 
     @Bean
     public CommonsMultipartResolver multipartResolver(){
         CommonsMultipartResolver fileOptions = new CommonsMultipartResolver();
@@ -55,9 +61,13 @@ public class JelogConfigApplication {
         return fileOptions;
     }
 
-    // 4. Jsp 사용 할경우.
+    /**
+     * Jsp 사용 할경우. 
+     * @return InternalResourceViewResolver
+     */
 //    @Bean
 //    public ViewResolver views(){
 //        return new InternalResourceViewResolver("/WEB-INF/views/", ".jsp");
 //    }
+
 }
