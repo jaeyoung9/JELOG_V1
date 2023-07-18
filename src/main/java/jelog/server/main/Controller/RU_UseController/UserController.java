@@ -1,6 +1,7 @@
 package jelog.server.main.Controller.RU_UseController;
 
 import jelog.server.main.Controller.BaseController;
+import jelog.server.main.Dto.DT_UserDto;
 import jelog.server.main.Global.GlobalExceptionHandler;
 import jelog.server.main.Global.ResponseDTO;
 import jelog.server.main.Model.DN_UserModel;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +50,7 @@ public class UserController extends BaseController {
      * [User]
      * User in Sign-In
      * */
-    @PostMapping(value = "/ko-jy/path/sign/")
+    @PostMapping(value = "/ko-jy/in/sign/")
     public ResponseEntity<?> signUser(HttpServletRequest request) {
 
         String signUserID = request.getParameter("daSignID");
@@ -63,6 +65,17 @@ public class UserController extends BaseController {
             ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
             return ResponseEntity.ok().body(responseDTO);
         }
+        return null;
+    }
+
+    /**
+     * [User]
+     * User in Sign-Up
+     * */
+    @PostMapping(value = "/ko-jy/up/sign/")
+    public ResponseEntity<?> signupInfoUser(@RequestBody DT_UserDto dto){
+        DN_UserModel entity = userService.createUser(DT_UserDto.dnUserEntity(dto));
+
         return null;
     }
 }

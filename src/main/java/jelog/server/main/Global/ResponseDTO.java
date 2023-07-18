@@ -27,10 +27,11 @@ public class ResponseDTO<T> {
     public ResponseResult result = new ResponseResult(200, "Success", new Date(), null);
     public T payload;
 
-    public ResponseDTO(int code, String message, T _payload){
+    public ResponseDTO(int code, String message, String request_action, T _payload){
         result = new ResponseResult();
         result.code = code;
         result.message = message;
+        result.request_action = request_action;
         payload = _payload;
     }
 }

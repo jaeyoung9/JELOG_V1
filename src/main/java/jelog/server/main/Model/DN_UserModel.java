@@ -1,14 +1,17 @@
 package jelog.server.main.Model;
 
 
+import jelog.server.main.Enum.OsEnum;
+import jelog.server.main.Enum.OsEnumConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -25,7 +28,23 @@ public class DN_UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int dnUid;
+
+    //@Enumerated(value = EnumType.STRING)
+    //@Convert(converter = OsEnumConverter.class)
+    //private OsEnum dnUserAuthEnum;
+
     private String daSignID;
+
+    private String dnName;
     private String dnPasswd;
     private String dnSalt;
+    private boolean dnGuest;
+    private String dnGuestQuestion;
+    private String dnGuestAnswer;
+
+    // 사용자 등록, 수정일
+    @CreationTimestamp
+    public LocalDateTime inDate;
+    @UpdateTimestamp
+    public LocalDateTime upDate;
 }

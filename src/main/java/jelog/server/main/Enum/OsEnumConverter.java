@@ -14,6 +14,7 @@ import javax.persistence.Converter;
  * ------------------------------------------------------------
  * 2023-07-15               MinJaeYoung                최초생성
  * ------------------------------------------------------------
+ * 2023-07-18               MinJaeYoung                이넘레이블 직열화 오류
  */
 @Converter
 public class OsEnumConverter implements AttributeConverter<OsEnum,Integer> {

@@ -31,10 +31,10 @@ public class DN_LogModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int dnLid;
 
-    //@Enumerated(value = EnumType.STRING) 문자열 타입 사용
+    //@Enumerated(value = EnumType.STRING) //문자열 타입 사용
     //@Column(name = "DN_OS")
-    @Convert(converter = OsEnumConverter.class)
-    public OsEnum dnOs;
+    //@Convert(converter = OsEnumConverter.class)
+    //public OsEnum dnOs;
 
     public String dseSignID;
     public String queryString;

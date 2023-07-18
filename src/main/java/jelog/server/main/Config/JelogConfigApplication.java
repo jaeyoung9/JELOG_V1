@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
@@ -21,7 +20,7 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(value = {"jelog.server.main.Mapper"})
 @EnableTransactionManagement
-@EnableWebSecurity
+//@EnableWebSecurity
 public class JelogConfigApplication {
 
 

@@ -45,6 +45,14 @@ public class DN_UserService {
         }
     }
 
+    public void validateExistUserId(final DN_UserModel _model){
+        boolean data = dn_userRepositories.existsByDaSignID(_model.getDaSignID());
+        if(true == data){
+            log.warn("exist User SignId");
+            throw  new RuntimeException("exist User SignId");
+        }
+    }
+
     /**
      * [User]
      * Add
@@ -52,8 +60,8 @@ public class DN_UserService {
     //-------------------------------------------------------------------------------------------------------------------------------------
     public DN_UserModel createUser(final DN_UserModel entity){
 
-        // data check
         validateUser(entity);
+        validateExistUserId(entity);
 
         dn_userRepositories.save(entity);
         log.info("Use : {} is saved.", entity.getDnUid());
