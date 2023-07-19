@@ -9,7 +9,7 @@ spring:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/jelog?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/jelog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: qwe123
   jpa:

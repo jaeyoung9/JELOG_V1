@@ -31,6 +31,7 @@ public class DT_UserDto {
     /* Table -> DTO **/
     public DT_UserDto(final DN_UserModel dataTo){
         this.dnUid = dataTo.getDnUid();
+        this.dnName = dataTo.getDnName();
         this.dnUserAuthEnum = dataTo.getDnUserAuthEnum();
         this.daSignID = dataTo.getDaSignID();
         this.dnPasswd = dataTo.getDnPasswd();
@@ -45,6 +46,7 @@ public class DT_UserDto {
         return DN_UserModel.builder()
                 .dnUid(dto.getDnUid())
                 .dnUserAuthEnum(dto.getDnUserAuthEnum())
+                .dnName(dto.getDnName())
                 .daSignID(dto.getDaSignID())
                 .dnPasswd(dto.getDnPasswd())
                 .dnSalt(dto.getDnSalt())

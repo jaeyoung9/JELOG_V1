@@ -9,6 +9,8 @@ import jelog.server.main.Service.DN_UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -54,28 +56,29 @@ public class UserController extends BaseController {
         String signUserID = request.getParameter("daSignID");
         DN_UserModel entity = userService.signUser(signUserID);
 
-        if(null == entity) return null;
-        else if(entity.getDnPasswd().equals(request.getParameter("dnPassword"))){
+        Map<String, Object> map = new HashMap<>();
+        map.put("JY-ACCESS-TOKEN", "");
+        map.put("JY-REFRESH-TOKEN", "");
 
-            Map<String ,Object> map = new HashMap<>();
-            map.put("JY-ACCESS-TOKEN","");
-            map.put("JY-REFRESH-TOKEN","");
-            ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
-            return ResponseEntity.ok().body(responseDTO);
-        }
-        return null;
+        ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+        return ResponseEntity.ok().body(responseDTO);
     }
 
     /**
      * [User]
      * User in Sign-Up
+     * automatic Sign-In after Sign-Up
      * */
     @PostMapping(value = "/ko-jy/up/sign/")
     public ResponseEntity<?> signupInfoUser(@RequestBody DT_UserDto dto){
 
         DN_UserModel entity = userService.createUser(DT_UserDto.dnUserEntity(dto));
 
-        return null;
+        Map<String,Object> map = new HashMap<>();
+        map.put("daSignID", entity.getDaSignID());
+        map.put("dnPassword", entity.getDnPasswd());
+
+        return signUser(serverServletRequest(map));
     }
 
     /**
@@ -83,7 +86,7 @@ public class UserController extends BaseController {
      * Test Get
      * */
     @GetMapping(value = "/ko-get/{signUserID}/")
-    public ResponseEntity<?> UserInfo(@PathVariable("signUserID") String signUserID){
+    public ResponseEntity<?> userInfo(@PathVariable("signUserID") String signUserID){
         Map<String ,Object> map = new HashMap<>();
         DN_UserModel entity = userService.signUser(signUserID);
         map.put("data", entity);
