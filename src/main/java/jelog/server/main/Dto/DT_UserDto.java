@@ -16,7 +16,7 @@ import javax.persistence.Convert;
 public class DT_UserDto {
     private int dnUid;
 
-    //private OsEnum dnUserAuthEnum;
+    private OsEnum dnUserAuthEnum;
 
     private String daSignID;
     private String dnName;
@@ -31,7 +31,7 @@ public class DT_UserDto {
     /* Table -> DTO **/
     public DT_UserDto(final DN_UserModel dataTo){
         this.dnUid = dataTo.getDnUid();
-        //this.dnUserAuthEnum = dataTo.getDnUserAuthEnum();
+        this.dnUserAuthEnum = dataTo.getDnUserAuthEnum();
         this.daSignID = dataTo.getDaSignID();
         this.dnPasswd = dataTo.getDnPasswd();
         this.dnSalt = dataTo.getDnSalt();
@@ -44,7 +44,7 @@ public class DT_UserDto {
     public static DN_UserModel dnUserEntity(final DT_UserDto dto){
         return DN_UserModel.builder()
                 .dnUid(dto.getDnUid())
-                //.dnUserAuthEnum(dto.getDnUserAuthEnum())
+                .dnUserAuthEnum(dto.getDnUserAuthEnum())
                 .daSignID(dto.getDaSignID())
                 .dnPasswd(dto.getDnPasswd())
                 .dnSalt(dto.getDnSalt())

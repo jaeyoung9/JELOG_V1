@@ -56,9 +56,10 @@ public enum OsEnum {
         this.titleCode = titleCode;
     }
 
+
     public static OsEnum LegacyCode(Integer titleCode){
         return Arrays.stream(OsEnum.values())
-                .filter(f-> f.getTitle().equals(titleCode))
+                .filter(f-> f.getTitleCode().equals(titleCode))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(String.format("State Code : [%s] does not exist.", titleCode)));
     }

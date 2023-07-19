@@ -22,6 +22,8 @@ spring:
       level:
         org:
           hibernate:
+            Connection:
+              charSet: UTF-8
             SQL: DEBUG
             type:
               false

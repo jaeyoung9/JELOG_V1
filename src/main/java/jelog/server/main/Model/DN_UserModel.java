@@ -30,8 +30,8 @@ public class DN_UserModel {
     private int dnUid;
 
     //@Enumerated(value = EnumType.STRING)
-    //@Convert(converter = OsEnumConverter.class)
-    //private OsEnum dnUserAuthEnum;
+    @Convert(converter = OsEnumConverter.class)
+    private OsEnum dnUserAuthEnum;
 
     private String daSignID;
 
