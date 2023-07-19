@@ -1,24 +1,28 @@
 package jelog.server.main.Model;
 
-
 import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Enum.OsEnumConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 
 /**
- *
- * TimeDate : 2023-07-03 21:01
- *
- * */
+ * Description :
+ * PackageName : jelog.server.main.Model
+ * FileName : DN_LogModel
+ * Author : MinJaeYoung
+ * TimeDate : 2023-07-15
+ * ============================================================
+ * DATE                      AUTHOR                      NOTE
+ * ------------------------------------------------------------
+ * 2023-07-19               MinJaeYoung                최초생성
+ * ------------------------------------------------------------
+ */
 
 @Builder
 @NoArgsConstructor
@@ -42,3 +46,4 @@ public class DN_LogModel {
     @CreationTimestamp
     public LocalDateTime inDate;
 }
+

@@ -1,6 +1,5 @@
 package jelog.server.main.Model;
 
-
 import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Enum.OsEnumConverter;
 import lombok.AllArgsConstructor;
@@ -14,10 +13,17 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- *
- * TimeDate : 2023-07-03 21:01
- *
- * */
+ * Description :
+ * PackageName : jelog.server.main.Model
+ * FileName : DN_UserModel
+ * Author : MinJaeYoung
+ * TimeDate : 2023-07-15
+ * ============================================================
+ * DATE                      AUTHOR                      NOTE
+ * ------------------------------------------------------------
+ * 2023-07-19               MinJaeYoung                최초생성
+ * ------------------------------------------------------------
+ */
 
 @Builder
 @NoArgsConstructor
