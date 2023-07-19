@@ -10,6 +10,18 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Convert;
 
+/**
+ * Description :
+ * PackageName : jelog.server.main.Dto
+ * FileName : DT_UserDto
+ * Author : MinJaeYoung
+ * TimeDate : 2023-07-15
+ * ============================================================
+ * DATE                      AUTHOR                      NOTE
+ * ------------------------------------------------------------
+ * 2023-07-19               MinJaeYoung                최초생성
+ * ------------------------------------------------------------
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
