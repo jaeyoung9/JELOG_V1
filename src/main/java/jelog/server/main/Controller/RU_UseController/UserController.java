@@ -8,12 +8,10 @@ import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Service.DN_UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,5 +76,18 @@ public class UserController extends BaseController {
         DN_UserModel entity = userService.createUser(DT_UserDto.dnUserEntity(dto));
 
         return null;
+    }
+
+    /**
+     * [User]
+     * Test Get
+     * */
+    @GetMapping(value = "/ko-get/{signUserID}/")
+    public ResponseEntity<?> UserInfo(@PathVariable("signUserID") String signUserID){
+        Map<String ,Object> map = new HashMap<>();
+        DN_UserModel entity = userService.signUser(signUserID);
+        map.put("data", entity);
+        ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+        return ResponseEntity.ok().body(responseDTO);
     }
 }

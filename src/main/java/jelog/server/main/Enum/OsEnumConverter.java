@@ -14,7 +14,8 @@ import javax.persistence.Converter;
  * ------------------------------------------------------------
  * 2023-07-15               MinJaeYoung                최초생성
  * ------------------------------------------------------------
- * 2023-07-18               MinJaeYoung                이넘레이블 직열화 오류
+ * 2023-07-18               MinJaeYoung                Enum 직열화 오류
+ * 2023-07-19               MinJaeYoung                Enum Index 변경가능 여부 확인중 상수값이라 불가능 할것으로 보이나 테스트 중
  */
 @Converter
 public class OsEnumConverter implements AttributeConverter<OsEnum,Integer> {
