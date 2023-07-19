@@ -1,8 +1,9 @@
-# JELOG_V1 (Blog)
+### JELOG_V1 (Blog)
+
 
 ```
 Ver : 0.1 
-Author : Min jae young
+Author : Minjaeyoung
 Tool : Intellij
 DataBase : MySql
 Framework : Spring Boot Spring Data Jpa
