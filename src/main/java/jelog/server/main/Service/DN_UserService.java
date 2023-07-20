@@ -75,9 +75,9 @@ public class DN_UserService {
      * [User]
      * Sign-In
      * */
-    public DN_UserModel signUser(final String signUserID){
+    public DN_UserModel signUser(final String signUserID, final String dnPassword){
 
-        if(null == signUserID) return null;
+        if(null == signUserID || null == dnPassword) return null;
 
         DN_UserModel userModel = new DN_UserModel();
         userModel.setDaSignID(signUserID);

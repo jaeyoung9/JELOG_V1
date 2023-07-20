@@ -53,8 +53,7 @@ public class UserController extends BaseController {
     @PostMapping(value = "/ko-jy/in/sign/")
     public ResponseEntity<?> signUser(HttpServletRequest request) {
 
-        String signUserID = request.getParameter("daSignID");
-        DN_UserModel entity = userService.signUser(signUserID);
+        DN_UserModel entity = userService.signUser(request.getParameter("daSignID"), request.getParameter("daSignID"));
 
         Map<String, Object> map = new HashMap<>();
         map.put("JY-ACCESS-TOKEN", "");
@@ -83,12 +82,12 @@ public class UserController extends BaseController {
 
     /**
      * [User]
-     * Test Get
+     * 삭제 예정 테스트 read
      * */
     @GetMapping(value = "/ko-get/{signUserID}/")
     public ResponseEntity<?> userInfo(@PathVariable("signUserID") String signUserID){
         Map<String ,Object> map = new HashMap<>();
-        DN_UserModel entity = userService.signUser(signUserID);
+        DN_UserModel entity = userService.signUser(signUserID, "");
         map.put("data", entity);
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);

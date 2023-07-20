@@ -10,7 +10,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
 import javax.sql.DataSource;
 
 /**
@@ -29,6 +28,16 @@ public class JelogConfigApplication {
      * Bane 설정
      * */
 
+    // TODO: 2. Web Security 개발 예정 실험필요
+    /**
+     * webSecurityCustomizer
+     * */
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().requestMatchers("/api/**");
+//    }
+
+
     /**
      * Sql data Base 쿼리 매퍼 사용시.
      * @return Sql data Base 쿼리 매퍼 사용시.
@@ -46,8 +55,6 @@ public class JelogConfigApplication {
     public SqlSessionTemplate sqlTemplate(SqlSessionFactory sqlSessionFactory) throws Exception{
         return new SqlSessionTemplate(sqlSessionFactory);
     }
-
-    // TODO: 2. Web Security 개발 예정 실험필요
 
     /**
      * File Option 파일서비스 담당
