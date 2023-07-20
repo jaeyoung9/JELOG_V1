@@ -33,17 +33,17 @@ public class DN_LogModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int dnLid;
+    private int dnLid;
 
     //@Enumerated(value = EnumType.STRING) //문자열 타입 사용
     //@Column(name = "DN_OS")
     @Convert(converter = OsEnumConverter.class)
-    public OsEnum dnOs;
+    private OsEnum dnOs;
 
-    public String dseSignID;
-    public String queryString;
+    private String dseSignID;
+    private String queryString;
 
     @CreationTimestamp
-    public LocalDateTime inDate;
+    private LocalDateTime inDate;
 }
 
