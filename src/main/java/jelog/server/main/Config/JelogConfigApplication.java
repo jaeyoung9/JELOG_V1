@@ -28,15 +28,31 @@ public class JelogConfigApplication {
      * Bane 설정
      * */
 
-    // TODO: 2. Web Security 개발 예정 실험필요
+    // TODO: 1. Web Security 개발 예정 실험필요
+    /**
+     * passwordEncoder
+     * @return PassWord Encoder
+     * 패스워드 함호화 적용
+     * */
+//    @Bean
+//    public static PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+
     /**
      * webSecurityCustomizer
+     * @return ignoring
+     * 스프링 부트 기본제공하는 static 리소스들의 기본 위치를 가져와 스프링 시큐리티에서 제외시킨다.
      * */
 //    @Bean
 //    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().requestMatchers("/api/**");
+//        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 //    }
 
+    /**
+     * SecurityFilterChain
+     *
+     * */
 
     /**
      * Sql data Base 쿼리 매퍼 사용시.
