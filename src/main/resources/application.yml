@@ -16,7 +16,7 @@ spring:
     show-sql: true # DDL출력
     hibernate:
       format_sql: true
-      ddl-auto: create # none , create
+      ddl-auto: none # none , create
       defer-datasource-initialization: false # dummy data
     logging:    # 로깅
       level:

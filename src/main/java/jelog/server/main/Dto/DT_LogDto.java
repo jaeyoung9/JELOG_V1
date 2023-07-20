@@ -18,12 +18,12 @@ import java.time.LocalDateTime;
  * Description :
  * PackageName : jelog.server.main.Dto
  * FileName : DT_LogDto
- * Author : User
+ * Author : MinJaeYoung
  * TimeDate : 2023-07-20
  * ============================================================
  * DATE                      AUTHOR                      NOTE
  * ------------------------------------------------------------
- * 2023-07-20               User                최초생성
+ * 2023-07-20               MinJaeYoung                최초생성
  * ------------------------------------------------------------
  */
 

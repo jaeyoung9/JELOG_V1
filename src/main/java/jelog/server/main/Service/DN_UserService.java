@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 /**
  * [Service]
  * DN_Users
@@ -58,12 +60,13 @@ public class DN_UserService {
      * Add
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
+    @Transactional
     public DN_UserModel createUser(final DN_UserModel entity){
 
         validateUser(entity);
         validateExistUserId(entity);
-
         dn_userRepositories.save(entity);
+
         log.info("Use : {} is saved.", entity.getDnUid());
         return dn_userRepositories.findById(entity.getDnUid()).get();
     }

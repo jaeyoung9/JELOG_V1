@@ -1,18 +1,13 @@
 package jelog.server.main.Repositories;
 
-
-import jelog.server.main.Model.DN_UserModel;
+import jelog.server.main.Model.DN_LogModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
-
-
 
 /**
  * Description :
  * PackageName : jelog.server.main.Repositories
- * FileName : DN_UserRepositories
+ * FileName : DN_LogRepositories
  * Author : MinJaeYoung
  * TimeDate : 2023-07-20
  * ============================================================
@@ -22,8 +17,5 @@ import java.util.Optional;
  * ------------------------------------------------------------
  */
 @Repository
-public interface DN_UserRepositories extends JpaRepository<DN_UserModel,Integer> {
-
-    Optional<DN_UserModel> findByDaSignID(String daSignID);
-    boolean existsByDaSignID(String daSignID);
+public interface DN_LogRepositories extends JpaRepository<DN_LogModel, Integer> {
 }
