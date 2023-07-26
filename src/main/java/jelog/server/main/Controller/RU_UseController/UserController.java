@@ -2,7 +2,9 @@ package jelog.server.main.Controller.RU_UseController;
 
 import jelog.server.main.Controller.BaseController;
 import jelog.server.main.Dto.DT_UserDto;
+import jelog.server.main.Global.Encrypt;
 import jelog.server.main.Global.GlobalExceptionHandler;
+import jelog.server.main.Global.Jwt.JwtProvider;
 import jelog.server.main.Global.ResponseDTO;
 import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Service.DN_UserService;
@@ -40,9 +42,9 @@ public class UserController extends BaseController {
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
     private DN_UserService userService;
-
-    public UserController(DN_UserService _userSerivce){
-        this.userService = _userSerivce;
+    private JwtProvider jwtProvider;
+    public UserController(DN_UserService _userSerivce, JwtProvider jwtProvider){
+        this.userService = _userSerivce; this.jwtProvider = jwtProvider;
     }
 
 
@@ -56,8 +58,8 @@ public class UserController extends BaseController {
         DN_UserModel entity = userService.signUser(dto.getDaSignID(), dto.getDnPasswd());
 
         Map<String, Object> map = new HashMap<>();
-        map.put("JY-ACCESS-TOKEN", "");
-        map.put("JY-REFRESH-TOKEN", "");
+        map.put("JY-ACCESS-TOKEN", jwtProvider.createToken(entity.getDaSignID(), entity.getRoles()));
+        map.put("JY-REFRESH-TOKEN", "*****" + Encrypt.getSalt());
 
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
@@ -77,13 +79,23 @@ public class UserController extends BaseController {
     /**
      * [User]
      * 삭제 예정 테스트 read
+     * 권한 테스트
      * */
     @GetMapping(value = "/ko-get/{signUserID}/")
     public ResponseEntity<?> userInfo(@PathVariable("signUserID") String signUserID){
         Map<String ,Object> map = new HashMap<>();
-        DN_UserModel entity = userService.signUser(signUserID, "");
+        DN_UserModel entity = userService.signUser(signUserID, "123445");
         map.put("data", entity);
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
+    }
+    @GetMapping(value = "/auth/user")
+    public String user(){
+        return "Auth User!";
+    }
+
+    @GetMapping(value = "/republic")
+    public String republic(){
+        return "Auth admin!";
     }
 }

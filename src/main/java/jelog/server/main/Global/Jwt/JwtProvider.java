@@ -66,11 +66,11 @@ public class JwtProvider {
 
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userService.loadUserByUsername(this.getUserPk(token));
+        UserDetails userDetails = userService.loadUserByUsername(this.getUserSignId(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getUserPk(String token) {
+    public String getUserSignId(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 

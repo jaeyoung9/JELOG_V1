@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -47,14 +48,37 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class JelogConfigApplication extends WebSecurityConfigurerAdapter {
-
+    /**
+     * Bane Setting
+     * */
 
     /**
-     * Bane 설정
+     * [Variables]
+     * @authIgnoring ignoring Setting
      * */
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    String[] authIgnoring = {
+        "/error",
+        "/favicon.ico",
+        "h2-console/**"
+    };
     private final JwtProvider jwtProvider;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    /**
+     * WebSecurity
+     * @param web WebSecurity
+     */
+    //-------------------------------------------------------------------------------------------------------------------------------------
+//    @Override
+//    public void configure(WebSecurity web){
+//        web.ignoring().antMatchers(authIgnoring);
+//    }
+    /**
+     * HttpSecurity
+     * @param http Web Security Setting
+     */
+    //-------------------------------------------------------------------------------------------------------------------------------------
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -66,13 +90,19 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/ko-jy/in/sign/","/ko-jy/up/sign/","/all").permitAll()
-                .antMatchers("/user").hasRole("USER")
+                .antMatchers("/api/ko-jy/in/sign/","/api/ko-jy/up/sign/","/api/public/main/").permitAll()
+                .antMatchers("/api/auth/**").access("hasRole('USER') or hasRole('ADMIN')")
+                .antMatchers("/api/republic/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
     }
 
+    /**
+     * PasswordEncoder
+     * @return PasswordEncoder
+     */
+    //-------------------------------------------------------------------------------------------------------------------------------------
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -82,6 +112,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter {
      * Sql data Base 쿼리 매퍼 사용시.
      * @return Sql data Base 쿼리 매퍼 사용시.
      * */
+    //-------------------------------------------------------------------------------------------------------------------------------------
     @Bean
     public SqlSessionFactory sqlSession(DataSource dataSource) throws Exception{
         SqlSessionFactoryBean sqlOptions = new SqlSessionFactoryBean();
@@ -99,7 +130,8 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter {
     /**
      * File Option 파일서비스 담당
      * @return multipartResolver
-     * */ 
+     * */
+    //-------------------------------------------------------------------------------------------------------------------------------------
     @Bean
     public CommonsMultipartResolver multipartResolver(){
         CommonsMultipartResolver fileOptions = new CommonsMultipartResolver();
@@ -112,6 +144,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter {
      * Jsp 사용 할경우. 
      * @return InternalResourceViewResolver
      */
+    //-------------------------------------------------------------------------------------------------------------------------------------
 //    @Bean
 //    public ViewResolver views(){
 //        return new InternalResourceViewResolver("/WEB-INF/views/", ".jsp");

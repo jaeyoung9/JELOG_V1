@@ -93,7 +93,21 @@ public class DN_UserService {
         entity.setDnSalt(Encrypt.getSalt());
         entity.setDnPasswd(Encrypt.getEncrypt(entity.getDnPasswd(), entity.getDnSalt()));
 
-        dn_userRepositories.save(entity).setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));
+        // perMission
+        String aMission = entity.getDnUserAuthEnum().getTitleCode() == 20000 ?
+                "ROLE_USER" :
+                entity.getDnUserAuthEnum().getTitleCode() == 20344 ?
+                        "ROLE_USER" :
+                        entity.getDnUserAuthEnum().getTitleCode() == 24678 ?
+                                "ROLE_ADMIN" :
+                                "ROLE_USER";
+
+        dn_userRepositories.save(entity)
+                .setRoles(Collections
+                        .singletonList(Authority
+                                .builder()
+                                .name(aMission)
+                                .build()));
 
         log.info("Use : {} is saved.", entity.getDnUid());
         return dn_userRepositories.findById(entity.getDnUid()).get();
@@ -111,6 +125,10 @@ public class DN_UserService {
         DN_UserModel authUser = dn_userRepositories.findByDaSignIDAndDnPasswd(signUserID,authPassword);
         validateUser(authUser);
         validateUserId(authUser);
+
+        // Password Changing
+        authUser.setDnPasswd("*****");
+        authUser.setDnSalt("*****");
         return authUser;
     }
 
