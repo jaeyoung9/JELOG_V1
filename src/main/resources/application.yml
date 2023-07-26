@@ -5,6 +5,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 ---
+jwt:
+  secret:
+    key: sWjaoxj8s2$9f86jcnsi$2W9d3fPS02
 # MYSQL JaeYoung TEST. OK.
 spring:
   datasource:

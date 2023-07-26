@@ -3,6 +3,7 @@ package jelog.server.main.Service;
 
 import jelog.server.main.Global.Encrypt;
 import jelog.server.main.Model.DN_UserModel;
+import jelog.server.main.Model.Jwt.Authority;
 import jelog.server.main.Repositories.DN_UserRepositories;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -90,7 +93,7 @@ public class DN_UserService {
         entity.setDnSalt(Encrypt.getSalt());
         entity.setDnPasswd(Encrypt.getEncrypt(entity.getDnPasswd(), entity.getDnSalt()));
 
-        dn_userRepositories.save(entity);
+        dn_userRepositories.save(entity).setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));
 
         log.info("Use : {} is saved.", entity.getDnUid());
         return dn_userRepositories.findById(entity.getDnUid()).get();

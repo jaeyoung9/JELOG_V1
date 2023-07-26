@@ -1,5 +1,9 @@
 package jelog.server.main.Config;
 
+import jelog.server.main.Global.Jwt.CustomAccessDeniedHandler;
+import jelog.server.main.Global.Jwt.JwtAuthenticationFilter;
+import jelog.server.main.Global.Jwt.JwtProvider;
+import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -8,9 +12,29 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @Configuration 설정파일 세팅을 위한 어노텐션, Bean 등록등.
@@ -20,14 +44,39 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(value = {"jelog.server.main.Mapper"})
 @EnableTransactionManagement
-//@EnableWebSecurity
-//@RequiredArgsConstructor
-public class JelogConfigApplication {
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class JelogConfigApplication extends WebSecurityConfigurerAdapter {
 
 
     /**
      * Bane 설정
      * */
+    private final JwtProvider jwtProvider;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .httpBasic()
+                .disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(customAccessDeniedHandler)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/ko-jy/in/sign/","/ko-jy/up/sign/","/all").permitAll()
+                .antMatchers("/user").hasRole("USER")
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 
     /**
      * Sql data Base 쿼리 매퍼 사용시.
