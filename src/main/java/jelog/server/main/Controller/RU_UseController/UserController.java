@@ -51,9 +51,9 @@ public class UserController extends BaseController {
      * User in Sign-In
      * */
     @PostMapping(value = "/ko-jy/in/sign/")
-    public ResponseEntity<?> signUser(HttpServletRequest request) {
+    public ResponseEntity<?> signUser(@RequestBody DT_UserDto dto) {
 
-        DN_UserModel entity = userService.signUser(request.getParameter("daSignID"), request.getParameter("daSignID"));
+        DN_UserModel entity = userService.signUser(dto.getDaSignID(), dto.getDnPasswd());
 
         Map<String, Object> map = new HashMap<>();
         map.put("JY-ACCESS-TOKEN", "");
@@ -70,14 +70,8 @@ public class UserController extends BaseController {
      * */
     @PostMapping(value = "/ko-jy/up/sign/")
     public ResponseEntity<?> signupInfoUser(@RequestBody DT_UserDto dto){
-
-        DN_UserModel entity = userService.createUser(DT_UserDto.dnUserEntity(dto));
-
-        Map<String,Object> map = new HashMap<>();
-        map.put("daSignID", entity.getDaSignID());
-        map.put("dnPassword", entity.getDnPasswd());
-
-        return signUser(serverServletRequest(map));
+        userService.createUser(DT_UserDto.dnUserEntity(dto));
+        return signUser(dto);
     }
 
     /**

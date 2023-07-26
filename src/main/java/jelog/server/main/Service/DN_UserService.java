@@ -1,6 +1,7 @@
 package jelog.server.main.Service;
 
 
+import jelog.server.main.Global.Encrypt;
 import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Repositories.DN_UserRepositories;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 /**
  * [Service]
@@ -55,6 +57,24 @@ public class DN_UserService {
         }
     }
 
+    public void validateSign(final String a, final String b){
+
+        if(null != a & null != b){
+            Optional<DN_UserModel> u = dn_userRepositories.findByDaSignID(a);
+            String salt = u.get().getDnSalt();
+
+            if(!Encrypt.getEncrypt(b, salt).equals(u.get().getDnPasswd())){
+                log.warn("exist password does not match.");
+                throw  new RuntimeException("exist password does not match.");
+            }
+
+        }else{
+            log.warn("!exist data");
+            throw  new RuntimeException("!exist data");
+        }
+
+    }
+
     /**
      * [User]
      * Add
@@ -65,6 +85,11 @@ public class DN_UserService {
 
         validateUser(entity);
         validateExistUserId(entity);
+
+        // Salt, SHA-256 Password Add
+        entity.setDnSalt(Encrypt.getSalt());
+        entity.setDnPasswd(Encrypt.getEncrypt(entity.getDnPasswd(), entity.getDnSalt()));
+
         dn_userRepositories.save(entity);
 
         log.info("Use : {} is saved.", entity.getDnUid());
@@ -77,15 +102,13 @@ public class DN_UserService {
      * */
     public DN_UserModel signUser(final String signUserID, final String dnPassword){
 
-        if(null == signUserID || null == dnPassword) return null;
-
-        DN_UserModel userModel = new DN_UserModel();
-        userModel.setDaSignID(signUserID);
-
-        validateUser(userModel);
-        validateUserId(userModel);
-
-        return dn_userRepositories.findByDaSignID(signUserID).get();
+        validateSign(signUserID, dnPassword);
+        Optional<DN_UserModel> user = dn_userRepositories.findByDaSignID(signUserID);
+        String authPassword = Encrypt.getEncrypt(dnPassword, user.get().getDnSalt());
+        DN_UserModel authUser = dn_userRepositories.findByDaSignIDAndDnPasswd(signUserID,authPassword);
+        validateUser(authUser);
+        validateUserId(authUser);
+        return authUser;
     }
 
 

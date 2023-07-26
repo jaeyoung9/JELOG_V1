@@ -25,5 +25,6 @@ import java.util.Optional;
 public interface DN_UserRepositories extends JpaRepository<DN_UserModel,Integer> {
 
     Optional<DN_UserModel> findByDaSignID(String daSignID);
+    DN_UserModel findByDaSignIDAndDnPasswd(String daSignID, String dnPassword);
     boolean existsByDaSignID(String daSignID);
 }
