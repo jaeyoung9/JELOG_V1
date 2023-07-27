@@ -3,19 +3,13 @@ package jelog.server.main.Controller.RU_UseController;
 import jelog.server.main.Controller.BaseController;
 import jelog.server.main.Dto.DT_UserDto;
 import jelog.server.main.Global.Encrypt;
-import jelog.server.main.Global.GlobalExceptionHandler;
 import jelog.server.main.Global.Jwt.JwtProvider;
 import jelog.server.main.Global.ResponseDTO;
 import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Service.DN_UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Builder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletWebRequest;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

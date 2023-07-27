@@ -1,5 +1,6 @@
 package jelog.server.main.Controller;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -22,9 +23,9 @@ import java.util.Map;
  * 2023-07-15               MinJaeYoung                최초생성
  * ------------------------------------------------------------
  */
-
 @RestController
 @RequestMapping(value = "/api")
+//@Transactional(timeout = 1)
 public class BaseController {
 
     /**
