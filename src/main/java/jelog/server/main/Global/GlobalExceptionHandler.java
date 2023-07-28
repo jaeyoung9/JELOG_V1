@@ -3,6 +3,7 @@ package jelog.server.main.Global;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -38,6 +39,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({Exception.class})
     public void handlerAll(Exception e){
         log.error("Unhandled exception occurred", e);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({UsernameNotFoundException.class})
+    public void UsernameNotFoundException(UsernameNotFoundException e){
+        log.error("Invalid authentication!", e);
     }
 
 }

@@ -29,10 +29,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Entity
+@SequenceGenerator(name = "logSequence", sequenceName = "logSequence", initialValue = 532932)
 public class DN_LogModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logSequence")
     private int dnLid;
 
     //@Enumerated(value = EnumType.STRING) //문자열 타입 사용

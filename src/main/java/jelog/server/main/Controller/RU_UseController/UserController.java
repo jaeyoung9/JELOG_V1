@@ -48,13 +48,10 @@ public class UserController extends BaseController {
      * */
     @PostMapping(value = "/ko-jy/in/sign/")
     public ResponseEntity<?> signUser(@RequestBody DT_UserDto dto) {
-
         DN_UserModel entity = userService.signUser(dto.getDaSignID(), dto.getDnPasswd());
-
         Map<String, Object> map = new HashMap<>();
         map.put("JY-ACCESS-TOKEN", jwtProvider.createToken(entity.getDaSignID(), entity.getRoles()));
         map.put("JY-REFRESH-TOKEN", "*****" + Encrypt.getSalt());
-
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
     }

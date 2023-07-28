@@ -33,9 +33,11 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
+@SequenceGenerator(name = "userSequence", sequenceName = "userSequence", initialValue = 237000)
 public class DN_UserModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY) /** 시퀀스 자동 생성*/
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSequence")
     private int dnUid;
 
     //@Enumerated(value = EnumType.STRING)

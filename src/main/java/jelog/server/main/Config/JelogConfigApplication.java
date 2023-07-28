@@ -90,7 +90,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/ko-jy/in/sign/","/api/ko-jy/up/sign/","/api/public/main/").permitAll()
+                .antMatchers("/api/public/**","/api/ko-jy/**").permitAll()
                 .antMatchers("/api/auth/**").access("hasRole('USER') or hasRole('ADMIN')")
                 .antMatchers("/api/republic/**").hasRole("ADMIN")
                 .anyRequest().authenticated()

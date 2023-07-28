@@ -22,6 +22,8 @@ import java.util.Map;
  * ------------------------------------------------------------
  * 2023-07-15               MinJaeYoung                최초생성
  * ------------------------------------------------------------
+ *
+ * @RequestMapping Base Mapping
  */
 @RestController
 @RequestMapping(value = "/api")

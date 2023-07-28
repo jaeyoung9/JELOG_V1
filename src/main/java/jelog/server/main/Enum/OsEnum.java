@@ -39,10 +39,22 @@ public enum OsEnum {
     //-----------------------------------------------------------
     OP_User0("OP_Guest", 20000),
     OP_User1("OP_User", 20344),
-    OP_User2("OP_Admin", 24678);
+    OP_User2("OP_Admin", 24678),
 
 
+    //-----------------------------------------------------------
+    Other("Other_Categories", 49847),
+    Java("Java_Categories",42958),
+    JavaScript("JavaScript_Categories",42959),
+    C("C_Categories",47685),
+    Python("Python",45656),
+    Shell("ShellScript_Categories",  48765),
+    Security("Security_Categories", 41232),
+    DeveloperCareerSkills("DeveloperCareerSkills_Categories",49999),
 
+
+    //-----------------------------------------------------------
+    Init("Next_None", 99999);
     /**
      * [OsEnum]
      * Variables
