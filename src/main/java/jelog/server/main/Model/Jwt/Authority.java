@@ -24,9 +24,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Getter
+@SequenceGenerator(name = "authSequence", sequenceName = "authSequence", initialValue = 7354985)
 public class Authority  {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "authSequence")
     @JsonIgnore
     private Long id;
 
