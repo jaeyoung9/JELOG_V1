@@ -56,6 +56,7 @@ public class DN_UserModel {
     // 사용자 등록, 수정일
     @CreationTimestamp
     public LocalDateTime inDate;
+
     @UpdateTimestamp
     public LocalDateTime upDate;
 

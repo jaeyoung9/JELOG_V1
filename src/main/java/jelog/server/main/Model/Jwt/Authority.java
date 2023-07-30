@@ -34,6 +34,16 @@ public class Authority  {
 
     private String name;
 
+    /**
+     * @ManyToOne : User Table 1:N 관계
+     * Example : dnUserModel = UserID PK.
+     * ==================================
+     * 1	ROLE_USER	237000
+     * 2	ROLE_ADMIN	237000
+     * 3	ROLE_USER	237001
+     * 4	ROLE_USER	237002
+     * ==================================
+     * */
     @JoinColumn(name = "dnUserModel")
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
