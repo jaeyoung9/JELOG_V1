@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * @Configuration 설정파일 세팅을 위한 어노텐션, Bean 등록등.
  * @EnableTransactionManagement 트랜잭션 허용하는 어노텐션.
- * @EnableWebSecurity 현재 미적용 차후 토큰 활용시 적용 예정.
+ * @EnableWebSecurity 적용 완료.
  * */
 @Configuration
 @MapperScan(value = {"jelog.server.main.Mapper"})

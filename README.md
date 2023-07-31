@@ -15,6 +15,6 @@ Java was used as the language used, and Spring Data Jpa was used for development
 Select and use Java version 11.
 
 Project summary:
-  We want to provide a blog service that developers can use.
+  Me want to provide a blog service that developers can use.
 When the web service is completed, we plan to proceed with app integration.
 ```

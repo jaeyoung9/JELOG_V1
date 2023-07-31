@@ -24,7 +24,12 @@ import java.util.Optional;
 @Repository
 public interface DN_UserRepositories extends JpaRepository<DN_UserModel,Integer> {
 
+    // 사용자 데이터 불러오기
     Optional<DN_UserModel> findByDaSignID(String daSignID);
+
+    // 로그인 유효성 검사 아이디 및 비밀번호 일치 여부 확인
     DN_UserModel findByDaSignIDAndDnPasswd(String daSignID, String dnPassword);
+
+    // 아이디 Null 여부 판단
     boolean existsByDaSignID(String daSignID);
 }

@@ -51,7 +51,7 @@ public class UserController extends BaseController {
         DN_UserModel entity = userService.signUser(dto.getDaSignID(), dto.getDnPasswd());
         Map<String, Object> map = new HashMap<>();
         map.put("JY-ACCESS-TOKEN", jwtProvider.createToken(entity.getDaSignID(), entity.getRoles()));
-        map.put("JY-REFRESH-TOKEN", "*****" + Encrypt.getSalt());
+        map.put("JY-REFRESH-TOKEN", "*****" + Encrypt.getSalt());           // TODO : REFRESH TOKEN 적용 필요.
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
     }
