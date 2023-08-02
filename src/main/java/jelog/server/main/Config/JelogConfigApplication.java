@@ -144,14 +144,4 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
         return fileOptions;
     }
 
-    /**
-     * Jsp 사용 할경우.
-     * @return InternalResourceViewResolver
-     */
-    //-------------------------------------------------------------------------------------------------------------------------------------
-//    @Bean
-//    public ViewResolver views(){
-//        return new InternalResourceViewResolver("/WEB-INF/views/", ".jsp");
-//    }
-
 }

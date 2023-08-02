@@ -19,6 +19,12 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  */
 @Configuration
 public class JelogMvcConfigApplication implements WebMvcConfigurer {
+
+    /**
+     * Jsp 사용 할경우.
+     * @return InternalResourceViewResolver
+     */
+    //-------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.viewResolver(new InternalResourceViewResolver("/WEB-INF/views/", ".jsp"));
