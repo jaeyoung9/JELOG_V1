@@ -21,6 +21,7 @@ import java.util.Map;
  * ------------------------------------------------------------
  * 2023-07-28               MinJaeYoung                최초생성
  * ------------------------------------------------------------
+ * 2023-08-02               MinJaeYoung
  */
 @RestController
 @RequestMapping(value = "/api/public")
@@ -29,6 +30,9 @@ public class SNS1011Controller extends BaseController {
     @GetMapping(value = "/mains/")
     public ResponseEntity<?> mains(){
         Map<String, Object> map = new HashMap<>();
+        map.put("test","data");
+        map.put("test1","data");
+        map.put("test2","data");
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
     }

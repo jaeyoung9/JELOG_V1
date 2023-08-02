@@ -70,6 +70,10 @@ dependencies {
     //runtimeOnly 'com.h2database:h2'
 //    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 //    runtimeOnly 'org.postgresql:postgresql'
+
+    //jsp 파일 처리 테스트
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	implementation 'javax.servlet:jstl'
 }
 
 tasks.named('test') {
