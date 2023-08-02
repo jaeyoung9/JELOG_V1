@@ -24,8 +24,15 @@ import org.springframework.web.servlet.View;
 @RestController
 @RequestMapping(value = "/api/view/public")
 public class SNS1011ViewController extends BaseController {
+
+
+    /**
+     * [Main]
+     * Main Page Jsp
+     * */
     @GetMapping("/mains")
     public ModelAndView showMainPage() {
-        return new ModelAndView("main"); // View name;
+        return new ModelAndView("main");
     }
+
 }

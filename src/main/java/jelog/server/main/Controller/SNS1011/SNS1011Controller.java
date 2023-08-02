@@ -27,6 +27,11 @@ import java.util.Map;
 @RequestMapping(value = "/api/public")
 public class SNS1011Controller extends BaseController {
 
+
+    /**
+     * [Main]
+     * Main Page Result Data
+     * */
     @GetMapping(value = "/mains/")
     public ResponseEntity<?> mains(){
         Map<String, Object> map = new HashMap<>();

@@ -31,10 +31,10 @@
 
 <!-- Display the result here -->
 <div>
-    <p>result: <span id="code"></span></p>
-    <p>result: <span id="message"></span></p>
-    <p>result: <span id="response_time"></span></p>
-    <p>result: <span id="request_action"></span></p>
+    <p>code: <span id="code"></span></p>
+    <p>message: <span id="message"></span></p>
+    <p>response_time: <span id="response_time"></span></p>
+    <p>request_action: <span id="request_action"></span></p>
     <p>Test: <span id="test"></span></p>
     <p>Test1: <span id="test1"></span></p>
     <p>Test2: <span id="test2"></span></p>
