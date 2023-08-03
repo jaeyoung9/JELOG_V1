@@ -40,7 +40,7 @@
                         '<p>Content Title: ' + content.contentTitle + '</p>' +
                         '<p>Content Body: ' + content.contentBody + '</p>' +
                         '<p>Views: ' + content.views + '</p>';
-                    document.getElementById("getdata").appendChild(contentElement);
+                    document.getElementById("getData").appendChild(contentElement);
                 }
 
             })
@@ -56,7 +56,7 @@
     <p>message: <span id="message"></span></p>
     <p>response_time: <span id="response_time"></span></p>
     <p>request_action: <span id="request_action"></span></p>
-    <div id="getdata"></div>
+    <div id="getData"></div>
 </div>
 </body>
 </html>
