@@ -2,8 +2,12 @@ package jelog.server.main.Controller.SNS1011;
 
 import jelog.server.main.Controller.BaseController;
 import jelog.server.main.Global.ResponseDTO;
+import jelog.server.main.Service.DN_ContentService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,17 +31,26 @@ import java.util.Map;
 @RequestMapping(value = "/api/public")
 public class SNS1011Controller extends BaseController {
 
+    /**
+     * [Variables]
+     * DN_ContentService
+     * */
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    private DN_ContentService dnContent;
+    public SNS1011Controller(DN_ContentService _dnContent){
+        this.dnContent = _dnContent;
+    }
+
 
     /**
      * [Main]
      * Main Page Result Data
      * */
     @GetMapping(value = "/mains/")
-    public ResponseEntity<?> mains(){
+    public ResponseEntity<?> mains(@PageableDefault(size = 10) Pageable pageable, String title){
+
         Map<String, Object> map = new HashMap<>();
-        map.put("test","data");
-        map.put("test1","data");
-        map.put("test2","data");
+        map.put("data",dnContent.findAll(pageable, title));
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
     }

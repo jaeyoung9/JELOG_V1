@@ -1,6 +1,8 @@
 package jelog.server.main.Repositories;
 
 import jelog.server.main.Model.DN_Content;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -30,6 +32,7 @@ public interface DN_ContentRepositories extends JpaRepository<DN_Content, Intege
     Optional<List<DN_Content>> findAllBy();
 
     // 콘텐츠 페이징
+    Page<DN_Content> findDN_ContentByContentTitleContainsOrderByContentIdDesc(String contentTitle,Pageable pageable);
 
 
 }

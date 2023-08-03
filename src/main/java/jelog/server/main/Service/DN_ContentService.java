@@ -1,5 +1,6 @@
 package jelog.server.main.Service;
 
+import jelog.server.main.Dto.DT_Content;
 import jelog.server.main.Model.DN_Content;
 import jelog.server.main.Repositories.DN_CommentRepositories;
 import jelog.server.main.Repositories.DN_ContentRepositories;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Description :
@@ -40,8 +43,10 @@ public class DN_ContentService {
     private DN_ContentRepositories dn_contentRepositories;
 
     /**
-     * [Page] Content
+     * [Page] Main Content Page
      * */
-
+    public Page<?> findAll(Pageable pageable, String Title){
+        return dn_contentRepositories.findDN_ContentByContentTitleContainsOrderByContentIdDesc(Title, pageable);
+    }
 
 }
