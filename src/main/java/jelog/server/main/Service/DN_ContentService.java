@@ -1,7 +1,5 @@
 package jelog.server.main.Service;
 
-import jelog.server.main.Dto.DT_Content;
-import jelog.server.main.Model.DN_Content;
 import jelog.server.main.Repositories.DN_CommentRepositories;
 import jelog.server.main.Repositories.DN_ContentRepositories;
 import jelog.server.main.Repositories.DN_FilesRepositories;

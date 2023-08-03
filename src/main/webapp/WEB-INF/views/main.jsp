@@ -6,27 +6,48 @@
 <body>
 <h1>Main Page</h1>
 
-
 <script>
-    const apiUrl = "/api/public/mains/";
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            const result = data.result;
-            const payload = data.payload;
-            // Json Data
-            document.getElementById("code").innerText = result.code;
-            document.getElementById("message").innerText = result.message;
-            document.getElementById("response_time").innerText = result.response_time;
-            document.getElementById("request_action").innerText = result.request_action;
 
-            document.getElementById("test").innerText = payload.test;
-            document.getElementById("test1").innerText = payload.test1;
-            document.getElementById("test2").innerText = payload.test2;
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
-        });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const apiUrl = "/api/public/mains/?";
+        fetch(apiUrl + new URLSearchParams({
+            page: '0',
+            size: '10',
+            title: ''
+        }))
+            .then(response => response.json())
+            .then(data => {
+
+                // result
+                const result = data.result;
+
+                // payload
+                const payload = data.payload.data.content;
+
+                document.getElementById("code").textContent = result.code;
+                document.getElementById("message").textContent = result.message;
+                document.getElementById("response_time").textContent = result.response_time;
+                document.getElementById("request_action").textContent = result.request_action;
+
+
+                for (const content of payload) {
+                    const contentElement = document.createElement("div");
+                    contentElement.innerHTML = '<hr>' +
+                        '<p>Content ID: ' + content.contentId + '</p>' +
+                        '<p>Content Categories: ' + content.contentCategories + '</p>' +
+                        '<p>Content Thumbnail: ' + content.contentThumbnail + '</p>' +
+                        '<p>Content Title: ' + content.contentTitle + '</p>' +
+                        '<p>Content Body: ' + content.contentBody + '</p>' +
+                        '<p>Views: ' + content.views + '</p>';
+                    document.getElementById("getdata").appendChild(contentElement);
+                }
+
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    });
 </script>
 
 <!-- Display the result here -->
@@ -35,9 +56,7 @@
     <p>message: <span id="message"></span></p>
     <p>response_time: <span id="response_time"></span></p>
     <p>request_action: <span id="request_action"></span></p>
-    <p>Test: <span id="test"></span></p>
-    <p>Test1: <span id="test1"></span></p>
-    <p>Test2: <span id="test2"></span></p>
+    <div id="getdata"></div>
 </div>
 </body>
 </html>
