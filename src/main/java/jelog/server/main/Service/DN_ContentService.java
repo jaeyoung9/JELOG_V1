@@ -45,7 +45,7 @@ public class DN_ContentService {
     /**
      * [Page] Main Content Page
      * */
-    public Page<?> findAll(Pageable pageable, String Title){
+    public Page<?> findPage(Pageable pageable, String Title){
         return dn_contentRepositories.findDN_ContentByContentTitleContainsOrderByContentIdDesc(Title, pageable);
     }
 

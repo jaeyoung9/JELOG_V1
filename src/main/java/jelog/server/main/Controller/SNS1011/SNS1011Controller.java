@@ -50,7 +50,7 @@ public class SNS1011Controller extends BaseController {
     public ResponseEntity<?> mains(@PageableDefault(size = 10) Pageable pageable, String title){
 
         Map<String, Object> map = new HashMap<>();
-        map.put("data",dnContent.findAll(pageable, title));
+        map.put("data",dnContent.findPage(pageable, title));
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
     }
