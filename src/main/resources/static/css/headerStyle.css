@@ -1,54 +1,73 @@
-/* Add your CSS styles for the header here */
-body {
-    margin: 0;
-    padding: 0;
+/* General Header Styles */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #f2f2f2;
 }
 
-.header {
-    background-color: #24292e;
-    padding: 10px;
-    color: #fff;
+.header-left {
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
-.header h1 {
-    margin: 0;
+.header-right {
+    display: flex;
+    align-items: center;
 }
 
-.menu-icon {
-    display: none;
+/* Logo Styles */
+.logo img {
+    width: 100px; /* Set the desired width */
+    height: auto; /* Maintain the aspect ratio */
+}
+
+/* Notification Icon Styles */
+.notification img {
+    width: 24px; /* Set the desired width */
+    height: auto; /* Maintain the aspect ratio */
+    margin-right: 10px; /* Add some space between the notification icon and the hamburger icon */
+}
+
+/* Hamburger Menu Icon Styles */
+.hamburger-icon {
+    font-size: 24px;
     cursor: pointer;
 }
 
-.menu {
-    display: flex;
+/* Hamburger Menu Styles */
+.hamburger-checkbox {
+    display: none;
+}
+
+.hamburger-menu {
+    display: none;
+    position: absolute;
+    top: 50px; /* Adjust the position as needed */
+    right: 20px; /* Adjust the position as needed */
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.hamburger-menu ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.menu li {
-    margin-left: 20px;
+.hamburger-menu li {
+    margin-bottom: 10px;
 }
 
-@media (max-width: 768px) {
-    .menu {
-        display: none;
-    }
+.hamburger-menu a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+}
 
-    .menu-icon {
-        display: block;
-    }
-
-    .menu.active {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .menu.active li {
-        margin-left: 0;
-        margin-bottom: 10px;
-    }
+/* Show the menu when checkbox is checked */
+.hamburger-checkbox:checked + .hamburger-icon + .hamburger-menu {
+    display: block;
 }
