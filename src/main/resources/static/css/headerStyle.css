@@ -1,0 +1,54 @@
+/* Add your CSS styles for the header here */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #24292e;
+    padding: 10px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.menu-icon {
+    display: none;
+    cursor: pointer;
+}
+
+.menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+    .menu {
+        display: none;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    .menu.active {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .menu.active li {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+}

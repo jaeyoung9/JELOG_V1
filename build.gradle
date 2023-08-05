@@ -74,8 +74,22 @@ dependencies {
     //jsp 파일 처리 테스트
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	implementation 'javax.servlet:jstl'
+
+    // Apache Tiles
+    implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.apache.tiles:tiles-core:3.0.8'
+    implementation 'org.apache.tiles:tiles-jsp:3.0.8'
+    implementation 'org.apache.tiles:tiles-servlet:3.0.8'
+    implementation 'javax.servlet:jstl:1.2'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+//sourceSets {
+//    main {
+//        resources {
+//            srcDirs = ['src/main/resources', 'src/main/resources/static']
+//        }
+//    }
+//}

@@ -27,6 +27,7 @@ import java.util.Map;
  * ------------------------------------------------------------
  */
 
+@RequestMapping(value = "/api")
 @RestController
 public class UserController extends BaseController {
 

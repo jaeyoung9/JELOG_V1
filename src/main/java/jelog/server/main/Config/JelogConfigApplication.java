@@ -16,7 +16,6 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
@@ -24,8 +23,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -51,7 +48,7 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(value = {"jelog.server.main.Mapper"})
 @EnableTransactionManagement
-@EnableWebSecurity
+//@EnableWebSecurity
 @RequiredArgsConstructor
 public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
     /**
@@ -69,15 +66,16 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
     private final JwtProvider jwtProvider;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    /**
-     * WebSecurity
+    /**     * WebSecurity
      * @param web WebSecurity
      */
     //-------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+//        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/favicon/**");
     }
+
     /**
      * HttpSecurity
      * @param http Web Security Setting
@@ -97,6 +95,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
                 .antMatchers("/api/public/**","/api/ko-jy/**","/api/view/public/**").permitAll()
                 .antMatchers("/api/auth/**","/api/view/auth/**").access("hasRole('USER') or hasRole('ADMIN')")
                 .antMatchers("/api/republic/**", "/api/view/republic/**").hasRole("ADMIN")
+                .antMatchers("/static/css/**", "/static/js/**", "/static/favicon/**", "/favicon.ico").permitAll() // Allow access to CSS and JS files in the /static/ folder
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
@@ -143,5 +142,4 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
         fileOptions.setMaxUploadSizePerFile(1024 * 1024 * 5);
         return fileOptions;
     }
-
 }
