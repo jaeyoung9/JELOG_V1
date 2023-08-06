@@ -3,8 +3,7 @@
         <!-- Your logo image or text here -->
     </div>
     <div class="notification">
-        <!-- Your notification icon here -->
-        <img src="path/to/your/notification-icon.png" alt="Notification Icon">
+        <img src="/static/images/notifications.png" alt="Notification Icon">
     </div>
     <input type="checkbox" id="hamburger-checkbox" class="hamburger-checkbox">
     <label for="hamburger-checkbox" class="hamburger-icon">&#9776;</label>

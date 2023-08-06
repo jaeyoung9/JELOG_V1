@@ -95,7 +95,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
                 .antMatchers("/api/public/**","/api/ko-jy/**","/api/view/public/**").permitAll()
                 .antMatchers("/api/auth/**","/api/view/auth/**").access("hasRole('USER') or hasRole('ADMIN')")
                 .antMatchers("/api/republic/**", "/api/view/republic/**").hasRole("ADMIN")
-                .antMatchers("/static/css/**", "/static/js/**", "/static/favicon/**", "/favicon.ico").permitAll() // Allow access to CSS and JS files in the /static/ folder
+                .antMatchers("/static/images/**","/static/css/**", "/static/js/**", "/static/favicon/**", "/favicon.ico").permitAll() // Allow access to CSS and JS files in the /static/ folder
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
