@@ -17,7 +17,7 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
         <link rel="stylesheet" type="text/css" href="/static/css/headerStyle.css"/>
-        <script type="application/javascript" src="/static/js/headerJs.js"></script>
+        <script type="text/javascript" src="/static/js/headerJs.js"></script>
     </head>
     <body>
         <tiles:insertAttribute name="header" />

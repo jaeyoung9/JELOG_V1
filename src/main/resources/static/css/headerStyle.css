@@ -86,3 +86,86 @@
 .hamburger-checkbox:checked + .hamburger-icon + .hamburger-menu {
     display: block;
 }
+
+/* Main Page Content Card View List */
+.content-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.content {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.content-thumbnail img {
+    max-width: 100%;
+    height: auto;
+}
+
+.content-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-title {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+.content-views {
+    margin-top: auto;
+    text-align: right;
+}
+.content-more {
+    font-size: 14px;
+    color: gray;
+}
+
+/* Main Paging List*/
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Adjust this margin as needed */
+}
+
+/* Styling for individual page buttons */
+.page-button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.3s;
+}
+
+.page-button:hover {
+    background-color: #f0f0f0;
+}
+
+.page-button.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Styling for ellipsis (...) */
+.ellipsis {
+    margin: 0 5px;
+}
+
+/* Styling for "before" and "next" links */
+.before-next {
+    font-weight: bold;
+    margin: 0 5px;
+    text-decoration: none;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.before-next:hover {
+    text-decoration: underline;
+}

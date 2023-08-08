@@ -9,10 +9,15 @@
     <label for="hamburger-checkbox" class="hamburger-icon">&#9776;</label>
     <nav class="hamburger-menu">
         <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Explore</a></li>
-            <li><a href="#">Features</a></li>
-            <li><a href="#">About</a></li>
+            <li><a href="#">Mains</a></li>
+            <li><a href="#">Other</a></li>
+            <li><a href="#">Java</a></li>
+            <li><a href="#">JavaScript</a></li>
+            <li><a href="#">C</a></li>
+            <li><a href="#">Python</a></li>
+            <li><a href="#">Shell</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">DevSkills</a></li>
             <!-- Add more menu items as needed -->
         </ul>
     </nav>
