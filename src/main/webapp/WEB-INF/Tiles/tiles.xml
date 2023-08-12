@@ -10,5 +10,9 @@
     <definition name="main" extends="layout">
         <put-attribute name="body" value="/WEB-INF/views/main.jsp" />
     </definition>
+    <!--  Login  -->
+    <definition name="inSign" extends="layout">
+        <put-attribute name="body" value="/WEB-INF/views/sign/in.jsp" />
+    </definition>
 
 </tiles-definitions>

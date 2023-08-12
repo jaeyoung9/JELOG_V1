@@ -10,14 +10,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-
         <link rel="shortcut icon" href="/static/favicon/favicon.ico">
-
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-
         <link rel="stylesheet" type="text/css" href="/static/css/headerStyle.css"/>
-        <script type="text/javascript" src="/static/js/headerJs.js"></script>
     </head>
     <body>
         <tiles:insertAttribute name="header" />
@@ -25,5 +21,7 @@
                 <tiles:insertAttribute name="body" />
             </div>
         <tiles:insertAttribute name="footer" />
+
+        <script type="text/javascript" src="/static/js/headerJs.js"></script>
     </body>
 </html>

@@ -1,15 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <header class="header">
     <div class="logo">
         <!-- Your logo image or text here -->
     </div>
-    <div class="notification">
-        <img src="/static/images/notifications.png" alt="Notification Icon">
-    </div>
+    <div class="sign-login"><button id="signIn" onclick="signInView()"></button></div>
     <input type="checkbox" id="hamburger-checkbox" class="hamburger-checkbox">
     <label for="hamburger-checkbox" class="hamburger-icon">&#9776;</label>
     <nav class="hamburger-menu">
         <ul>
-            <li><a href="#">Mains</a></li>
+            <li><a href="/api/view/public/mains">Mains</a></li>
             <li><a href="#">Other</a></li>
             <li><a href="#">Java</a></li>
             <li><a href="#">JavaScript</a></li>

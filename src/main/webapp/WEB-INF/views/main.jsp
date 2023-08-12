@@ -6,17 +6,19 @@
     <title>Main Page</title>
 </head>
 <body>
-<h1>Main Page</h1>
 
 <script type="text/javascript">
-
+    /**
+     * 메인 페이지 구현 및 페이징 구현
+     * */
     document.addEventListener("DOMContentLoaded", function() {
         let currentPage = 0;
+        let fetchedPages = 0;
         const pageSize = 8;
-
         const apiUrl = "/api/public/mains/?";
 
         function fetchPage(page) {
+
             fetch(apiUrl + new URLSearchParams({
                 page: page.toString(),
                 size: pageSize.toString(),
@@ -53,6 +55,7 @@
 
                     const totalPages = data.payload.data.totalPages;
                     currentPage = page;
+                    fetchedPages++;
                     updatePaginationControls(totalPages, currentPage);
                 })
                 .catch(error => {
@@ -61,49 +64,26 @@
         }
 
         function updatePaginationControls(totalPages, currentPage) {
-            const paginationControls = document.getElementById("paginationControls");
-            paginationControls.innerHTML = '';
 
             const pageButtonsContainer = document.getElementById("pageButtons");
             pageButtonsContainer.innerHTML = '';
 
-            for (let i = 1; i <= totalPages; i++) {
+            const startPage = Math.max(0, currentPage - 5);
+            const endPage = Math.min(totalPages - 1, startPage + 9);
+
+            for (let i = startPage; i <= endPage; i++) {
                 const pageButton = document.createElement("button");
-                pageButton.textContent = i;
-                if (i === currentPage + 1) {
+                pageButton.textContent = i + 1;
+                if (i === currentPage) {
                     pageButton.disabled = true;
                     pageButton.classList.add("active");
                 }
                 pageButton.addEventListener("click", () => {
-                    fetchPage(i - 1);
+                    fetchPage(i);
                 });
                 pageButtonsContainer.appendChild(pageButton);
             }
-
-            const previousPageLink = document.getElementById("previousPage");
-            const nextPageLink = document.getElementById("nextPage");
-
-            if (currentPage > 0) {
-                previousPageLink.textContent = "Previous";
-                previousPageLink.style.display = "inline";
-                previousPageLink.addEventListener("click", () => {
-                    fetchPage(currentPage - 1);
-                });
-            } else {
-                previousPageLink.style.display = "none";
-            }
-
-            if (currentPage < totalPages - 1) {
-                nextPageLink.textContent = "Next";
-                nextPageLink.style.display = "inline";
-                nextPageLink.addEventListener("click", () => {
-                    fetchPage(currentPage + 1);
-                });
-            } else {
-                nextPageLink.style.display = "none";
-            }
         }
-
         fetchPage(currentPage);
     });
 </script>
@@ -117,14 +97,8 @@
     <div class="content-list" id="contentList"></div>
 </div>
 
-<!-- Pagination controls -->
-<div class="pagination-container" id="paginationControls"></div>
-
-<!-- "Next" and "Previous" links -->
 <div class="pagination-container">
-    <a class="before-next" id="previousPage">Previous</a>
     <div class="pagination-pages" id="pageButtons"></div>
-    <a class="before-next" id="nextPage">Next</a>
 </div>
 
 </body>

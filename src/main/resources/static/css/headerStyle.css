@@ -31,18 +31,13 @@
     height: auto; /* Maintain the aspect ratio */
 }
 
-/* Notification Icon Styles */
-.notification{
+/* sign-login Icon Styles */
+.sign-login{
     position: absolute;
     display: inline-block;
     margin: 1px;
     right: 55px;
     float: right;
-}
-.notification img {
-    width: 24px; /* Set the desired width */
-    height: auto; /* Maintain the aspect ratio */
-    margin-right: 10px; /* Add some space between the notification icon and the hamburger icon */
 }
 
 /* Hamburger Menu Icon Styles */
@@ -168,4 +163,73 @@
 
 .before-next:hover {
     text-decoration: underline;
+}
+
+/* footer */
+footer{
+    border-top: 1px solid #e4e4e4;
+    background-color:#f8f9fa;
+    padding:1rem 0;
+    margin:1rem 0;
+}
+
+.footer-message{
+    font-weight: bold;
+    font-size:0.9rem;
+    color:#545e6f;
+    margin-bottom:0.3rem;
+    margin:0 0 0 0.6rem;
+}
+.footer-contact{
+    font-size:0.9rem;
+    color:#545e6f;
+    margin:0.6rem;
+}
+.footer-copyright{
+    font-size:0.9rem;
+    color:#545e6f;
+    margin:0.6rem;
+}
+
+/* Sign */
+.body-login-container {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.sign-input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.loginbutton {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 10px;
 }
