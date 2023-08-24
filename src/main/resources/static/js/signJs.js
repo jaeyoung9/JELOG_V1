@@ -30,11 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                     // const refreshToken = data.payload["JY-REFRESH-TOKEN"];
                     const accessToken = data.payload["JY-ACCESS-TOKEN"];
-
-                    // document.cookie = `refreshToken=${refreshToken}`;
-                    const date = new Date();
-                    date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
-                    document.cookie = `JY-ACCESS-TOKEN=${accessToken}; expires=${date}; Secure; SameSite=Strict; Path=/;`;
+                    setCookie('JY-ACCESS-TOKEN', accessToken);
 
                     window.location.replace("/api/view/public/mains");
                 } else {

@@ -34,9 +34,7 @@ function signInView() {
     const signCheck = document.getElementById("signIn").valueOf();
 
     if(signCheck == "Logout"){
-        const date = new Date();
-        date.setTime(date.getTime() - 1000 * 60 * 60 * 24);
-        document.cookie = `JY-ACCESS-TOKEN=; expires=${date}; Secure; SameSite=Strict; Path=/;`;
+        deleteCookie('JY-ACCESS-TOKEN');
         const mainUrl = "/api/view/public/mains/";
         window.location.replace(mainUrl);
     }
@@ -50,16 +48,3 @@ function signInView() {
     }
 }
 
-/**
- * 쿠키 체크
- * */
-function getCookie(cookieName){
-    const cookies = document.cookie.split("; ");
-    for (const cookie of cookies) {
-        const [name, value] = cookie.split("=");
-        if (name === "JY-ACCESS-TOKEN") {
-            return value;
-        }
-    }
-    return null;
-}
