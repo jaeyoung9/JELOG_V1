@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
         const signInUrl = "/api/ko-jy/in/sign/";
-        // Perform the API request here
         fetch(signInUrl, {
             method: "POST",
             headers: {
@@ -29,13 +28,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     messageElement.textContent = "Login successful!";
                     messageElement.style.color = "green";
 
-                    // Extract the tokens from the payload
-                    const refreshToken = data.payload["JY-REFRESH-TOKEN"];
+                    // const refreshToken = data.payload["JY-REFRESH-TOKEN"];
                     const accessToken = data.payload["JY-ACCESS-TOKEN"];
 
-                    // You can store the tokens in cookies or local storage for future requests
                     // document.cookie = `refreshToken=${refreshToken}`;
-                    document.cookie = `JY-ACCESS-TOKEN=${accessToken}; Secure; SameSite=Strict; Path=/;`;
+                    const date = new Date();
+                    date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
+                    document.cookie = `JY-ACCESS-TOKEN=${accessToken}; expires=${date}; Secure; SameSite=Strict; Path=/;`;
 
                     window.location.replace("/api/view/public/mains");
                 } else {

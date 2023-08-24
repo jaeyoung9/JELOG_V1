@@ -34,12 +34,14 @@ function signInView() {
     const signCheck = document.getElementById("signIn").valueOf();
 
     if(signCheck == "Logout"){
-        document.cookie = `JY-ACCESS-TOKEN =; Secure; SameSite=Strict; Path=/;`;
+        const date = new Date();
+        date.setTime(date.getTime() - 1000 * 60 * 60 * 24);
+        document.cookie = `JY-ACCESS-TOKEN=; expires=${date}; Secure; SameSite=Strict; Path=/;`;
         const mainUrl = "/api/view/public/mains/";
         window.location.replace(mainUrl);
     }
 
-    if(cookie == null){
+    if(signCheck !== "Logout" && cookie == null){
         const signUrl = "/api/view/public/in/sign/";
         window.location.replace(signUrl);
     }else{

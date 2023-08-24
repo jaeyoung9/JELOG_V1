@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * Description :
@@ -53,5 +56,10 @@ public class DN_Content {
     private String contentBody;
     private int views;
 
+    @CreationTimestamp
+    public LocalDateTime inDate;
+
+    @UpdateTimestamp
+    public LocalDateTime upDate;
 
 }
