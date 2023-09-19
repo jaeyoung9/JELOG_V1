@@ -2,7 +2,7 @@
 /**
  * Cookie Check
  * */
-function getCookie(cookieName){
+const getCookie = function(cookieName){
     const cookies = document.cookie.split("; ");
     for (const cookie of cookies) {
         const [name, value] = cookie.split("=");
