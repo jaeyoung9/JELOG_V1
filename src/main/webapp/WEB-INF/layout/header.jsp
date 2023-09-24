@@ -20,4 +20,6 @@
             <!-- Add more menu items as needed -->
         </ul>
     </nav>
+
+    <script type="text/javascript" src="/static/js/headerJs.js"></script>
 </header>

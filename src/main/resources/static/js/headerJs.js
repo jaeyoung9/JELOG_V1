@@ -31,7 +31,7 @@ function toggleMenu() {
  * */
 function signInView() {
     let cookie = getCookie("JY-ACCESS-TOKEN");
-    const signCheck = document.getElementById("signIn").valueOf();
+    const signCheck = document.getElementById("signIn").innerText;
 
     if(signCheck == "Logout"){
         deleteCookie('JY-ACCESS-TOKEN');
