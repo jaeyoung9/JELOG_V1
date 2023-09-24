@@ -22,7 +22,5 @@
                 <tiles:insertAttribute name="body" />
             </div>
         <tiles:insertAttribute name="footer" />
-
-        <script type="text/javascript" src="/static/js/headerJs.js"></script>
     </body>
 </html>
