@@ -62,26 +62,6 @@ public class SNS1011Controller extends BaseController {
     /**
      * [Main]
      * Main Detail Page
-     *
-     * RestApi Test Data
-     *     "result": {
-     *         "code": 200,
-     *         "message": "Success",
-     *         "response_time": "2023-09-28T05:12:25.013+00:00",
-     *         "request_action": null
-     *     },
-     *     "payload": {
-     *         "data": {
-     *             "contentId": 987699,
-     *             "contentCategories": "Other",
-     *             "contentThumbnail": "https://t1.daumcdn.net/cfile/tistory/24283C3858F778CA2E",
-     *             "contentTitle": "이것은 제목입니다.",
-     *             "contentBody": "이것은 내용입니다.이것은 내용입니다.이것은 내용입니다.",
-     *             "views": 2,
-     *             "inDate": null,
-     *             "upDate": null
-     *         }
-     *     }
      * 1. 페이지 접근시 조회수 카운팅 필요.
      * 2. 작성일 자동등록 안되는 내용 확인 필요.
      * 2-1. 현재 DN_Content 모델에 등록된 어노텐션 @CreationTimestamp 관련 내용 수집필요.
