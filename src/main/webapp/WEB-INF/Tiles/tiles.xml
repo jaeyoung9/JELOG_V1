@@ -6,10 +6,17 @@
         <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp" />
     </definition>
     <!--  각 페이지 마다 타일즈 설정 필요  -->
+
     <!--  Main Page  -->
     <definition name="main" extends="layout">
         <put-attribute name="body" value="/WEB-INF/views/main.jsp" />
     </definition>
+
+    <!--  Main Detail  -->
+    <definition name="main/relay" extends="layout">
+        <put-attribute name="body" value="/WEB-INF/views/detail/mainDetails.jsp" />
+    </definition>
+
     <!--  Login  -->
     <definition name="inSign" extends="layout">
         <put-attribute name="body" value="/WEB-INF/views/sign/in.jsp" />

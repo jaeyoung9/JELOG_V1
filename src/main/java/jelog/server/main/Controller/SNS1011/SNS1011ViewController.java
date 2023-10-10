@@ -33,4 +33,13 @@ public class SNS1011ViewController extends BaseController {
         return new ModelAndView("main");
     }
 
+    /**
+     * [Main]
+     * Main Page Details
+     * */
+    @GetMapping("/mains/relay")
+    public ModelAndView showMainDetail(){
+        return new ModelAndView("main/relay");
+    }
+
 }

@@ -86,7 +86,7 @@ public class SNS1011Controller extends BaseController {
      * 2. 작성일 자동등록 안되는 내용 확인 필요.
      * 2-1. 현재 DN_Content 모델에 등록된 어노텐션 @CreationTimestamp 관련 내용 수집필요.
      * */
-    @GetMapping(value = "/mains/{listNumber}/")
+    @GetMapping(value = "/mains/relay/{listNumber}/")
     public ResponseEntity<?> mainPage(@PathVariable int listNumber){
 
         // get data through number
