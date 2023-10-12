@@ -1,6 +1,7 @@
 package jelog.server.main.Service;
 
 import jelog.server.main.Model.DN_Content;
+import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Repositories.DN_CommentRepositories;
 import jelog.server.main.Repositories.DN_ContentRepositories;
 import jelog.server.main.Repositories.DN_FilesRepositories;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,18 +44,57 @@ public class DN_ContentService {
     @Autowired
     private DN_ContentRepositories dn_contentRepositories;
 
+
     /**
-     * [Page] Main Content Page
+     * [Content]
+     * Validate
+     * */
+    //-------------------------------------------------------------------------------------------------------------------------------------
+    public void validateExistContentId(int contentId){
+        boolean data = dn_contentRepositories.existsById(contentId);
+        if(true != data){
+            log.warn("not exist contentId");
+            throw  new RuntimeException("not exist contentId");
+        }
+    }
+
+    /**
+     * [Content]
+     * Content Services
+     * */
+    //-------------------------------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * [Content] Main Content Page
      * */
     public Page<?> findPage(Pageable pageable, String Title){
         return dn_contentRepositories.findDN_ContentByContentTitleContainsOrderByContentIdDesc(Title, pageable);
     }
 
     /**
-     * Main Content Detail
+     * [Content] Main Content Detail
      * */
-    public Optional<DN_Content> findContent(int mainNumber){
+    @Transactional
+    public DN_Content findContent(int mainNumber){
+
+        validateExistContentId(mainNumber);
+
         return dn_contentRepositories.findByContentId(mainNumber);
     }
 
+    /**
+     * [Content] View Count
+     * */
+    @Transactional
+    public String contentViewCount(int contentNumber){
+
+        // 데이터 존재 여부 체크.
+        validateExistContentId(contentNumber);
+
+        DN_Content entity = dn_contentRepositories.findByContentId(contentNumber);
+        entity.setViews(entity.getViews() + 1);
+        dn_contentRepositories.save(entity);
+        return "";
+    }
 }

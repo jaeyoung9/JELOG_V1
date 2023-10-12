@@ -62,7 +62,7 @@ public class SNS1011Controller extends BaseController {
     /**
      * [Main]
      * Main Detail Page
-     * 1. 페이지 접근시 조회수 카운팅 필요.
+     * 1. 페이지 접근시 조회수 카운팅 필요. Ok.
      * 2. 작성일 자동등록 안되는 내용 확인 필요.
      * 2-1. 현재 DN_Content 모델에 등록된 어노텐션 @CreationTimestamp 관련 내용 수집필요.
      * */
@@ -70,7 +70,8 @@ public class SNS1011Controller extends BaseController {
     public ResponseEntity<?> mainPage(@PathVariable int listNumber){
 
         // get data through number
-        Optional<DN_Content> getContent = dnContent.findContent(listNumber);
+        DN_Content getContent = dnContent.findContent(listNumber);
+        dnContent.contentViewCount(listNumber);
 
         Map<String, Object> map = new HashMap<>();
         map.put("data", getContent);

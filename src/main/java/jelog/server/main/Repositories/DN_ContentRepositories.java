@@ -26,13 +26,12 @@ import java.util.Optional;
 public interface DN_ContentRepositories extends JpaRepository<DN_Content, Integer> {
 
     // Id 로 콘텐츠 찾기
-    Optional<DN_Content> findByContentId(Integer contentId);
+    DN_Content findByContentId(Integer contentId);
 
     // 콘텐츠 전체 불러오기
     Optional<List<DN_Content>> findAllBy();
 
     // 콘텐츠 페이징
     Page<DN_Content> findDN_ContentByContentTitleContainsOrderByContentIdDesc(String contentTitle,Pageable pageable);
-
 
 }
