@@ -7,6 +7,12 @@
 *{
     font-family: "Saira Extra Condensed", sans-serif;
 }
+
+.fix-a-tag{
+    text-decoration: none;
+    color: #333333;
+}
+
 .header {
     display: flex;
     align-items: center;

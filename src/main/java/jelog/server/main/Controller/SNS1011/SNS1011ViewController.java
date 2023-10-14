@@ -2,6 +2,7 @@ package jelog.server.main.Controller.SNS1011;
 
 import jelog.server.main.Controller.BaseController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,9 +38,14 @@ public class SNS1011ViewController extends BaseController {
      * [Main]
      * Main Page Details
      * */
-    @GetMapping("/mains/relay")
-    public ModelAndView showMainDetail(){
-        return new ModelAndView("main/relay");
+    @GetMapping("/mains/relay/{listNumber}/")
+    public ModelAndView showMainDetail(@PathVariable int listNumber){
+
+        ModelAndView model = new ModelAndView();
+        model.addObject("contentNumber", listNumber);
+        model.setViewName("main/relay");
+        return model;
+
     }
 
 }
