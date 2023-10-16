@@ -22,4 +22,9 @@
         <put-attribute name="body" value="/WEB-INF/views/sign/in.jsp" />
     </definition>
 
+    <!--  Content Writing Out  -->
+    <definition name="contentWritingOut" extends="layout">
+        <put-attribute name="body" value="/WEB-INF/views/writingout/contentWritingOut.jsp" />
+    </definition>
+
 </tiles-definitions>

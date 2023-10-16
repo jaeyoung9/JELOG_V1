@@ -8,6 +8,7 @@
     <label for="hamburger-checkbox" class="hamburger-icon">&#9776;</label>
     <nav class="hamburger-menu">
         <ul>
+            <li><a class="fix-a-tag" href="/api/view/auth/cwo/new">Writing</a></li>
             <li><a href="/api/view/public/mains">Mains</a></li>
             <li><a href="#">Other</a></li>
             <li><a href="#">Java</a></li>

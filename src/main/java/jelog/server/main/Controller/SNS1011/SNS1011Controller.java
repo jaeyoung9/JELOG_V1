@@ -31,6 +31,7 @@ import java.util.Optional;
  * ------------------------------------------------------------
  * 2023-09-28               MinJaeYoung                상세페이지 테스트
  */
+
 @RestController
 @RequestMapping(value = "/api/public")
 public class SNS1011Controller extends BaseController {
