@@ -13,6 +13,18 @@ const getCookie = function(cookieName){
     return null;
 }
 
+function getCookieValue(key) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim(); // Remove spaces around cookie string
+        const cookieParts = cookie.split('=');
+        if (cookieParts[0] === key) {
+            return cookieParts[1];
+        }
+    }
+    return null; // Cookie not found
+}
+
 /**
  * Cookie Set
  * */
