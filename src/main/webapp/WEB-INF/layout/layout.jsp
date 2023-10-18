@@ -11,7 +11,6 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <script type="text/javascript" src="/static/js/cookie.js"></script>
-        <script type="text/javascript" src="/static/js/default.js"></script>
         <link rel="shortcut icon" href="/static/favicon/favicon.ico">
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>

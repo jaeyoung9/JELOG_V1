@@ -13,10 +13,6 @@ function fetchView(contentNumber){
             const result = data.result;
             const payload = data.payload.data;
 
-            document.getElementById("code").textContent = result.code;
-            document.getElementById("message").textContent = result.message;
-            document.getElementById("response_time").textContent = result.response_time;
-            document.getElementById("request_action").textContent = result.request_action;
 
             const contentDetails = document.getElementById("content-details");
             contentDetails.innerHTML = '';

@@ -2,10 +2,7 @@
 
 <!-- Display the result here -->
 <div>
-    <p>code: <span id="code"></span></p>
-    <p>message: <span id="message"></span></p>
-    <p>response_time: <span id="response_time"></span></p>
-    <p>request_action: <span id="request_action"></span></p>
+
     <div class="content-list" id="contentList"></div>
 </div>
 

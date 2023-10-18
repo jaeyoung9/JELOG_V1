@@ -19,10 +19,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 const result = data.result;
                 const payload = data.payload.data.content;
 
-                document.getElementById("code").textContent = result.code;
-                document.getElementById("message").textContent = result.message;
-                document.getElementById("response_time").textContent = result.response_time;
-                document.getElementById("request_action").textContent = result.request_action;
 
                 const contentList = document.getElementById("contentList");
                 contentList.innerHTML = '';
