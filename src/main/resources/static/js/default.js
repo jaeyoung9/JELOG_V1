@@ -22,13 +22,24 @@
                     }
                 })
                 .then(data =>{
-                    const tempElement = document.createElement('div');
-                    tempElement.innerHTML = data;
 
-                    const bodyContent = tempElement.querySelector('#content').innerHTML;
-
-                    document.getElementById('content').innerHTML = bodyContent;
+                    document.open();
+                    document.write(data);
                     history.pushState({}, '', url);
+                    document.close();
+
+                    // const tempElement = document.createElement('div');
+                    // tempElement.innerHTML = data;
+                    //
+                    // const bodyContent = tempElement.querySelector('#editor-container').innerHTML;
+                    //
+                    // const script = document.createElement("script");
+                    // script.type = 'text/javascript';
+                    // script.src = '/static/js/editor.js';
+                    //
+                    // document.getElementById('content').innerHTML = bodyContent;
+                    // history.pushState({}, '', url);
+                    // document.head.appendChild(script);
                 })
                 .catch(error => {
 

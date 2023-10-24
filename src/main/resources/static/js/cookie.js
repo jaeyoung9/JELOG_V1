@@ -1,4 +1,3 @@
-
 /**
  * Cookie Check
  * */

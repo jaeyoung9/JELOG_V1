@@ -3,28 +3,22 @@
 <div id="editor-container">
     <input type="text" id="title-input" placeholder="Title">
 
-    <div id="button-container">
-        <div class="custom-button photo-button">
-            <img src="/static/images/notifications.png">
-            <span>사진</span>
-        </div>
-        <div class="custom-button file-button">
-            <img src="/static/images/notifications.png">
-            <span>파일</span>
-        </div>
+    <div name="formatting-buttons" id="formatting-buttons">
+        <button type="button" data-cmd="justifyLeft"><i class="fas fa-align-left"></i></button>
+        <button type="button" data-cmd="justifyCenter"><i class="fas fa-align-center"></i></button>
+        <button type="button" data-cmd="justifyFull"><i class="fas fa-align-justify"></i></button>
+        <button type="button" data-cmd="justifyRight"><i class="fas fa-align-right"></i></button>
+        <button type="button" data-cmd="bold"><i class="fas fa-bold"></i></button>
+        <button type="button" data-cmd="italic"><i class="fas fa-italic"></i></button>
+        <button type="button" data-cmd="underline"><i class="fas fa-underline"></i></button>
+        <button type="button" data-cmd="insertOrderedList"><i class="fas fa-list-ol"></i></button>
+        <button type="button" data-cmd="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
+        <button type="button" data-cmd="createLink"><i class="fas fa-link"></i></button>
+        <button type="button" data-cmd="insertImage"><i class="far fa-image"></i></button>
+        <button type="button" data-cmd="showCode" name="active"><i class="fas fa-code"></i></button>
     </div>
 
-    <div id="formatting-buttons">
-        <button id="bold-button"><b>B</b></button>
-        <button id="italic-button"><i>I</i></button>
-        <button id="underline-button"><u>U</u></button>
-        <select id="font-size-dropdown">
-            <option value="12px">12px</option>
-            <option value="16px">16px</option>
-            <option value="20px">20px</option>
-            <option value="24px">24px</option>
-        </select>
-    </div>
+    <div id="text-area" name="textField" contenteditable="true"></div>
 
-    <div id="text-area" contenteditable="true"></div>
+    <script type="text/javascript" src="/static/js/editor.js"></script>
 </div>
