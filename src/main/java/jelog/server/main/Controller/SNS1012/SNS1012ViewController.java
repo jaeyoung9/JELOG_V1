@@ -27,7 +27,6 @@ public class SNS1012ViewController extends BaseController {
      * [writingOut]
      * contentWritingOut
      *
-     * 쿠키 검사해서 글쓰기 버튼 생성해줘야함.
      * */
     @GetMapping("/cwo/new")
     public ModelAndView showWritingPage() {

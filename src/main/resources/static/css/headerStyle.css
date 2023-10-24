@@ -93,6 +93,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+    margin: 42px 0px 32px 0px;
 }
 
 .content {
@@ -131,6 +132,7 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px; /* Adjust this margin as needed */
+    margin-bottom: 10px;
 }
 
 /* Styling for individual page buttons */
@@ -243,19 +245,24 @@ footer{
 /*test editor*/
 
 #editor-container {
-    margin: 20px; /* Add margin for spacing */
+    border: 1px solid #ccc; /* Add a border around the editor container */
+    padding: 10px; /* Add some padding for spacing */
+    margin: 45px 0px 32px 0px;
 }
 
 #title-input {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
+    margin: 10px 0px 15px 0px;
+    border: none; /* Remove the border on title input */
+    border-bottom: 1px solid #ccc;
 }
 
 #text-area {
+    margin: 25px 0px 25px 0px;
     width: 100%;
     height: 300px;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc;;
 }
 
 /*button custom.*/
@@ -274,6 +281,7 @@ footer{
     cursor: pointer;
     transition: background-color 0.3s;
     margin-right: 10px;
+    margin-bottom: 7px;
 }
 .custom-button img {
     max-width: 80px; /* Adjust the maximum image width */
