@@ -48,4 +48,8 @@ public class DN_Comment {
     @Nullable
     private String commentPwd;
 
+    @ManyToOne
+    @JoinColumn(name = "contentId", referencedColumnName = "contentId", insertable = false, updatable = false)
+    private DN_Content content;
+
 }

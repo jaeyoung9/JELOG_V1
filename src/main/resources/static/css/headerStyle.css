@@ -299,3 +299,23 @@ footer{
 .custom-button:hover {
     background-color: #0056b3; /* Change the background color on hover */
 }
+
+/* Style for the submit button */
+.submit-button {
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    background-color: #556EE6;
+    padding: 8px 19px;
+    margin: 14px auto; /* Center the button horizontally and add margin for spacing */
+
+    display: block; /* Ensure the button is displayed as a block element */
+    clear: both; /* Clear any floating elements (if needed) */
+}
+
+/* Style for the submit button on hover */
+.submit-button:hover {
+    background-color: #4E68E6; /* Change background color on hover */
+}

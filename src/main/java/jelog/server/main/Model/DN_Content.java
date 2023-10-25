@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Description :
@@ -55,6 +56,12 @@ public class DN_Content {
     private String contentTitle;
     private String contentBody;
     private int views;
+
+    @OneToMany(mappedBy = "contentId", cascade = CascadeType.ALL)
+    private List<DN_Files> files;
+
+    @OneToMany(mappedBy = "contentId", cascade = CascadeType.ALL)
+    private List<DN_Comment> comments;
 
     @CreationTimestamp
     public LocalDateTime inDate;

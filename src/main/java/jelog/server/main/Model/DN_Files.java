@@ -37,5 +37,10 @@ public class DN_Files {
     private String filePath;
     private String fileName;
     private String mediaType;
-    private String resultFile;
+    @Lob
+    private byte[] resultFile;
+
+    @ManyToOne
+    @JoinColumn(name = "contentId", referencedColumnName = "contentId", insertable = false, updatable = false)
+    private DN_Content content;
 }
