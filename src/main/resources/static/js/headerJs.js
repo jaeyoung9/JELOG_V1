@@ -7,7 +7,7 @@ window.onload = signInit();
  * 버튼 로그인, 로그아웃  표시.
  * */
 function signInit(){
-    let cookie = getCookie("JY-ACCESS-TOKEN");
+    let cookie = getCookieValue("JY-ACCESS-TOKEN");
     const sign = document.getElementById("signIn");
     if(cookie == null){
         sign.innerText = "Login";
@@ -30,7 +30,7 @@ function toggleMenu() {
  * 2.로그아웃 클릭시 토큰 삭제.
  * */
 function signInView() {
-    let cookie = getCookie("JY-ACCESS-TOKEN");
+    let cookie = getCookieValue("JY-ACCESS-TOKEN");
     const signCheck = document.getElementById("signIn").innerText;
 
     if(signCheck == "Logout"){

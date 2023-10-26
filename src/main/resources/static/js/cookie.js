@@ -1,17 +1,3 @@
-/**
- * Cookie Check
- * */
-const getCookie = function(cookieName){
-    const cookies = document.cookie.split("; ");
-    for (const cookie of cookies) {
-        const [name, value] = cookie.split("=");
-        if (name === "JY-ACCESS-TOKEN") {
-            return value;
-        }
-    }
-    return null;
-}
-
 function getCookieValue(key) {
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -27,7 +13,7 @@ function getCookieValue(key) {
 /**
  * Cookie Set
  * */
-const setCookie = function (name, value){
+function setCookie(name, value){
     const date = new Date();
     date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
     // Secure; = https 연결을 통해서 전송가능하게 함.
@@ -38,6 +24,6 @@ const setCookie = function (name, value){
 /**
  * Cookie Delete
  * */
-const deleteCookie = function (name){
+function deleteCookie(name){
     document.cookie = `${name}=; expires=Thu, 01 Jan 1999 00:00:10 GMT; Secure; SameSite=Strict; Path=/; `;
 }
