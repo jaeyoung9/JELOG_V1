@@ -1,24 +1,41 @@
 /* General Header Styles */
 
-:root{
+:root {
 
 }
 
-*{
+* {
     font-family: "Saira Extra Condensed", sans-serif;
 }
 
-.fix-a-tag{
+body {
+    background-color: #f2f2f2;
+}
+
+login-body{
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.fix-a-tag {
     text-decoration: none;
     color: #333333;
 }
 
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    background-color: #f5f5f5; /* Light gray background for the header */
+    color: #333; /* Dark text color */
     padding: 10px 20px;
-    background-color: #f2f2f2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc; /* Add a subtle border at the bottom */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a slight shadow */
 }
 
 .header-left {
@@ -38,12 +55,22 @@
 }
 
 /* sign-login Icon Styles */
-.sign-login{
-    position: absolute;
-    display: inline-block;
-    margin: 1px;
-    right: 55px;
-    float: right;
+.sign-login {
+    /* Move to the right */
+    margin-left: auto;
+}
+
+.sign-login button {
+    background-color: #007bff; /* Apple's blue color */
+    color: #fff;
+    padding: 8px 16px; /* Smaller size */
+    border: none;
+    border-radius: 25px; /* Rounded shape */
+    cursor: pointer;
+}
+
+.sign-login button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }
 
 /* Hamburger Menu Icon Styles */
@@ -60,11 +87,12 @@
 .hamburger-menu {
     display: none;
     position: absolute;
-    top: 50px; /* Adjust the position as needed */
-    right: 20px; /* Adjust the position as needed */
-    background-color: #fff;
+    top: 50px;
+    right: 20px;
+    background-color: white;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     padding: 10px;
+    border-radius: 5px;
 }
 
 .hamburger-menu ul {
@@ -121,17 +149,18 @@
     margin-top: auto;
     text-align: right;
 }
+
 .content-more {
     font-size: 14px;
     color: gray;
 }
 
-/* Main Paging List*/
+/* Main Paging List */
 .pagination-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px; /* Adjust this margin as needed */
+    margin-top: 20px;
     margin-bottom: 10px;
 }
 
@@ -174,29 +203,31 @@
 }
 
 /* footer */
-footer{
+.footer {
     border-top: 1px solid #e4e4e4;
-    background-color:#f8f9fa;
-    padding:1rem 0;
-    margin:1rem 0;
+    background-color: #f8f9fa;
+    padding: 1rem 0;
+    margin: 1rem 0;
 }
 
-.footer-message{
+.footer-message {
     font-weight: bold;
-    font-size:0.9rem;
-    color:#545e6f;
-    margin-bottom:0.3rem;
-    margin:0 0 0 0.6rem;
+    font-size: 0.9rem;
+    color: #545e6f;
+    margin-bottom: 0.3rem;
+    margin: 0 0 0 0.6rem;
 }
-.footer-contact{
-    font-size:0.9rem;
-    color:#545e6f;
-    margin:0.6rem;
+
+.footer-contact {
+    font-size: 0.9rem;
+    color: #545e6f;
+    margin: 0.6rem;
 }
-.footer-copyright{
-    font-size:0.9rem;
-    color:#545e6f;
-    margin:0.6rem;
+
+.footer-copyright {
+    font-size: 0.9rem;
+    color: #545e6f;
+    margin: 0.6rem;
 }
 
 /* Sign */
@@ -214,26 +245,67 @@ footer{
 .login-container {
     background-color: white;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 10px; /* Rounded corners */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+}
+.login-h1{
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333; /* Dark text color */
 }
 
 .sign-input {
     width: 100%;
-    padding: 10px;
-    margin: 5px 0;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 5px; /* Rounded corners */
+    margin: 12px 0px 3px 0px;
 }
 
-.loginbutton {
-    background-color: #3498db;
-    color: white;
+.loginButton {
+    background-color: #007bff; /* Apple's blue color */
+    color: #fff;
+    padding: 5px 40px; /* Adjusted padding for size */
     border: none;
-    border-radius: 3px;
-    padding: 10px 20px;
+    border-radius: 8px; /* Rounded shape */
     cursor: pointer;
+    font-size: 18px; /* Adjusted font size */
+    font-weight: bold; /* Make the text bold */
+    text-transform: uppercase; /* Uppercase text */
+    letter-spacing: 1px; /* Adjusted letter spacing */
+    transition: background-color 0.3s;
+    margin-top : 10px;
+}
+
+.loginButton:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.loginForm{
+    text-align: center;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    background-color: #f9f9f9; /* Light gray background */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Add a slight shadow */
+
+    display: flex;
+    flex-direction: row; /* Display children in a row */
+    justify-content: flex-end; /* Push children to the right */
+    align-items: center;
+}
+
+.login-input-box {
+    max-width: 300px; /* Limit the width of the input box */
+    margin-right: 20px; /* Add some space to the right */
+}
+
+.login-input-group{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .message {
@@ -242,62 +314,91 @@ footer{
     margin-top: 10px;
 }
 
-/*test editor*/
+/* test editor */
 
-#editor-container {
-    border: 1px solid #ccc; /* Add a border around the editor container */
-    padding: 10px; /* Add some padding for spacing */
-    margin: 45px 0px 32px 0px;
-}
-
-#title-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0px 15px 0px;
-    border: none; /* Remove the border on title input */
-    border-bottom: 1px solid #ccc;
-}
-
-#text-area {
-    margin: 25px 0px 25px 0px;
-    width: 100%;
-    height: 300px;
+.editor-container {
     border: 1px solid #ccc;
-    overflow: auto;
+    padding: 20px;
+    margin: 45px 0px 32px 0px;
+    background-color: #fff;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/*button custom.*/
+.formatting-button {
+    background-color: #007bff; /* Apple's blue color */
+    color: #fff;
+    border: none;
+    border-radius: 50%; /* Circle shape */
+    cursor: pointer;
+    font-size: 12px;
+    margin: 5px;
+    padding: 10px;
+}
 
-.custom-button{
+.formatting-button i {
+    font-size: 20px;
+}
+
+.formatting-select {
+    padding: 12px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.title-input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-size: 20px;
+}
+
+.text-area {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 0px;
+    height: 300px;
+    overflow: auto;
+    margin: 20px 0;
+    font-size: 16px;
+}
+
+/* button custom */
+
+.custom-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column; /* Place photo on top of text */
-    width: 40px; /* Adjust the width as desired */
-    height: 54px; /* Increase the height */
-    background-color: #bebcc4;
+    flex-direction: column;
+    width: 40px;
+    height: 40px; /* Smaller height */
+    background-color: #007bff; /* Apple's blue color */
     color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: none;
+    border-radius: 50%; /* Circle shape */
     cursor: pointer;
     transition: background-color 0.3s;
     margin-right: 10px;
     margin-bottom: 7px;
 }
+
 .custom-button img {
-    max-width: 80px; /* Adjust the maximum image width */
-    max-height: 80px; /* Adjust the maximum image height */
-    margin: 0 auto; /* Center the image horizontally */
+    max-width: 60px; /* Smaller image size */
+    max-height: 60px; /* Smaller image size */
+    margin: 0 auto;
 }
 
 .custom-button span {
-    text-align: center; /* Center-align the text */
-    font-size: 14px; /* Adjust text size if needed */
-    margin-top: 5px; /* Add spacing between image and text */
+    text-align: center;
+    font-size: 12px; /* Smaller text size */
+    margin-top: 5px;
 }
 
 .custom-button:hover {
-    background-color: #0056b3; /* Change the background color on hover */
+    background-color: #0056b3;
 }
 
 /* Style for the submit button */
@@ -307,15 +408,14 @@ footer{
     cursor: pointer;
     border-radius: 4px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    background-color: #556EE6;
-    padding: 8px 19px;
-    margin: 14px auto; /* Center the button horizontally and add margin for spacing */
-
-    display: block; /* Ensure the button is displayed as a block element */
-    clear: both; /* Clear any floating elements (if needed) */
+    background-color: #556EE6; /* Apple's blue color */
+    padding: 12px 24px;
+    margin: 20px 0;
+    display: block;
+    width: 100%;
 }
 
 /* Style for the submit button on hover */
 .submit-button:hover {
-    background-color: #4E68E6; /* Change background color on hover */
+    background-color: #4E68E6;
 }

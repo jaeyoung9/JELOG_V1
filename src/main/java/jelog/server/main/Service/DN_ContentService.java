@@ -1,6 +1,9 @@
 package jelog.server.main.Service;
 
+import jelog.server.main.Dto.DT_Content;
+import jelog.server.main.Dto.DT_Files;
 import jelog.server.main.Model.DN_Content;
+import jelog.server.main.Model.DN_Files;
 import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Repositories.DN_CommentRepositories;
 import jelog.server.main.Repositories.DN_ContentRepositories;
@@ -58,12 +61,52 @@ public class DN_ContentService {
         }
     }
 
+    public void validateContent(final DT_Content _model){
+        if(null == _model){
+            log.warn("data is check for cannot be null.");
+            throw new RuntimeException("data is check for cannot be null.");
+        }
+    }
+
     /**
      * [Content]
      * Content Services
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * [Content] Create Content
+     * */
+    public DN_Content createContent(DT_Content entity){
+
+        validateContent(entity);
+
+        // DT -> DN conversion
+        DN_Content content = new DN_Content();
+        content.setContentCategories(entity.getContentCategories());
+        content.setContentTitle(entity.getContentTitle());
+        content.setContentBody(entity.getContentBody());
+        content.setContentThumbnail(entity.getContentThumbnail());
+        content = dn_contentRepositories.save(content);
+
+        // Create and save DT_Files for each file in the DTO
+        List<DT_Files> dtFilesList = entity.getFiles();
+        if(null != dtFilesList){
+            for(DT_Files dtFile :dtFilesList){
+                DN_Files saveFile = new DN_Files();
+                saveFile.setFilePath(dtFile.getFilePath());
+                saveFile.setFileName(dtFile.getFileName());
+                saveFile.setMediaType(dtFile.getMediaType());
+                saveFile.setResultFile(dtFile.getResultFile());
+                saveFile.setContentId(content.getContentId());
+                saveFile.setContent(content);
+                dn_filesRepositories.save(saveFile);
+            }
+        }
+
+
+        return content;
+    }
 
     /**
      * [Content] Main Content Page

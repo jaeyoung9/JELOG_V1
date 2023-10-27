@@ -3,7 +3,7 @@
     <div class="logo">
         <!-- Your logo image or text here -->
     </div>
-    <div class="sign-login"><button id="signIn" onclick="signInView()"></button></div>
+    <div class="sign-login"><button id="signIn" onclick="signInView()">Sign In</button></div>
     <input type="checkbox" id="hamburger-checkbox" class="hamburger-checkbox">
     <label for="hamburger-checkbox" class="hamburger-icon">&#9776;</label>
     <nav class="hamburger-menu">
