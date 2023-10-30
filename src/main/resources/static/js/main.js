@@ -23,15 +23,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 const result = data.result;
                 const payload = data.payload.data.content;
 
-                // payload.files.forEach((blob) => {
-                //     const fileName = payload.files.fileName;
-                //     blobToFile(blob,fileName);
-                // });
-
                 const contentList = document.getElementById("contentList");
                 contentList.innerHTML = '';
 
                 for (const content of payload) {
+
                     const contentElement = document.createElement("div");
                     contentElement.className = "content";
                     contentElement.innerHTML =
@@ -42,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         '<div class="content-details">' +
                         '<h3 class="content-title">' + content.contentTitle + '</h3>' +
                         '<p class="content-body">' +
-                        (content.contentBody.length > 20 ? content.contentBody.substring(0, 20) + '<span class="content-more">(자세히)</span>' : content.contentBody) +
+                        limitContentLength(content.contentBody) +
                         '</p>' +
                         '</a>' +
                         '<p class="content-views">Views: ' + content.views + '</p>' +
@@ -81,5 +77,13 @@ document.addEventListener("DOMContentLoaded", function() {
             pageButtonsContainer.appendChild(pageButton);
         }
     }
+
+    function limitContentLength(contentBody) {
+        if (contentBody.length > 20) {
+            return contentBody.substring(0, 20) + '<span class="content-more">(자세히)</span>';
+        }
+        return contentBody;
+    }
+
     fetchPage(currentPage);
 });

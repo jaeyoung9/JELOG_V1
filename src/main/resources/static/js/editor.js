@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const content = new DT_Content();
     const newFiles = [];
+    const newFilesPath = [];
 
 
 
@@ -71,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 insertImageElement(img);
 
-
+                newFilesPath.push(imageUrl);
                 newFiles.push(file);
             };
             reader.readAsArrayBuffer(file);
@@ -140,10 +141,10 @@ document.addEventListener('DOMContentLoaded', function () {
         content.views = 0;
 
 
-        const fileConversionPromises = newFiles.map(file => {
+        const fileConversionPromises = newFiles.map((file, index) => {
             return new Promise((resolve, reject) => {
                 const dtFile = new DT_Files();
-                dtFile.filePath = `<img src="${URL.createObjectURL(file)}" />`;
+                dtFile.filePath = `<img src="${newFilesPath[index]}" />`;
                 dtFile.fileName = file.name;
                 dtFile.mediaType = file.type;
 

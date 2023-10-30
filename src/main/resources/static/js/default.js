@@ -55,4 +55,19 @@ function blobToFile(blob, fileName){
     return new File([blob], fileName);
 }
 
+function replaceBlobUrls(content) {
+    const imgTags = content.match(/<img src="blob:(.*?)"/g);
+    if (imgTags) {
+        for (const imgTag of imgTags) {
+            const matches = /<img src="blob:(.*?)"/.exec(imgTag);
+            if (matches && matches[1]) {
+                const blobUrl = matches[0]; // Get the Blob URL
+                // Replace the img tag with the Blob URL
+                content = content.replace(imgTag, `<img src="${blobUrl}"`);
+            }
+        }
+    }
+    return content;
+}
+
 
