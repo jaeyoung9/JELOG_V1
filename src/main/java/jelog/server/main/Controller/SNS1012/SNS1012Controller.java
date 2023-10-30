@@ -51,9 +51,12 @@ public class SNS1012Controller extends BaseController {
     @PostMapping(value = "/cwo/action")
     public ResponseEntity<?> contentWriting(@RequestBody DT_Content dto){
 
+        if(dto.getFiles().size() != 0)
+        {dto.setContentThumbnail(dto.getFiles().get(0).getFilePath());}
 
+        DN_Content checkContent = contentService.createContent(dto);
         Map<String, Object> map = new HashMap<>();
-
+        map.put("data", checkContent);
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
     }

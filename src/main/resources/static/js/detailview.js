@@ -22,7 +22,7 @@ function fetchView(contentNumber){
             contentElement.innerHTML =
                  '<div class="content-title">' + payload.contentTitle + '</div>'
                 +'<div class="content-thumbnail">'
-                    +'<img src="' + payload.contentThumbnail + '" alt="Content Thumbnail">'
+                + payload.contentThumbnail
                 +'</div>'
                 +'<p class="content-body">' + payload.contentBody + '</p>';
 

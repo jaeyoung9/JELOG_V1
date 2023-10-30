@@ -1,5 +1,6 @@
 package jelog.server.main.Dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jelog.server.main.Model.DN_Files;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,8 @@ public class DT_Files {
     private String fileName;
     private String mediaType;
     private byte[] resultFile;
+
+
     private DT_Content content; // Dependency reference
 
     public DT_Files(DN_Files dnFiles) {

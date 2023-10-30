@@ -8,17 +8,25 @@ document.addEventListener("DOMContentLoaded", function() {
     const apiUrl = "/api/public/mains/?";
 
     function fetchPage(page) {
-
         fetch(apiUrl + new URLSearchParams({
             page: page.toString(),
             size: pageSize.toString(),
             title: ''
         }))
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok){
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 const result = data.result;
                 const payload = data.payload.data.content;
 
+                payload.files.forEach((blob) => {
+                    const fileName = payload.files.fileName;
+                    blobToFile(blob,fileName);
+                });
 
                 const contentList = document.getElementById("contentList");
                 contentList.innerHTML = '';
@@ -29,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     contentElement.innerHTML =
                         '<a  class="fix-a-tag" href=' + '"/api/view/public/mains/relay/' + content.contentId +'/">' +
                         '<div class="content-thumbnail">' +
-                        '<img src="' + content.contentThumbnail + '" alt="Thumbnail">' +
+                        (content.contentThumbnail === null ? 'null' : content.contentThumbnail) +
                         '</div>' +
                         '<div class="content-details">' +
                         '<h3 class="content-title">' + content.contentTitle + '</h3>' +

@@ -1,5 +1,6 @@
 package jelog.server.main.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Enum.OsEnumConverter;
 import lombok.AllArgsConstructor;
@@ -59,9 +60,11 @@ public class DN_Content {
     private int views;
 
     @OneToMany(mappedBy = "contentId", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<DN_Files> files;
 
     @OneToMany(mappedBy = "contentId", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<DN_Comment> comments;
 
     @CreationTimestamp

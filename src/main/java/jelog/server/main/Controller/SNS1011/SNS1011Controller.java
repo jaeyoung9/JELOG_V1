@@ -1,6 +1,8 @@
 package jelog.server.main.Controller.SNS1011;
 
 import jelog.server.main.Controller.BaseController;
+import jelog.server.main.Dto.DT_Content;
+import jelog.server.main.Dto.DT_Files;
 import jelog.server.main.Global.ResponseDTO;
 import jelog.server.main.Model.DN_Content;
 import jelog.server.main.Service.DN_ContentService;
@@ -13,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Description :
@@ -79,4 +83,5 @@ public class SNS1011Controller extends BaseController {
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
     }
+
 }

@@ -23,6 +23,10 @@
                 })
                 .then(data =>{
 
+                    // if(!data.ok){
+                    //     window.location.href = '/api/view/public/mains';
+                    // }
+
                     document.open();
                     document.write(data);
                     history.pushState({}, '', url);
@@ -46,5 +50,9 @@
                 });
         });
     });
+
+function blobToFile(blob, fileName){
+    return new File([blob], fileName);
+}
 
 

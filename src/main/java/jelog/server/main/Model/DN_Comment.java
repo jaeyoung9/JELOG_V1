@@ -1,5 +1,6 @@
 package jelog.server.main.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,6 +50,7 @@ public class DN_Comment {
     private String commentPwd;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "contentId", referencedColumnName = "contentId", insertable = false, updatable = false)
     private DN_Content content;
 

@@ -1,5 +1,7 @@
 package jelog.server.main.Dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Model.DN_Content;
 import lombok.AllArgsConstructor;
@@ -33,7 +35,9 @@ public class DT_Content {
     private String contentTitle;
     private String contentBody;
     private int views;
+
     private List<DT_Files> files;
+
     private List<DT_Comment> comments;
 
     public DT_Content(DN_Content content) {

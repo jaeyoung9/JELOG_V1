@@ -137,7 +137,6 @@ document.addEventListener('DOMContentLoaded', function () {
         content.contentCategories = selectEl.value;
         content.contentTitle = contentTitle.value;
         content.contentBody = showCode ? textField.textContent : textField.innerHTML;
-        content.contentThumbnail = contentThumbnail;
         content.views = 0;
 
 
@@ -162,11 +161,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 
+
+
         Promise.all(fileConversionPromises)
             .then(dtFiles => {
                 content.files = dtFiles;
-
-
                 return goFetch('/api/auth/cwo/action', {
                     method: 'POST',
                     headers: {
