@@ -23,10 +23,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 const result = data.result;
                 const payload = data.payload.data.content;
 
-                payload.files.forEach((blob) => {
-                    const fileName = payload.files.fileName;
-                    blobToFile(blob,fileName);
-                });
+                // payload.files.forEach((blob) => {
+                //     const fileName = payload.files.fileName;
+                //     blobToFile(blob,fileName);
+                // });
 
                 const contentList = document.getElementById("contentList");
                 contentList.innerHTML = '';
