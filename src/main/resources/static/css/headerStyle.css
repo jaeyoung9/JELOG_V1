@@ -118,6 +118,7 @@ login-body{
 
 /* Main Page Content Card View List */
 .content-list {
+    background-color: #f5f5f5;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -126,6 +127,7 @@ login-body{
 
 .content {
     border: 1px solid #ccc;
+    border-radius: 20px 20px 20px 20px;
     padding: 10px;
 }
 

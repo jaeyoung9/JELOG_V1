@@ -27,23 +27,24 @@ document.addEventListener("DOMContentLoaded", function() {
                 contentList.innerHTML = '';
 
                 for (const content of payload) {
-
-                    const contentElement = document.createElement("div");
-                    contentElement.className = "content";
-                    contentElement.innerHTML =
-                        '<a  class="fix-a-tag" href=' + '"/api/view/public/mains/relay/' + content.contentId +'/">' +
-                        '<div class="content-thumbnail">' +
-                        (content.contentThumbnail === null ? 'null' : content.contentThumbnail) +
-                        '</div>' +
-                        '<div class="content-details">' +
-                        '<h3 class="content-title">' + content.contentTitle + '</h3>' +
-                        '<p class="content-body">' +
-                        limitContentLength(content.contentBody) +
-                        '</p>' +
-                        '</a>' +
-                        '<p class="content-views">Views: ' + content.views + '</p>' +
-                        '</div>';
-                    contentList.appendChild(contentElement);
+                    blobFilesToImg(content)
+                        .then(imgTag => {
+                            const contentElement = document.createElement("div");
+                            contentElement.className = "content";
+                            contentElement.innerHTML =
+                                '<a  class="fix-a-tag" href=' + '"/api/view/public/mains/relay/' + content.contentId +'/">' +
+                                '<div class="content-thumbnail">' + imgTag.outerHTML + '</div>' +
+                                '<div class="content-details">' +
+                                '<h3 class="content-title">' + content.contentTitle + '</h3>' +
+                                '<p class="content-body">' + limitContentLength(content.contentBody) + '</p>' +
+                                '</a>' +
+                                '<p class="content-views">Views: ' + content.views + '</p>' +
+                                '</div>';
+                            contentList.appendChild(contentElement);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
                 }
 
                 const totalPages = data.payload.data.totalPages;
@@ -83,6 +84,38 @@ document.addEventListener("DOMContentLoaded", function() {
             return contentBody.substring(0, 20) + '<span class="content-more">(자세히)</span>';
         }
         return contentBody;
+    }
+
+    function blobFilesToImg(data) {
+        return new Promise((resolve, reject) => {
+            if (data.contentThumbnail != null && data.files && data.files[0]) {
+                try {
+                    const byteArray = new Uint8Array(data.files[0].resultFile);
+                    const blob = new Blob([byteArray], { type: data.files[0].mediaType });
+
+                    console.log("Blob created:", blob);
+                    console.log("ByteArray:", byteArray);
+                    console.log("MediaType:", data.files[0].mediaType);
+
+                    const reader = new FileReader();
+                    reader.onload = function () {
+                        const dataURL = reader.result;
+                        console.log("Data URL:", dataURL);
+                        const imgTag = document.createElement('img');
+                        imgTag.src = dataURL;
+                        imgTag.alt = data.contentTitle;
+                        resolve(imgTag);
+                    };
+
+                    reader.readAsDataURL(blob);
+                } catch (error) {
+                    console.error("Error creating blob URL:", error);
+                    reject('Error creating blob URL');
+                }
+            } else {
+                resolve('null');
+            }
+        });
     }
 
     fetchPage(currentPage);
