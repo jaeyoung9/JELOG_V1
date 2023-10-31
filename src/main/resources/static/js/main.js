@@ -34,13 +34,17 @@ document.addEventListener("DOMContentLoaded", function() {
                             contentElement.className = "content";
                             contentElement.innerHTML =
                                 '<a  class="fix-a-tag" href=' + '"/api/view/public/mains/relay/' + content.contentId +'/">' +
-                                '<div class="content-thumbnail">' + imgTag.outerHTML + '</div>' +
-                                '<div class="content-details">' +
-                                '<h3 class="content-title">' + content.contentTitle + '</h3>' +
-                                '<p class="content-body">' + limitContentLength(content.contentBody) + '</p>' +
+                                    '<div class="content-thumbnail-parents">'+
+                                        '<div class="content-thumbnail">' +
+                                            imgTag.outerHTML +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="content-details">' +
+                                        '<h3 class="content-title">' + content.contentTitle + '</h3>' +
+                                        '<p class="content-body">' + limitContentLength(content.contentBody) + '</p>' +
                                 '</a>' +
-                                '<p class="content-views">Views: ' + content.views + '</p>' +
-                                '</div>';
+                                    '<p class="content-views">Views: ' + content.views + '</p>' +
+                                    '</div>';
                             contentList.appendChild(contentElement);
                         })
                         .catch(error => {

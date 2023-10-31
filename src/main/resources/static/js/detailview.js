@@ -13,6 +13,8 @@ function fetchView(contentNumber){
             const result = data.result;
             const payload = data.payload.data;
 
+            // const originBodyData = payload.contentBody;
+            // const newBodyData = originBodyData.querySelector(`<img src=""/>`);
 
             const contentDetails = document.getElementById("content-details");
             contentDetails.innerHTML = '';
@@ -21,9 +23,6 @@ function fetchView(contentNumber){
             contentElement.className = "content";
             contentElement.innerHTML =
                  '<div class="content-title">' + payload.contentTitle + '</div>'
-                +'<div class="content-thumbnail">'
-                + payload.contentThumbnail
-                +'</div>'
                 +'<p class="content-body">' + payload.contentBody + '</p>';
 
 
