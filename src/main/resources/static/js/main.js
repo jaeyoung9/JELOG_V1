@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch(apiUrl + new URLSearchParams({
             page: page.toString(),
             size: pageSize.toString(),
-            title: ''
+            title: '',
+            Categories : ''
         }))
             .then(response => {
                 if (!response.ok){

@@ -56,7 +56,7 @@ public class SNS1011Controller extends BaseController {
      * Main Page Result Data
      * */
     @GetMapping(value = "/mains/")
-    public ResponseEntity<?> mains(@PageableDefault(size = 10) Pageable pageable, String title){
+    public ResponseEntity<?> mains(@PageableDefault(size = 10) Pageable pageable, String title, String Categories){
 
         Map<String, Object> map = new HashMap<>();
         map.put("data",dnContent.findPage(pageable, title));
