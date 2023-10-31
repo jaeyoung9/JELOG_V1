@@ -90,27 +90,19 @@ document.addEventListener("DOMContentLoaded", function() {
         return new Promise((resolve, reject) => {
             if (data.contentThumbnail != null && data.files && data.files[0]) {
                 try {
-                    const byteArray = new Uint8Array(data.files[0].resultFile);
-                    const blob = new Blob([byteArray], { type: data.files[0].mediaType });
+                    const base64Data = data.files[0].resultFile; // Assuming the data is already base64-encoded
 
-                    console.log("Blob created:", blob);
-                    console.log("ByteArray:", byteArray);
-                    console.log("MediaType:", data.files[0].mediaType);
-
-                    const reader = new FileReader();
-                    reader.onload = function () {
-                        const dataURL = reader.result;
-                        console.log("Data URL:", dataURL);
-                        const imgTag = document.createElement('img');
-                        imgTag.src = dataURL;
+                    const imgTag = new Image();
+                    imgTag.onload = function () {
                         imgTag.alt = data.contentTitle;
                         resolve(imgTag);
                     };
-
-                    reader.readAsDataURL(blob);
+                    imgTag.onerror = function () {
+                        reject('Error loading image');
+                    };
+                    imgTag.src = `data:${data.files.mediaType};base64,` + base64Data;
                 } catch (error) {
-                    console.error("Error creating blob URL:", error);
-                    reject('Error creating blob URL');
+                    reject('Error creating image');
                 }
             } else {
                 resolve('null');
