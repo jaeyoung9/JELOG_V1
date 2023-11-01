@@ -35,23 +35,43 @@
         });
     });
 
-function blobToFile(blob, fileName){
-    return new File([blob], fileName);
-}
+    function limitContentLength(contentBody) {
+        if (contentBody.length > 20) {
+            return contentBody.replace(/<img[^>]*>/g, '').trim().substring(0,20) + '<span class="content-more">(자세히)</span>';
+        }
+        return contentBody;
+    }
 
-function replaceBlobUrls(content) {
-    const imgTags = content.match(/<img src="blob:(.*?)"/g);
-    if (imgTags) {
-        for (const imgTag of imgTags) {
-            const matches = /<img src="blob:(.*?)"/.exec(imgTag);
-            if (matches && matches[1]) {
-                const blobUrl = matches[0]; // Get the Blob URL
-                // Replace the img tag with the Blob URL
-                content = content.replace(imgTag, `<img src="${blobUrl}"`);
+    function findImgInBody(contentBody, files){
+        const imgRegex = /<img[^>]*>/g;
+
+        if(contentBody != null && files != null){
+            const searchImg = contentBody.match(imgRegex);
+
+            if (searchImg) {
+                searchImg.forEach((img) => {
+                    const src = img.match(/src="([^"]+)"/);
+                    if (src) {
+                        const imgSrcDataPart = src[1].substring(src[1].indexOf("blob")).split('"')[0];
+
+                        files.forEach((file) => {
+                            const filePath = file.filePath;
+                            const filePathDataPart = filePath.substring(filePath.indexOf("blob")).split('"')[0];
+
+                            if (imgSrcDataPart === filePathDataPart) {
+                                const imgTag = new Image();
+                                imgTag.src = `data:${file.mediaType};base64,` + file.resultFile;
+                                contentBody = contentBody.replace(img, imgTag.outerHTML);
+                            } else {
+                                contentBody = contentBody.replace(img, '(이미지 보기 오류)');
+                            }
+                        });
+                    }
+                });
             }
+
+            return contentBody;
         }
     }
-    return content;
-}
 
 

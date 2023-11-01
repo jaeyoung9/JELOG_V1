@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     '</div>' +
                                     '<div class="content-details">' +
                                         '<h3 class="content-title">' + content.contentTitle + '</h3>' +
-                                        '<p class="content-body">' + limitContentLength(content.contentBody) + '</p>' +
+                                        '<p class="content-body">' + limitContentLength(findImgInBody(content.contentBody, content.files)) + '</p>' +
                                 '</a>' +
                                     '<p class="content-views">Views: ' + content.views + '</p>' +
                                     '</div>';
@@ -84,18 +84,11 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function limitContentLength(contentBody) {
-        if (contentBody.length > 20) {
-            return contentBody.substring(0, 20) + '<span class="content-more">(자세히)</span>';
-        }
-        return contentBody;
-    }
-
     function blobFilesToImg(data) {
         return new Promise((resolve, reject) => {
             if (data.contentThumbnail != null && data.files && data.files[0]) {
                 try {
-                    const base64Data = data.files[0].resultFile; // Assuming the data is already base64-encoded
+                    const base64Data = data.files[0].resultFile;
 
                     const imgTag = new Image();
                     imgTag.onload = function () {
