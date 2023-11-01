@@ -162,12 +162,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 
-
-
         Promise.all(fileConversionPromises)
             .then(dtFiles => {
                 content.files = dtFiles;
-                return goFetch('/api/auth/cwo/action', {
+                const url = '/api/auth/cwo/action';
+                return goFetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

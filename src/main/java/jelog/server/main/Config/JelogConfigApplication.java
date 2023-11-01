@@ -60,9 +60,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
      * @authIgnoring ignoring Setting
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
-//    String[] authIgnoring = {
-//        "/error","/favicon.ico","h2-console/**","/api/public/**","/api/ko-jy/**","/api/view/public/**"
-//    };
+
     private final JwtProvider jwtProvider;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
@@ -73,7 +71,6 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-//        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/favicon/**");
     }
 
     /**
