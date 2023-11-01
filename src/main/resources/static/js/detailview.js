@@ -23,10 +23,39 @@ function fetchView(contentNumber){
             contentElement.className = "content";
             contentElement.innerHTML =
                  '<div class="content-title">' + payload.contentTitle + '</div>'
-                +'<p class="content-body">' + payload.contentBody + '</p>';
+                +'<p class="content-body">' + findImgInBody(payload.contentBody, payload.files) + '</p>';
+
+            const contentCommentElement = document.createElement("div");
+            contentCommentElement.className = 'content-comment';
+            contentCommentElement.innerHTML = '<div class="content-comment-list">' +
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+                '<br>'+
+                '<span>임시 댓글 내용</span>'+
+            '</div>';
 
 
             contentDetails.appendChild(contentElement);
+            contentDetails.appendChild(contentCommentElement);
 
 
         })

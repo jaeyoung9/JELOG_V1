@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     blobFilesToImg(content)
                         .then(imgTag => {
                             const contentElement = document.createElement("div");
-                            contentElement.className = "content";
+                            contentElement.className = "content-page";
                             contentElement.innerHTML =
                                 '<a  class="fix-a-tag" href=' + '"/api/view/public/mains/relay/' + content.contentId +'/">' +
                                     '<div class="content-thumbnail-parents">'+
@@ -43,7 +43,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                         '<h3 class="content-title">' + content.contentTitle + '</h3>' +
                                         '<p class="content-body">' + limitContentLength(findImgInBody(content.contentBody, content.files)) + '</p>' +
                                 '</a>' +
-                                    '<p class="content-views">Views: ' + content.views + '</p>' +
+                                        '<div class="content-footer">' +
+                                            '<hr class="content-footer-hr">' +
+                                            '<p class="content-views">Views: ' + content.views + '</p>' +
+                                        '</div>' +
                                     '</div>';
                             contentList.appendChild(contentElement);
                         })
