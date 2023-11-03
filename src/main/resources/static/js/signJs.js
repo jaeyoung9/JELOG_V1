@@ -78,7 +78,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 },
                 body: JSON.stringify({
                     dnUserAuthEnum : e,
-                    dnName: id_input,
                     daSignID: id_input,
                     dnPasswd: password_input1
                 })

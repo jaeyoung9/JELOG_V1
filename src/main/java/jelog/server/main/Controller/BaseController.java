@@ -1,15 +1,13 @@
 package jelog.server.main.Controller;
 
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Description :
@@ -108,5 +106,23 @@ public class BaseController {
         return newList;
     }
 
+    /**
+     * [Base] Random name
+     * @return name
+     * */
+    public static String randomLetters(@Nullable int number){
+
+        String result = "";
+        if(number == 0){ number = 1; }
+
+        for(int i=1; i<= number; i++) {
+            int rnd = (int) (Math.random() * 52);
+            char base = (rnd < 26 ? 'A' : 'a');
+            char newChar = (char) (base + rnd % 26);
+            result += String.valueOf(newChar);
+        }
+
+        return result;
+    }
 
 }

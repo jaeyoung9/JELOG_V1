@@ -83,7 +83,7 @@ public class UserController extends BaseController {
     }
     @GetMapping(value = "/auth/user")
     public String user(){
-        return "Auth User!";
+        return randomLetters(7);
     }
 
     @GetMapping(value = "/republic")

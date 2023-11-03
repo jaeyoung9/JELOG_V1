@@ -16,6 +16,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
+import static jelog.server.main.Controller.BaseController.randomLetters;
+
 /**
  * [Service]
  * DN_Users
@@ -90,8 +92,8 @@ public class DN_UserService {
         validateUser(entity);
         validateExistUserId(entity);
 
-        int check = dn_userRepositories.findAll().size();
-        if(check == 0){ entity.setDnUserAuthEnum(OsEnum.OP_User2); }
+        if(dn_userRepositories.findAll().size() == 0){ entity.setDnUserAuthEnum(OsEnum.OP_User2); }
+        if(null == entity.getDnName()){ entity.setDnName(randomLetters(8)); }
 
         // Salt, SHA-256 Password Add
         entity.setDnSalt(Encrypt.getSalt());
