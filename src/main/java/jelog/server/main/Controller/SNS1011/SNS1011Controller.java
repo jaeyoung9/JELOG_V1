@@ -3,6 +3,7 @@ package jelog.server.main.Controller.SNS1011;
 import jelog.server.main.Controller.BaseController;
 import jelog.server.main.Dto.DT_Content;
 import jelog.server.main.Dto.DT_Files;
+import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Global.ResponseDTO;
 import jelog.server.main.Model.DN_Content;
 import jelog.server.main.Service.DN_ContentService;
@@ -56,10 +57,10 @@ public class SNS1011Controller extends BaseController {
      * Main Page Result Data
      * */
     @GetMapping(value = "/mains/")
-    public ResponseEntity<?> mains(@PageableDefault(size = 10) Pageable pageable, String title, String Categories){
+    public ResponseEntity<?> mains(@PageableDefault(size = 10) Pageable pageable, String Title, OsEnum Categories){
 
         Map<String, Object> map = new HashMap<>();
-        map.put("data",dnContent.findPage(pageable, title));
+        map.put("data",dnContent.findPage(pageable, Title, Categories));
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
     }

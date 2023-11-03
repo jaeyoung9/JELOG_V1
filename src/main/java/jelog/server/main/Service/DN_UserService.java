@@ -1,6 +1,7 @@
 package jelog.server.main.Service;
 
 
+import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Global.Encrypt;
 import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Model.Jwt.Authority;
@@ -88,6 +89,9 @@ public class DN_UserService {
 
         validateUser(entity);
         validateExistUserId(entity);
+
+        int check = dn_userRepositories.findAll().size();
+        if(check == 0){ entity.setDnUserAuthEnum(OsEnum.OP_User2); }
 
         // Salt, SHA-256 Password Add
         entity.setDnSalt(Encrypt.getSalt());

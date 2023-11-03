@@ -74,4 +74,50 @@
         }
     }
 
+    function blobFilesToImg(data) {
+        return new Promise((resolve, reject) => {
+            if (data.contentThumbnail != null && data.files && data.files[0]) {
+                try {
+                    const base64Data = data.files[0].resultFile;
+
+                    const imgTag = new Image();
+                    imgTag.onload = function () {
+                        imgTag.alt = data.contentTitle;
+                        resolve(imgTag);
+                    };
+                    imgTag.onerror = function () {
+                        reject('Error loading image');
+                    };
+                    imgTag.src = `data:${data.files.mediaType};base64,` + base64Data;
+                } catch (error) {
+                    reject('Error creating image');
+                }
+            } else {
+                resolve('null');
+            }
+        });
+    }
+
+    function DataToURL(data){
+        const url = new URL(window.location);
+        url.hash = '#' + data;
+        window.history.pushState(null, null, url.toString());
+        location.reload(url.toString());
+    }
+
+    function DataFromURL(){
+        const url = new URL(window.location);
+        const data = url.hash.slice(1); // Remove the '#' symbol
+        return data;
+    }
+
+    function toggleForm(formToShow) {
+        if (formToShow === 'login') {
+            document.getElementById('login-container').style.display = 'block';
+            document.getElementById('signup-container').style.display = 'none';
+        } else if (formToShow === 'signup') {
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('signup-container').style.display = 'block';
+        }
+    }
 

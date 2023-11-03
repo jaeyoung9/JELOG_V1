@@ -4,15 +4,18 @@
 document.addEventListener("DOMContentLoaded", function() {
     let currentPage = 0;
     let fetchedPages = 0;
+    let title_input = '';
+    let categories_input = DataFromURL();
     const pageSize = 8;
     const apiUrl = "/api/public/mains/?";
+
 
     function fetchPage(page) {
         fetch(apiUrl + new URLSearchParams({
             page: page.toString(),
             size: pageSize.toString(),
-            title: '',
-            Categories : ''
+            Title: title_input,
+            Categories : categories_input
         }))
             .then(response => {
                 if (!response.ok){
@@ -85,30 +88,6 @@ document.addEventListener("DOMContentLoaded", function() {
             });
             pageButtonsContainer.appendChild(pageButton);
         }
-    }
-
-    function blobFilesToImg(data) {
-        return new Promise((resolve, reject) => {
-            if (data.contentThumbnail != null && data.files && data.files[0]) {
-                try {
-                    const base64Data = data.files[0].resultFile;
-
-                    const imgTag = new Image();
-                    imgTag.onload = function () {
-                        imgTag.alt = data.contentTitle;
-                        resolve(imgTag);
-                    };
-                    imgTag.onerror = function () {
-                        reject('Error loading image');
-                    };
-                    imgTag.src = `data:${data.files.mediaType};base64,` + base64Data;
-                } catch (error) {
-                    reject('Error creating image');
-                }
-            } else {
-                resolve('null');
-            }
-        });
     }
 
     fetchPage(currentPage);

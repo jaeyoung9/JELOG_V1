@@ -2,21 +2,26 @@ package jelog.server.main.Service;
 
 import jelog.server.main.Dto.DT_Content;
 import jelog.server.main.Dto.DT_Files;
+import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Model.DN_Content;
 import jelog.server.main.Model.DN_Files;
 import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Repositories.DN_CommentRepositories;
 import jelog.server.main.Repositories.DN_ContentRepositories;
 import jelog.server.main.Repositories.DN_FilesRepositories;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.experimental.categories.Categories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Description :
@@ -109,8 +114,24 @@ public class DN_ContentService {
     /**
      * [Content] Main Content Page
      * */
-    public Page<?> findPage(Pageable pageable, String Title){
-        return dn_contentRepositories.findDN_ContentByContentTitleContainsOrderByContentIdDesc(Title, pageable);
+    public Page<?> findPage(Pageable pageable, String Title, OsEnum Categories){
+
+        Set<OsEnum> categories = new HashSet<>();
+
+        if(null != Categories){
+            categories.add(Categories);
+        }else {
+            categories.add(OsEnum.LegacyCode(49847));
+            categories.add(OsEnum.LegacyCode(42958));
+            categories.add(OsEnum.LegacyCode(42959));
+            categories.add(OsEnum.LegacyCode(47685));
+            categories.add(OsEnum.LegacyCode(45656));
+            categories.add(OsEnum.LegacyCode(48765));
+            categories.add(OsEnum.LegacyCode(41232));
+            categories.add(OsEnum.LegacyCode(49999));
+        }
+
+        return dn_contentRepositories.findDN_ContentByContentTitleContainsAndContentCategoriesInOrContentCategoriesIsNullOrderByContentIdDesc(Title, categories, pageable);
     }
 
     /**
