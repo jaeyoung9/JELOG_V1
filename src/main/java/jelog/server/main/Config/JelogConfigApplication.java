@@ -117,7 +117,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
     public SqlSessionFactory sqlSession(DataSource dataSource) throws Exception{
         SqlSessionFactoryBean sqlOptions = new SqlSessionFactoryBean();
         sqlOptions.setDataSource(dataSource);
-        Resource[] res = new PathMatchingResourcePatternResolver().getResources("classpath:Mapper/*_SQL.xml");
+        Resource[] res = new PathMatchingResourcePatternResolver().getResources("classpath*:Mapper/*_SQL.xml");
         sqlOptions.setMapperLocations(res);
         return sqlOptions.getObject();
     }
