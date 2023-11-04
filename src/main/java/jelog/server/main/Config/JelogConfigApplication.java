@@ -139,4 +139,5 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
         fileOptions.setMaxUploadSizePerFile(1024 * 1024 * 5);
         return fileOptions;
     }
+
 }

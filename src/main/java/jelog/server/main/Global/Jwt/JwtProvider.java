@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import jelog.server.main.Model.Jwt.Authority;
 import jelog.server.main.Service.Jwt.JpaUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,7 +45,9 @@ public class JwtProvider {
 
     private final long exp = 1000L * 60 * 60 * 24;
 
-    private final JpaUserDetailsService userService;
+    @Autowired
+    private JpaUserDetailsService userService;
+
 
     @PostConstruct
     protected void init() {
