@@ -9,7 +9,7 @@
             <div class="profile-group">
                 <div class="profile-body">
                     <div class="profile-img">
-                        <img class="profile-img-data" src="/static/images/img.png">
+                        <img class="profile-img-data" src="/static/images/img.png" alt="(Memoji)_Apple.com">
                     </div>
                     <div class="profile-content">
                         <span style="font-size: 20px">ProjectMin</span>
@@ -27,7 +27,7 @@
                 <li><a class="main-li-a" onclick="DataToURL('Shell');">Shell</a></li>
                 <li><a class="main-li-a" onclick="DataToURL('Security');">Security</a></li>
                 <li><a class="main-li-a" onclick="DataToURL('DeveloperCareerSkills');">DevSkills</a></li>
-                <!-- Add more menu items as needed -->
+
             </ul>
             <div class="sign-login"><button id="signIn" onclick="signInView()">Sign In</button></div>
         </nav>

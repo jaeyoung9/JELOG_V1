@@ -102,22 +102,8 @@
 
 
     function DataToURL(data){
-
         const url = new URL(window.location);
-
-        let ct_index = '';
-        let sq_index = '';
-        if(url.hash !== '')
-        {
-            ct_index = DataFromURL().split(',')[0].split('ct=').pop();
-            sq_index = DataFromURL().split(',')[1].split('sq=').pop();
-        }
-
-        if(DataFromURL() === ''){
-            url.hash = '#ct=' + data + ',#sq=null';
-        }else{
-            url.hash = '#ct=' + data + ',#sq=null';
-        }
+        url.hash = '#ct=' + data + ',#sq=null';
 
         window.history.pushState(null, null, url.toString());
         location.reload(url.toString());
@@ -128,11 +114,9 @@
         const url = new URL(window.location);
 
         let ct_index = '';
-        let sq_index = '';
         if(url.hash !== '')
         {
             ct_index = DataFromURL().split(',')[0].split('ct=').pop();
-            sq_index = DataFromURL().split(',')[1].split('sq=').pop();
         }
 
         if(DataFromURL() === '')
