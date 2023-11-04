@@ -9,9 +9,12 @@ window.onload = signInit();
 function signInit(){
     let cookie = getCookieValue("JY-ACCESS-TOKEN");
     const sign = document.getElementById("signIn");
+
     if(cookie == null){
         sign.innerText = "Login";
+        document.getElementById('header-nav-sign').style.display = 'none';
     }else{
+        document.getElementById('header-nav-sign').style.display = 'block';
         sign.innerText = "Logout";
     }
 }

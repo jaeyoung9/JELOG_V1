@@ -6,8 +6,18 @@
         </div>
 
         <nav class="hamburger-menu">
+            <div class="profile-group">
+                <div class="profile-body">
+                    <div class="profile-img">
+                        <img src="/static/images/notifications.png">
+                    </div>
+                    <div class="profile-content">
+                        <span>소개 내용글</span>
+                    </div>
+                </div>
+            </div>
             <ul id="search-li-a">
-                <li><a id="custom-li-a" class="fix-a-tag" href="/api/view/auth/cwo/new">Writing</a></li>
+                <li id="header-nav-sign"><a id="custom-li-a" class="fix-a-tag" href="/api/view/auth/cwo/new">Writing</a></li>
                 <li><a href="/api/view/public/mains/" class="main-li-a">Mains</a></li>
                 <li><a class="main-li-a" onclick="DataToURL('Other');">Other</a></li>
                 <li><a class="main-li-a" onclick="DataToURL('Java');">Java</a></li>

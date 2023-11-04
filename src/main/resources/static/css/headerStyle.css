@@ -27,8 +27,10 @@ body {
     color: #333333;
 }
 
-.main-li-a {
+.main-li-a{
     cursor: pointer;
+    font-size: 17px;
+    text-align: center;
 }
 
 .header {
@@ -62,6 +64,7 @@ body {
 /* sign-login Icon Styles */
 .sign-login {
     margin-left: auto;
+    text-align: center;
 }
 
 .sign-login button {
@@ -102,6 +105,8 @@ body {
     padding-top: 20px;
     left: 0;
     display: block;
+    border-radius: 0px 20px 20px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .hamburger-menu ul {
@@ -112,12 +117,30 @@ body {
 
 .hamburger-menu li {
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .hamburger-menu a {
     text-decoration: none;
     color: #333;
     font-size: 16px;
+}
+
+.profile-group{
+    text-align: center;
+    margin: 100px 70px 100px 70px;
+    padding: 10px 0 10px 0;
+    width: 100px;
+    height: 100px;
+    left: 100px;
+}
+.profile-body{
+    width: 100px;
+    height: 100px;
+}
+
+.profile-img{
+    padding: 0 0 40px 0;
 }
 
 .content {
