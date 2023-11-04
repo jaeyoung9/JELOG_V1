@@ -2,6 +2,7 @@ package jelog.server.main.Controller.RU_UseController;
 
 import jelog.server.main.Controller.BaseController;
 import jelog.server.main.Dto.DT_UserDto;
+import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Global.Encrypt;
 import jelog.server.main.Global.Jwt.JwtProvider;
 import jelog.server.main.Global.ResponseDTO;
@@ -51,7 +52,11 @@ public class UserController extends BaseController {
     public ResponseEntity<?> signUser(@RequestBody DT_UserDto dto) {
         DN_UserModel entity = userService.signUser(dto.getDaSignID(), dto.getDnPasswd());
         Map<String, Object> map = new HashMap<>();
-        map.put("JY-ACCESS-TOKEN", jwtProvider.createToken(entity.getDaSignID(), entity.getRoles()));
+        if(entity.getDnUserAuthEnum() != OsEnum.OP_User0) {
+            map.put("JY-ACCESS-TOKEN", jwtProvider.createToken(entity.getDaSignID(), entity.getRoles()));
+        }else{
+            map.put("JY-ACCESS-TOKEN", jwtProvider.createToken(entity.getDaSignID(), null));
+        }
         map.put("JY-REFRESH-TOKEN", "*****" + Encrypt.getSalt());           // TODO : REFRESH TOKEN 적용 필요.
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);

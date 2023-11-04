@@ -9,10 +9,10 @@
             <div class="profile-group">
                 <div class="profile-body">
                     <div class="profile-img">
-                        <img src="/static/images/notifications.png">
+                        <img class="profile-img-data" src="/static/images/img.png">
                     </div>
                     <div class="profile-content">
-                        <span>소개 내용글</span>
+                        <span style="font-size: 20px">ProjectMin</span>
                     </div>
                 </div>
             </div>
