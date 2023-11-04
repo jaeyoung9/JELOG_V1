@@ -125,4 +125,24 @@ public class BaseController {
         return result;
     }
 
+    /**
+     * [Base] Token Decryption
+     * @return boolean data
+     * */
+    public boolean quickTokenDecryption(String a){
+
+        String[] chunks = a.split("\\.");
+
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+//        String header = new String(decoder.decode(chunks[0]));
+        String payload = new String(decoder.decode(chunks[1]));
+
+        boolean data = true;
+        if(data == payload.contains("ROLE_USER") || data == payload.contains("ROLE_ADMIN")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

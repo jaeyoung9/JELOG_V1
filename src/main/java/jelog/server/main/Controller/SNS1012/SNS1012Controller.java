@@ -5,13 +5,11 @@ import jelog.server.main.Dto.DT_Content;
 import jelog.server.main.Global.ResponseDTO;
 import jelog.server.main.Model.DN_Content;
 import jelog.server.main.Service.DN_ContentService;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,15 +47,40 @@ public class SNS1012Controller extends BaseController {
      *
      * */
     @PostMapping(value = "/cwo/action")
-    public ResponseEntity<?> contentWriting(@RequestBody DT_Content dto){
+    public ResponseEntity<?> contentWriting(@RequestBody DT_Content dto, HttpServletRequest request){
+        try {
+            /**
+             * 쿠키 체크.
+             * */
+            String cookieValue = "";
+            for (Cookie cookie : request.getCookies()) {
+                if(cookie.getName().equals("JY-ACCESS-TOKEN")){
+                    cookieValue = cookie.getValue();
+                }
+            }
 
-        if(dto.getFiles().size() != 0)
-        {dto.setContentThumbnail(dto.getFiles().get(0).getFilePath());}
+            if (null != cookieValue) {
+                boolean tokenBool = quickTokenDecryption(cookieValue);
+                if(tokenBool != true){
+                    Exception e = new Exception("error");
+                    throw e;
+                }
+            }else{
+                Exception e = new Exception("error");
+                throw e;
+            }
 
-        DN_Content checkContent = contentService.createContent(dto);
-        Map<String, Object> map = new HashMap<>();
-        map.put("data", checkContent);
-        ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
-        return ResponseEntity.ok().body(responseDTO);
+            if (dto.getFiles().size() != 0) {
+                dto.setContentThumbnail(dto.getFiles().get(0).getFilePath());
+            }
+
+            DN_Content checkContent = contentService.createContent(dto);
+            Map<String, Object> map = new HashMap<>();
+            map.put("data", checkContent);
+            ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+            return ResponseEntity.ok().body(responseDTO);
+        }catch (Exception e){
+            return null;
+        }
     }
 }

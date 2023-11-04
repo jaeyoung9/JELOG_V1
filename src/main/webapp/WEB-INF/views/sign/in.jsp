@@ -34,8 +34,8 @@
                         <input class="sign-input" type="Password" id="signUpPassword" name="signUpPassword" placeholder="Password"/>
                         <input class="sign-input" type="Password" id="signUpCheckPassword" name="signUpCheckPassword" placeholder="Re-Password"/>
                     </div>
-                    <input type="checkbox" id="cd1">
-                    <label for="cd1" style="font-size: 12px;"><a href="#">개인정보 활용동의</a></label>
+<%--                    <input type="checkbox" id="cd1">--%>
+<%--                    <label for="cd1" style="font-size: 12px;"><a href="#">개인정보 활용동의</a></label>--%>
                     <br>
                     <button class="SignUpButton" type="button" id="SignUpButton">SignUp</button>
                     <input class="loginButton" type="button" onclick="toggleForm('login')" value="SignIn"/>
