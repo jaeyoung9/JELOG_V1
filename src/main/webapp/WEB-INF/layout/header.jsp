@@ -4,9 +4,7 @@
         <div class="logo">
 
         </div>
-        <div class="sign-login"><button id="signIn" onclick="signInView()">Sign In</button></div>
-        <input type="checkbox" id="hamburger-checkbox" class="hamburger-checkbox">
-        <label for="hamburger-checkbox" class="hamburger-icon">&#9776;</label>
+
         <nav class="hamburger-menu">
             <ul id="search-li-a">
                 <li><a id="custom-li-a" class="fix-a-tag" href="/api/view/auth/cwo/new">Writing</a></li>
@@ -21,6 +19,7 @@
                 <li><a class="main-li-a" onclick="DataToURL('DeveloperCareerSkills');">DevSkills</a></li>
                 <!-- Add more menu items as needed -->
             </ul>
+            <div class="sign-login"><button id="signIn" onclick="signInView()">Sign In</button></div>
         </nav>
 
     <script type="text/javascript" src="/static/js/headerJs.js"></script>
