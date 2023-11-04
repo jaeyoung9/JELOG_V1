@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             })
             .catch(error => {
-                console.error("Error:", error);
+                toastr.error('알수없는 오류.');
                 messageElement.textContent = "Login failed. Please check your credentials.";
                 messageElement.style.color = "red";
             });

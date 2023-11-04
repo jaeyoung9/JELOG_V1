@@ -60,6 +60,6 @@ function fetchView(contentNumber){
 
         })
         .catch(error => {
-            console.error("Error fetching data:", error);
+            toastr.error('알수없는 오류.');
         });
 }

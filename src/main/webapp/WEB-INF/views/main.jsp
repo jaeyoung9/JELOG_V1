@@ -2,8 +2,8 @@
 
 <!-- Display the result here -->
 <div class="content-container">
-    <div class="search-button">
-        <input class="main-search-input" placeholder="search" />
+    <div id="search-button" class="search-button">
+        <input id="main-search-input" class="main-search-input" placeholder="search" />
         <input class="main-search-button" type="button"/>
     </div>
     <div class="content-group">

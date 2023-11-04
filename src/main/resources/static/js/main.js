@@ -2,10 +2,19 @@
  * 메인 페이지 구현 및 페이징 구현
  * */
 document.addEventListener("DOMContentLoaded", function() {
+
     let currentPage = 0;
     let fetchedPages = 0;
     let title_input = '';
-    let categories_input = DataFromURL();
+    let categories_input = '';
+
+    if(DataFromURL() !== ''){
+        const item1 = DataFromURL().split(',')[0].split('ct=').pop();
+        const item2 = DataFromURL().split(',')[1].split('sq=').pop();
+        categories_input = item1 === 'null'? '' : item1;
+        title_input = item2 === 'null'? '' : item2;
+    }
+
     const pageSize = 8;
     const apiUrl = "/api/public/mains/?";
 
@@ -14,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch(apiUrl + new URLSearchParams({
             page: page.toString(),
             size: pageSize.toString(),
-            Title: title_input,
+            Title: decodeURI(title_input),
             Categories : categories_input
         }))
             .then(response => {
@@ -54,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             contentList.appendChild(contentElement);
                         })
                         .catch(error => {
-                            console.error(error);
+                            toastr.error('다시 시도해주세요.');
                         });
                 }
 
@@ -64,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 updatePaginationControls(totalPages, currentPage);
             })
             .catch(error => {
-                console.error("Error fetching data:", error);
+                toastr.error('다시 시도해주세요.');
             });
     }
 
@@ -91,4 +100,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     fetchPage(currentPage);
+});
+
+document.getElementById('search-button').addEventListener('keyup', function (event){
+
+    if(event.code === 'Enter'){
+        const search_data = document.getElementById('main-search-input').value;
+        SearchToURL(search_data);
+    }
+
 });

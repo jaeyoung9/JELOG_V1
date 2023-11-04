@@ -7,7 +7,7 @@
                 <span>Email: <a href="mailto:jae.o.jy@gmail.com">jae.o.jy@gmail.com</a></span>
             </div>
             <div class="footer-copyright">
-                <span>&copy; 2023 Your Website. All rights reserved.</span>
+                <span>&copy; 2023 Website. All rights reserved.</span>
             </div>
         </div>
     </div>

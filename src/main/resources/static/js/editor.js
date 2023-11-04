@@ -176,12 +176,16 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(response => response.json())
             .then(data => {
+                if(data.result.code == '200'){
+                    toastr.success('등록완료.');
+                    window.location.href = '/api/view/public/mains/';
+                }else{
+                    throw Error;
+                }
 
-                console.log(data);
             })
             .catch(error => {
-
-                console.error(error);
+                toastr.error('알수없는 오류.');
             });
     });
 

@@ -99,16 +99,54 @@
         });
     }
 
+
+
     function DataToURL(data){
+
         const url = new URL(window.location);
-        url.hash = '#' + data;
+
+        let ct_index = '';
+        let sq_index = '';
+        if(url.hash !== '')
+        {
+            ct_index = DataFromURL().split(',')[0].split('ct=').pop();
+            sq_index = DataFromURL().split(',')[1].split('sq=').pop();
+        }
+
+        if(DataFromURL() === ''){
+            url.hash = '#ct=' + data + ',#sq=null';
+        }else{
+            url.hash = '#ct=' + data + ',#sq=null';
+        }
+
+        window.history.pushState(null, null, url.toString());
+        location.reload(url.toString());
+    }
+
+    function SearchToURL(data){
+
+        const url = new URL(window.location);
+
+        let ct_index = '';
+        let sq_index = '';
+        if(url.hash !== '')
+        {
+            ct_index = DataFromURL().split(',')[0].split('ct=').pop();
+            sq_index = DataFromURL().split(',')[1].split('sq=').pop();
+        }
+
+        if(DataFromURL() === '')
+        { url.hash = '#ct=null,#sq=' + data;}
+        else if(ct_index !== 'null'){ url.hash = '#ct=' + ct_index + ',#sq=' + data;}
+        else{ url.hash = '#ct=null,#sq=' + data; }
+
         window.history.pushState(null, null, url.toString());
         location.reload(url.toString());
     }
 
     function DataFromURL(){
         const url = new URL(window.location);
-        const data = url.hash.slice(1); // Remove the '#' symbol
+        const data = url.hash.slice(1);
         return data;
     }
 
