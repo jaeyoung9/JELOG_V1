@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div th:fragment="body">
+    <div class="content-convert">
+        <div class="content-details" id="content-details"></div>
+    </div>
+
+    <script type="text/javascript" src="/static/js/detailview.js"></script>
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchView([[${contentNumber}]]);
+        });
+    </script>
+</div>
+</html>

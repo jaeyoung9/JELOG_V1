@@ -29,7 +29,9 @@ public class UserViewController extends BaseController {
      * */
     @GetMapping("/in/sign/")
     public ModelAndView showMainPage() {
-        return new ModelAndView("inSign");
+        ModelAndView modelAndView = new ModelAndView("fragments/layout");
+        modelAndView.addObject("data", "page/inSign");
+        return modelAndView;
     }
 
 }

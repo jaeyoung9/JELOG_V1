@@ -28,29 +28,9 @@ function fetchView(contentNumber){
             const contentCommentElement = document.createElement("div");
             contentCommentElement.className = 'content-comment';
             contentCommentElement.innerHTML = '<div class="content-comment-list">' +
-                '<span>임시 댓글 내용</span>'+
+                '<span>해당 칸은 댓글 칸 입니다.</span>'+
                 '<br>'+
-                '<span>임시 댓글 내용</span>'+
-                '<br>'+
-                '<span>임시 댓글 내용</span>'+
-                '<br>'+
-                '<span>임시 댓글 내용</span>'+
-                '<br>'+
-                '<span>임시 댓글 내용</span>'+
-                '<br>'+
-                '<span>임시 댓글 내용</span>'+
-                '<br>'+
-                '<span>임시 댓글 내용</span>'+
-                '<br>'+
-                '<span>임시 댓글 내용</span>'+
-                '<br>'+
-                '<span>임시 댓글 내용</span>'+
-                '<br>'+
-                '<span>임시 댓글 내용</span>'+
-                '<br>'+
-                '<span>임시 댓글 내용</span>'+
-                '<br>'+
-                '<span>임시 댓글 내용</span>'+
+                '<span>차후 RestAPI 연결 예정입니다.</span>'+
             '</div>';
 
 

@@ -22,7 +22,6 @@
                     }
                 })
                 .then(data =>{
-
                     document.open();
                     document.write(data);
                     history.pushState({}, '', url);
@@ -110,7 +109,6 @@
     }
 
     function SearchToURL(data){
-
         const url = new URL(window.location);
 
         let ct_index = '';

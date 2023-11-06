@@ -5,6 +5,7 @@ import jelog.server.main.Model.Jwt.CustomUserDetails;
 import jelog.server.main.Repositories.DN_UserRepositories;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +29,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class JpaUserDetailsService implements UserDetailsService {
 
-    private final DN_UserRepositories dn_userRepositories;
+    private DN_UserRepositories dn_userRepositories;
+
+    @Autowired
+    public void setDN_UserRepositories(DN_UserRepositories dn_userRepositories) {
+        this.dn_userRepositories = dn_userRepositories;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String signUserID) throws UsernameNotFoundException {

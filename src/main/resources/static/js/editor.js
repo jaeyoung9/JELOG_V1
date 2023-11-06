@@ -164,15 +164,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
         Promise.all(fileConversionPromises)
             .then(dtFiles => {
-                content.files = dtFiles;
-                const url = '/api/auth/cwo/action';
-                return goFetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(content),
-                });
+
+                try{
+
+                    if(content.contentTitle === ''){
+                        toastr.warning('제목을 입력하세요.');
+                        throw Error;
+                    }else if(content.contentBody === ''){
+                        toastr.warning('본문을 입력하세요.');
+                        throw Error;
+                    }
+
+                    content.files = dtFiles;
+                    const url = '/api/auth/cwo/action';
+                    return goFetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(content),
+                    });
+                }catch (error){
+
+                }
+
             })
             .then(response => response.json())
             .then(data => {

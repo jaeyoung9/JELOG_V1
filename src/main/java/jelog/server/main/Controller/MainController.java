@@ -13,13 +13,15 @@ import org.springframework.web.servlet.ModelAndView;
  * ============================================================
  * DATE                      AUTHOR                      NOTE
  * ------------------------------------------------------------
- * 2023-11-04               User                최초생성
+ * 2023-11-04               MinJaeYoung                최초생성
  * ------------------------------------------------------------
  */
 @Controller
 public class MainController {
     @GetMapping("/")
     public ModelAndView index(){
-        return new ModelAndView("main");
+        ModelAndView modelAndView = new ModelAndView("fragments/layout");
+        modelAndView.addObject("data", "page/main");
+        return modelAndView;
     }
 }

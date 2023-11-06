@@ -17,14 +17,15 @@ spring:
     username: root
     password: qwe123
   jpa:
-    show-sql: true # DDL출력
+    show-sql: false # 로그출력
     hibernate:
-      format_sql: true
+      format_sql: false # 로그출력
       ddl-auto: create # none , create
       defer-datasource-initialization: false # dummy data
     logging:    # 로깅
       level:
         org:
+#          springframework: DEBUG
           hibernate:
             Connection:
               charSet: UTF-8

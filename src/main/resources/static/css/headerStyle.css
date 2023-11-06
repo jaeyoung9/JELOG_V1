@@ -66,6 +66,7 @@ body {
     margin: 0px 0px 100px 0;
     text-align: center;
     width: 240px;
+    display: none;
 }
 
 .sign-login button {
@@ -185,12 +186,12 @@ body {
 /* Main Page Content Card View List */
 
 .search-button{
-    text-align: center;
+    text-align: right;
 }
 
 .main-search-input{
     position: relative;
-    width: 100%;
+    /*width: 100%;*/
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -493,7 +494,7 @@ body {
 
 .title-input {
     width: 100%;
-    padding: 12px;
+    padding: 12px 0px 12px 0px;
     margin: 10px 0;
     border: none;
     border-bottom: 1px solid #ccc;

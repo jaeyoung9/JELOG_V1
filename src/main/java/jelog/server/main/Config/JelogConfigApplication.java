@@ -8,18 +8,20 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -48,7 +50,7 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(value = {"jelog.server.main.Mapper"})
 @EnableTransactionManagement
-//@EnableWebSecurity
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
     /**
@@ -80,7 +82,8 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
     //-------------------------------------------------------------------------------------------------------------------------------------
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.csrf()
+                .disable()
                 .httpBasic()
                 .disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -89,7 +92,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/public/**","/api/ko-jy/**","/api/view/public/**", "/").permitAll()
+                .antMatchers("/api/public/**","/api/ko-jy/**","/api/view/public/**", "/", "/templates/**").permitAll()
                 .antMatchers("/api/auth/**","/api/view/auth/**").access("hasRole('USER') or hasRole('ADMIN')")
                 .antMatchers("/api/republic/**", "/api/view/republic/**").hasRole("ADMIN")
                 .antMatchers("/static/images/**","/static/css/**", "/static/js/**", "/static/favicon/**", "/favicon.ico").permitAll() // Allow access to CSS and JS files in the /static/ folder
@@ -113,6 +116,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
      * @return Sql data Base 쿼리 매퍼 사용시.
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
+//    @Lazy
     @Bean
     public SqlSessionFactory sqlSession(DataSource dataSource) throws Exception{
         SqlSessionFactoryBean sqlOptions = new SqlSessionFactoryBean();
@@ -122,6 +126,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
         return sqlOptions.getObject();
     }
 
+    //-------------------------------------------------------------------------------------------------------------------------------------
     @Bean
     public SqlSessionTemplate sqlTemplate(SqlSessionFactory sqlSessionFactory) throws Exception{
         return new SqlSessionTemplate(sqlSessionFactory);
@@ -139,5 +144,4 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
         fileOptions.setMaxUploadSizePerFile(1024 * 1024 * 5);
         return fileOptions;
     }
-
 }

@@ -31,7 +31,9 @@ public class SNS1011ViewController extends BaseController {
      * */
     @GetMapping("/mains")
     public ModelAndView showMainPage() {
-        return new ModelAndView("main");
+        ModelAndView modelAndView = new ModelAndView("fragments/layout");
+        modelAndView.addObject("data", "page/main");
+        return modelAndView;
     }
 
     /**
@@ -41,11 +43,10 @@ public class SNS1011ViewController extends BaseController {
     @GetMapping("/mains/relay/{listNumber}/")
     public ModelAndView showMainDetail(@PathVariable int listNumber){
 
-        ModelAndView model = new ModelAndView();
-        model.addObject("contentNumber", listNumber);
-        model.setViewName("main/relay");
-        return model;
-
+        ModelAndView modelAndView = new ModelAndView("fragments/layout");
+        modelAndView.addObject("contentNumber", listNumber);
+        modelAndView.addObject("data", "page/details");
+        return modelAndView;
     }
 
 }

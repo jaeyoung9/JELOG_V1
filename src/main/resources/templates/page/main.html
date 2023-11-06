@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div th:fragment="body">
+    <div class="content-container">
+        <div id="search-button" class="search-button">
+            <input id="main-search-input" class="main-search-input" placeholder="search" />
+            <input class="main-search-button" type="button"/>
+        </div>
+        <div class="content-group">
+            <div class="content-list" id="contentList"></div>
+        </div>
+        <div class="pagination-container">
+            <div class="pagination-pages" id="pageButtons"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:src="@{/static/js/main.js}"></script>
+</div>
+</html>

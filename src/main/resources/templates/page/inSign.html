@@ -1,12 +1,6 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Login Page</title>
-</head>
-<body class="login-body">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div th:fragment="body">
 <div class="body-login-container">
     <div class="login-container" id="login-container" style="display: block">
         <div class="login-SignIn" id="loginFormContainer">
@@ -34,8 +28,8 @@
                         <input class="sign-input" type="Password" id="signUpPassword" name="signUpPassword" placeholder="Password"/>
                         <input class="sign-input" type="Password" id="signUpCheckPassword" name="signUpCheckPassword" placeholder="Re-Password"/>
                     </div>
-<%--                    <input type="checkbox" id="cd1">--%>
-<%--                    <label for="cd1" style="font-size: 12px;"><a href="#">개인정보 활용동의</a></label>--%>
+<!--                      <input type="checkbox" id="cd1">-->
+<!--                      <label for="cd1" style="font-size: 12px;"><a href="#">개인정보 활용동의</a></label>-->
                     <br>
                     <button class="SignUpButton" type="button" id="SignUpButton">SignUp</button>
                     <input class="loginButton" type="button" onclick="toggleForm('login')" value="SignIn"/>
@@ -45,6 +39,6 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/static/js/signJs.js"></script>
-</body>
+<script type="text/javascript" th:src="@{/static/js/signJs.js}"></script>
+</div>
 </html>

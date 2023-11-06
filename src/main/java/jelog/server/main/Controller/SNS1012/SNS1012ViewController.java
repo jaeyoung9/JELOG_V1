@@ -30,7 +30,9 @@ public class SNS1012ViewController extends BaseController {
      * */
     @GetMapping("/cwo/new")
     public ModelAndView showWritingPage() {
-        return new ModelAndView("contentWritingOut");
+        ModelAndView modelAndView = new ModelAndView("fragments/layout");
+        modelAndView.addObject("data", "page/writingOut");
+        return modelAndView;
     }
 
 }

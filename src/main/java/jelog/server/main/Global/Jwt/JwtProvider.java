@@ -31,22 +31,28 @@ import java.util.List;
  * ============================================================
  * DATE                      AUTHOR                      NOTE
  * ------------------------------------------------------------
- * 2023-07-26               User                최초생성
+ * 2023-07-26               MinJaeYoung                최초생성
  * ------------------------------------------------------------
  */
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class JwtProvider {
 
     @Value("${jwt.secret.key}")
     private String saltKey;
+
     private Key secretKey;
 
     private final long exp = 1000L * 60 * 60 * 24;
 
-    @Autowired
+
     private JpaUserDetailsService userService;
+
+    @Autowired
+    public void setUserService(JpaUserDetailsService userService) {
+        this.userService = userService;
+    }
 
 
     @PostConstruct
