@@ -55,7 +55,9 @@ public class DN_Content {
 
     private String contentThumbnail;
     private String contentTitle;
-    @Column(length = 5000)
+
+    @Lob
+    @Column(length = 21844)
     private String contentBody;
     private int views;
 

@@ -225,6 +225,7 @@ body {
     border-bottom: 1px solid #ccc;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 1em;
+    overflow: hidden;
 }
 
 .content-page {
@@ -562,4 +563,93 @@ body {
 /* Style for the submit button on hover */
 .submit-button:hover {
     background-color: #4E68E6;
+}
+
+
+/* Mobile Styles */
+@media only screen and (max-width: 600px) {
+    .login-body {
+        height: auto;
+        padding: 20px;
+    }
+
+    .header {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .logo img {
+        width: 60px; /* Adjusted for smaller screens */
+    }
+
+    .sign-login {
+        width: auto;
+        margin: 10px 0;
+    }
+
+    .sign-login button {
+        width: auto;
+    }
+
+    .hamburger-icon {
+        display: block;
+    }
+
+    .hamburger-checkbox {
+        display: block;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+
+    .hamburger-menu {
+        left: -250px;
+        transition: left 0.3s ease-in-out;
+    }
+
+    .hamburger-menu.open {
+        left: 0;
+    }
+
+    .footer {
+        margin: 0; /* Adjusted margin for the footer on smaller screens */
+    }
+
+    .content-container,
+    .content-convert,
+    .editor-container {
+        margin: 20px; /* Adjusted margin for content on smaller screens */
+    }
+
+    .pagination-container {
+        margin-top: 10px; /* Adjusted margin for pagination on smaller screens */
+        margin-bottom: 5px;
+    }
+
+    .content-list {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    }
+
+    .content-list,
+    .content-page,
+    .content-thumbnail-parents {
+        padding: 10px; /* Adjusted padding for content on smaller screens */
+    }
+
+    .content-thumbnail img {
+        max-width: 100%;
+        width: auto;
+        height: auto;
+    }
+
+    .title-input,
+    .text-area {
+        width: 100%;
+    }
+
+    .custom-button {
+        width: 30px;
+        height: 30px;
+        margin-bottom: 5px;
+    }
 }
