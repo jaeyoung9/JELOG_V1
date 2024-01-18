@@ -51,6 +51,7 @@ public class SNS1012Controller extends BaseController {
         try {
             /**
              * 쿠키 체크.
+             * 공통으로 제외.
              * */
             String cookieValue = "";
             for (Cookie cookie : request.getCookies()) {
