@@ -14,7 +14,7 @@ function getCookieValue(key) {
  * Cookie Set
  * */
 const url = '.project-min.com';
-
+// const url = 'http://localhost:80';
 function setCookie(name, value){
     const date = new Date();
     date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
