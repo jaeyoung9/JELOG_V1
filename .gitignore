@@ -13,10 +13,10 @@
 .idea/**/shelf
 
 ### IntelliJ IDEA ###
-
 application.properties
 application.yml
-
+build.gradle
+settings.gradle
 
 # AWS User-specific
 .idea/**/aws.xml
