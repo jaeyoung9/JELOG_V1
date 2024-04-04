@@ -99,9 +99,11 @@
     }
 
 
-
     function DataToURL(data){
+
         const url = new URL(window.location);
+
+        url.pathname = '/api/view/public/mains/';
         url.hash = '#ct=' + data + ',#sq=null';
 
         window.history.pushState(null, null, url.toString());

@@ -51,25 +51,25 @@ public class SNS1012Controller extends BaseController {
         try {
             /**
              * 쿠키 체크.
-             * 공통으로 제외.
+             * Todo : 추후에 사용할까?...
              * */
-            String cookieValue = "";
-            for (Cookie cookie : request.getCookies()) {
-                if(cookie.getName().equals("JY-ACCESS-TOKEN")){
-                    cookieValue = cookie.getValue();
-                }
-            }
-
-            if (null != cookieValue) {
-                boolean tokenBool = quickTokenDecryption(cookieValue);
-                if(tokenBool != true){
-                    Exception e = new Exception("error");
-                    throw e;
-                }
-            }else{
-                Exception e = new Exception("error");
-                throw e;
-            }
+//            String cookieValue = "";
+//            for (Cookie cookie : request.getCookies()) {
+//                if(cookie.getName().equals("JY-ACCESS-TOKEN")){
+//                    cookieValue = cookie.getValue();
+//                }
+//            }
+//
+//            if (null != cookieValue) {
+//                boolean tokenBool = quickTokenDecryption(cookieValue);
+//                if(tokenBool != true){
+//                    Exception e = new Exception("error");
+//                    throw e;
+//                }
+//            }else{
+//                Exception e = new Exception("error");
+//                throw e;
+//            }
 
             if (dto.getFiles().size() != 0) {
                 dto.setContentThumbnail(dto.getFiles().get(0).getFilePath());
