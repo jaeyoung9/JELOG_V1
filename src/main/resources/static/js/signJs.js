@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const id_input = document.getElementById('signUpName').value;
         const password_input1 = document.getElementById('signUpPassword').value;
         const password_input2 = document.getElementById('signUpCheckPassword').value;
+        const policy = document.getElementById('cd1').checked;
 
         try{
             if(id_input.length === 0){
@@ -66,6 +67,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 throw Error;
             }else if(checkedP !== 'true'){
                 toastr.error('입력된 비밀번호가 일치하지 않습니다.');
+                throw Error;
+            }else if(!policy){
+                toastr.error('필수 약관을 동의해주세요.');
                 throw Error;
             }
 

@@ -1,30 +1,40 @@
-### JELOG_V1 (Blog)
+# 개인 블로그 프로젝트(Jelog)
 
+이 프로젝트는 개인 블로그를 개발하기 위해 Java 기반으로 만들어졌습니다. Spring Boot 및 JPA Spring Data를 사용하여 개발되었습니다.
 
-```
-Ver : 0.1 
-Author : Minjaeyoung
-Tool : Intellij
-DataBase : MySql
-Framework : Spring Boot Spring Data Jpa
+## 프로젝트 소개
 
-The 'Jelog' project is a personal side project.
+이 블로그 프로젝트는 개인이 진행하는 사이드 프로젝트로, 현생 개발을 진행하고 있기에 천천히 진행되는 개인 프로젝트 입니다.
 
-Java was used as the language used, and Spring Data Jpa was used for development.
+개인 블로그 서비스를 제공하기 위해 시작되었습니다. 
 
-Select and use Java version 11.
+Java 언어를 기반으로 하며, Spring Data JPA를 사용하여 개발되었습니다. 프로젝트는 현재 진행 중이며, 향후에는 앱 통합을 진행할 계획입니다.
 
-Project summary:
-  Me want to provide a blog service that developers can use.
-When the web service is completed, we plan to proceed with app integration.
-```
+## 프로젝트 현황 및 향후 계획
 
-인텔리J 개발도구를 사용합니다.
-필요한 라이브러리 및 글로벌 세팅을 진행하며 로그인 기능 같은경우. JWT와 USER ROLE를 이용합니다.
+프로젝트의 현재 상태에서는 아래와 같은 주요 기능이 구현되어 있습니다:
+- 방문자는 회원가입을 할 수 있습니다.
+- 방문자는 게시물을 읽을 수 있습니다.
 
-사용언어는 자바로 제작되었습니다.
+향후 추가할 예정인 기능은 다음과 같습니다:
+- 관리자 페이지: 관리자는 사용자 및 게시물을 관리할 수 있습니다.
+- 댓글 기능: 방문자가 게시물에 댓글을 달 수 있습니다.
 
-천천히 진행하고있는 프로젝트입니다.
-감안하고 필요하신 부분 봐주시면 감사하겠습니다.
+## 사용 기술
 
-감사합니다.
+- Java
+- Spring Boot
+- JPA Spring Data
+- Thymeleaf (템플릿 엔진)
+- MySQL (데이터베이스)
+- HTML, CSS, JavaScript (프론트엔드)
+
+## 참고 문서
+
+- [Spring Boot 공식 문서](https://docs.spring.io/spring-boot/docs/current/reference/html/)
+- [Spring Data JPA 공식 문서](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)
+- [Thymeleaf 공식 문서](https://www.thymeleaf.org/documentation.html)
+
+## 라이센스
+
+이 프로젝트는 MIT 라이센스 하에 배포됩니다.

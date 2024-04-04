@@ -135,6 +135,7 @@
     }
 
     function toggleForm(formToShow) {
+
         if (formToShow === 'login') {
             document.getElementById('login-container').style.display = 'block';
             document.getElementById('signup-container').style.display = 'none';
@@ -142,5 +143,14 @@
             document.getElementById('login-container').style.display = 'none';
             document.getElementById('signup-container').style.display = 'block';
         }
+    }
+
+    function openModal() {
+        document.getElementById("privacyModal").style.display = "block";
+    }
+
+    // 모달을 닫기 위한 함수
+    function closeModal() {
+        document.getElementById("privacyModal").style.display = "none";
     }
 
