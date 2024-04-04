@@ -12,11 +12,15 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
-### IntelliJ IDEA ###
+### IntelliJ IDEA User Setting ###
 application.properties
 application.yml
 build.gradle
 settings.gradle
+JelogApplication
+CustomBeanConfig
+JelogConfigApplication
+JelogTilesConfigApplication
 
 # AWS User-specific
 .idea/**/aws.xml
