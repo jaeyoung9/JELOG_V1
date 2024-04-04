@@ -17,7 +17,6 @@ application.properties
 application.yml
 build.gradle
 settings.gradle
-JelogApplication
 
 # AWS User-specific
 .idea/**/aws.xml
