@@ -18,7 +18,6 @@ application.yml
 build.gradle
 settings.gradle
 JelogApplication
-src/java/jelog/server/main/Config
 
 # AWS User-specific
 .idea/**/aws.xml
