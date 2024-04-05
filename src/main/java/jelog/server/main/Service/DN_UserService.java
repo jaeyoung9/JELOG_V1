@@ -89,34 +89,51 @@ public class DN_UserService {
     @Transactional
     public DN_UserModel createUser(final DN_UserModel entity){
 
-        validateUser(entity);
-        validateExistUserId(entity);
+        try{
+            validateUser(entity);
+            validateExistUserId(entity);
 
-        if(dn_userRepositories.findAll().size() == 0){ entity.setDnUserAuthEnum(OsEnum.OP_User2); }
-        if(null == entity.getDnName()){ entity.setDnName(randomLetters(8)); }
+            if(null == entity.getDnName()){ entity.setDnName(randomLetters(8)); }
 
-        // Salt, SHA-256 Password Add
-        entity.setDnSalt(Encrypt.getSalt());
-        entity.setDnPasswd(Encrypt.getEncrypt(entity.getDnPasswd(), entity.getDnSalt()));
+            // Salt, SHA-256 Password Add
+            entity.setDnSalt(Encrypt.getSalt());
+            entity.setDnPasswd(Encrypt.getEncrypt(entity.getDnPasswd(), entity.getDnSalt()));
 
-        // perMission
-        String aMission = entity.getDnUserAuthEnum().getTitleCode() == 20000 ?
-                "ROLE_USER" :
-                entity.getDnUserAuthEnum().getTitleCode() == 20344 ?
-                        "ROLE_USER" :
-                        entity.getDnUserAuthEnum().getTitleCode() == 24678 ?
-                                "ROLE_ADMIN" :
-                                "ROLE_USER";
+            // 권한 설정
+            assignRole(entity);
 
-        dn_userRepositories.save(entity)
-                .setRoles(Collections
-                        .singletonList(Authority
-                                .builder()
-                                .name(aMission)
-                                .build()));
+            // 사용자 생성
+            DN_UserModel savedEntity = dn_userRepositories.save(entity);
+            log.info("User: {} is saved.", savedEntity.getDnUid());
 
-        log.info("Use : {} is saved.", entity.getDnUid());
-        return dn_userRepositories.findById(entity.getDnUid()).get();
+            return savedEntity;
+        }catch(Exception e){
+            log.error("Error creating user: {}", e.getMessage(), e);
+            throw new RuntimeException("User creation failed.");
+        }
+    }
+
+    /**
+     * [User]
+     * Issuing a user account
+     * 권한설정
+     * */
+    private void assignRole(DN_UserModel entity) {
+        String roleName;
+        switch (entity.getDnUserAuthEnum().getTitleCode()) {
+            case 24678:
+                roleName = "ROLE_ADMIN";
+                break;
+            case 20000:
+            case 20344:
+            default:
+                roleName = "ROLE_USER";
+                break;
+        }
+
+        Authority authority = Authority.builder().name(roleName).build();
+        authority.setDnUserModel(entity);
+        entity.setRoles(Collections.singletonList(authority));
     }
 
     /**
@@ -124,22 +141,22 @@ public class DN_UserService {
      * Sign-In
      * */
     public DN_UserModel signUser(final String signUserID, final String dnPassword){
+        try {
+            validateSign(signUserID, dnPassword);
+            Optional<DN_UserModel> user = dn_userRepositories.findByDaSignID(signUserID);
+            String authPassword = Encrypt.getEncrypt(dnPassword, user.get().getDnSalt());
+            DN_UserModel authUser = dn_userRepositories.findByDaSignIDAndDnPasswd(signUserID, authPassword);
+            validateUser(authUser);
+            validateUserId(authUser);
 
-        validateSign(signUserID, dnPassword);
-        Optional<DN_UserModel> user = dn_userRepositories.findByDaSignID(signUserID);
-        String authPassword = Encrypt.getEncrypt(dnPassword, user.get().getDnSalt());
-        DN_UserModel authUser = dn_userRepositories.findByDaSignIDAndDnPasswd(signUserID,authPassword);
-        validateUser(authUser);
-        validateUserId(authUser);
-
-        // Password Changing
-        authUser.setDnPasswd("*****");
-        authUser.setDnSalt("*****");
-        return authUser;
+            // Password Changing
+            authUser.setDnPasswd("*****");
+            authUser.setDnSalt("*****");
+            return authUser;
+        }catch (Exception e){
+            log.error("Error signing in user: {}", e.getMessage(), e);
+            throw new RuntimeException("User sign-in failed. ", e);
+        }
     }
-
-
-
-
 
 }
