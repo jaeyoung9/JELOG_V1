@@ -1,18 +1,15 @@
 package jelog.server.main.Service;
 
 
-import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Global.Encrypt;
 import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Model.Jwt.Authority;
 import jelog.server.main.Repositories.DN_UserRepositories;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
