@@ -37,4 +37,6 @@ Java 언어를 기반으로 하며, Spring Data JPA를 사용하여 개발되었
 
 ## 라이센스
 
-이 프로젝트는 MIT 라이센스 하에 배포됩니다.
+이 프로젝트는 [Creative Commons Attribution-NonCommercial (CC BY-NC)](https://creativecommons.org/licenses/by-nc/4.0/) 라이센스 하에 배포됩니다. 
+이 라이센스에 따라, 비상업적 목적으로 이 프로젝트를 자유롭게 공유하고 수정할 수 있습니다. 
+상업적 사용은 허용되지 않습니다.
