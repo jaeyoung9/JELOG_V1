@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     function fetchPage(page) {
-        fetch(apiUrl + new URLSearchParams({
+        goFetch(apiUrl + new URLSearchParams({
             page: page.toString(),
             size: pageSize.toString(),
             Title: decodeURI(title_input),

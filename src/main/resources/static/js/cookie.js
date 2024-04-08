@@ -15,7 +15,6 @@ function getCookieValue(key) {
  * */
 function getCurrentDomain(){
     const hostname = window.location.hostname;
-    console.log('data domain : ', hostname);
     if(hostname === "localhost" || hostname === "127.0.0.1"){
         return 'localhost';
     }else{

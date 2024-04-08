@@ -7,7 +7,7 @@ let item = "";
 function fetchView(contentNumber){
 
     const apiUrl = "/api/public/mains/relay/" + contentNumber + "/";
-    fetch(apiUrl)
+    goFetch(apiUrl)
         .then(response => response.json())
         .then(data => {
             const result = data.result;

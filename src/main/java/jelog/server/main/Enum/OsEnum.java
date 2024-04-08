@@ -1,5 +1,7 @@
 package jelog.server.main.Enum;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +77,19 @@ public enum OsEnum {
                 .filter(f-> f.getTitleCode().equals(titleCode))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(String.format("State Code : [%s] does not exist.", titleCode)));
+    }
+
+    @JsonCreator
+    public static OsEnum fromValue(String value){
+        return Arrays.stream(OsEnum.values())
+                .filter(os -> os.getTitle().equals(value))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown value: " + value));
+    }
+
+    @JsonValue
+    public String toValue() {
+        return getTitle();
     }
 
 }

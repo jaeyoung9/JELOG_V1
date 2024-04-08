@@ -8,12 +8,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
     const loginButton = document.getElementById("loginButton");
     const messageElement = document.getElementById("message");
+    const signForm = document.getElementById('SignUpForm');
+    const signButton = document.getElementById('SignUpButton');
+    const signMessageElement = document.getElementById("SignMessage");
+    const passwordInput = document.getElementById('signUpPassword');
+    const passwordCheckInput = document.getElementById('signUpCheckPassword');
 
     loginButton.addEventListener("click", function() {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
         const signInURL = "/api/ko-jy/in/sign/";
-        fetch(signInURL, {
+        goFetch(signInURL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -48,9 +53,6 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     });
 
-    const signForm = document.getElementById('SignUpForm');
-    const signButton = document.getElementById('SignUpButton');
-    const signMessageElement = document.getElementById("SignMessage");
 
     signButton.addEventListener('click', function () {
         const id_input = document.getElementById('signUpName').value;
@@ -61,20 +63,35 @@ document.addEventListener("DOMContentLoaded", function() {
         try{
             if(id_input.length === 0){
                 toastr.warning('아이디를 입력해주세요.');
+                signMessageElement.textContent = "아이디를 입력해주세요.";
+                signMessageElement.style.color = "red";
                 throw Error;
             }else if(password_input1.length === 0 || password_input2.length === 0){
                 toastr.warning('비밀번호를 입력해주세요.');
+                signMessageElement.textContent = "비밀번호를 입력해주세요.";
+                signMessageElement.style.color = "red";
                 throw Error;
-            }else if(checkedP !== 'true'){
+            }else if(password_input1 !== password_input2){
                 toastr.error('입력된 비밀번호가 일치하지 않습니다.');
+                signMessageElement.textContent = "입력된 비밀번호가 일치하지 않습니다.";
+                signMessageElement.style.color = "red";
                 throw Error;
             }else if(!policy){
                 toastr.error('필수 약관을 동의해주세요.');
                 throw Error;
             }
 
+            if(password_input1 === password_input2){
+                const validationResult1 = validatePassword(password_input1);
+                const validationResult2 = validatePassword(password_input2);
+                if(validationResult1 !== true && validationResult2 !== true) {
+                    toastr.error(validationResult1 || validationResult2);
+                    throw Error;
+                }
+            }
+
             const signUpURL = "/api/ko-jy/up/sign/";
-            const e = 3;
+            const e = 'OP_Guest';
             goFetch(signUpURL, {
                 method: "POST",
                 headers: {
@@ -106,20 +123,46 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 
+    passwordInput.addEventListener('keyup', validatePasswords);
+    passwordCheckInput.addEventListener('keyup', validatePasswords);
 
-    document.getElementById('signUpCheckPassword').addEventListener('keyup', function (event){
-        const password_input1 = document.getElementById('signUpPassword').value;
-        const password_input2 = document.getElementById('signUpCheckPassword').value;
+    function validatePasswords() {
+        const password_input1 = passwordInput.value;
+        const password_input2 = passwordCheckInput.value;
 
         if(password_input1 !== password_input2){
             signMessageElement.textContent = "Passwords do not match.";
             signMessageElement.style.color = "red";
-            checkedP = 'false';
-        }else if(password_input1 === password_input2){
+        }else{
             signMessageElement.textContent = "Passwords do match.";
             signMessageElement.style.color = "green";
-            checkedP = 'true';
         }
-    });
+    }
+
+    function validatePassword(password){
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/;
+        const hasLowerCase = /[a-z]/;
+        const hasDigits = /\d/;
+        const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+
+        if (password.length < minLength) {
+            return "비밀번호는 최소 8자 이상이어야 합니다.";
+        }
+        if (!hasUpperCase.test(password)) {
+            return "비밀번호에는 최소 하나의 대문자가 포함되어야 합니다.";
+        }
+        if (!hasLowerCase.test(password)) {
+            return "비밀번호에는 최소 하나의 소문자가 포함되어야 합니다.";
+        }
+        if (!hasDigits.test(password)) {
+            return "비밀번호에는 최소 하나의 숫자가 포함되어야 합니다.";
+        }
+        if (!hasSpecialChar.test(password)) {
+            return "비밀번호에는 최소 하나의 특수 문자가 포함되어야 합니다.";
+        }
+
+        return true;
+    }
 
 });
