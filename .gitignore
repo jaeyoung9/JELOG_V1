@@ -17,12 +17,14 @@ application.properties
 application.yml
 build.gradle
 settings.gradle
+src/main/generated/
 
 # AWS User-specific
 .idea/**/aws.xml
 
 # Generated files
 .idea/**/contentModel.xml
+
 
 # Sensitive or high-churn files
 .idea/**/dataSources/
