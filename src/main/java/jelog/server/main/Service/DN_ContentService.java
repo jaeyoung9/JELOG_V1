@@ -34,6 +34,7 @@ import java.util.Set;
  * ------------------------------------------------------------
  * 2023-07-31               MinJaeYoung                최초생성
  * ------------------------------------------------------------
+ * 2024-04-08               jyMin                @Autowired 수정
  */
 
 @Slf4j
@@ -45,13 +46,17 @@ public class DN_ContentService {
      * Repository
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
-    @Autowired
-    private DN_FilesRepositories dn_filesRepositories;
-    @Autowired
-    private DN_CommentRepositories dn_commentRepositories;
-    @Autowired
-    private DN_ContentRepositories dn_contentRepositories;
 
+    private final DN_FilesRepositories dn_filesRepositories;
+    private final DN_CommentRepositories dn_commentRepositories;
+    private final DN_ContentRepositories dn_contentRepositories;
+
+    @Autowired
+    public DN_ContentService(DN_FilesRepositories dn_filesRepositories, DN_CommentRepositories dn_commentRepositories, DN_ContentRepositories dn_contentRepositories){
+        this.dn_filesRepositories = dn_filesRepositories;
+        this.dn_commentRepositories = dn_commentRepositories;
+        this.dn_contentRepositories = dn_contentRepositories;
+    }
 
     /**
      * [Content]

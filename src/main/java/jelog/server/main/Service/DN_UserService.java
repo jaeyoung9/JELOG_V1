@@ -29,8 +29,11 @@ public class DN_UserService {
      * Repository
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
+    private final DN_UserRepositories dn_userRepositories;
     @Autowired
-    private DN_UserRepositories dn_userRepositories;
+    public DN_UserService(DN_UserRepositories dn_userRepositories){
+        this.dn_userRepositories = dn_userRepositories;
+    }
 
     /**
      * [User]

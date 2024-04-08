@@ -23,6 +23,8 @@ public class QDN_LogModel extends EntityPathBase<DN_LogModel> {
 
     public final EnumPath<jelog.server.main.Enum.OsEnum> dnOs = createEnum("dnOs", jelog.server.main.Enum.OsEnum.class);
 
+    public final StringPath dseIP = createString("dseIP");
+
     public final StringPath dseSignID = createString("dseSignID");
 
     public final DateTimePath<java.time.LocalDateTime> inDate = createDateTime("inDate", java.time.LocalDateTime.class);

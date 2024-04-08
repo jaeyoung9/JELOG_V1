@@ -9,6 +9,7 @@ import jelog.server.main.Global.ResponseDTO;
 import jelog.server.main.Model.DN_UserModel;
 import jelog.server.main.Service.DN_UserService;
 import lombok.Builder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
@@ -37,10 +38,12 @@ public class UserController extends BaseController {
      * DN_UserService
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
-    private DN_UserService userService;
-    private JwtProvider jwtProvider;
-    public UserController(DN_UserService _userSerivce, JwtProvider jwtProvider){
-        this.userService = _userSerivce; this.jwtProvider = jwtProvider;
+    private final DN_UserService userService;
+    private final JwtProvider jwtProvider;
+
+    @Autowired
+    public UserController(DN_UserService _userService, JwtProvider jwtProvider){
+        this.userService = _userService; this.jwtProvider = jwtProvider;
     }
 
 
@@ -73,26 +76,4 @@ public class UserController extends BaseController {
         return signUser(dto);
     }
 
-    /**
-     * [User]
-     * 삭제 예정 테스트 read
-     * 권한 테스트
-     * */
-    @GetMapping(value = "/ko-get/{signUserID}/")
-    public ResponseEntity<?> userInfo(@PathVariable("signUserID") String signUserID){
-        Map<String ,Object> map = new HashMap<>();
-        DN_UserModel entity = userService.signUser(signUserID, "123445");
-        map.put("data", entity);
-        ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
-        return ResponseEntity.ok().body(responseDTO);
-    }
-    @GetMapping(value = "/auth/user")
-    public String user(){
-        return randomLetters(7);
-    }
-
-    @GetMapping(value = "/republic")
-    public String republic(){
-        return "Auth admin!";
-    }
 }

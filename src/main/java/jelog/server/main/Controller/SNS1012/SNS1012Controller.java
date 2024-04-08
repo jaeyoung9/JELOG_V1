@@ -5,6 +5,7 @@ import jelog.server.main.Dto.DT_Content;
 import jelog.server.main.Global.ResponseDTO;
 import jelog.server.main.Model.DN_Content;
 import jelog.server.main.Service.DN_ContentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,9 @@ public class SNS1012Controller extends BaseController {
      * DN_UserService
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
-    private DN_ContentService contentService;
+    private final DN_ContentService contentService;
+
+    @Autowired
     public SNS1012Controller(DN_ContentService _contentService){
         this.contentService = _contentService;
     }
@@ -49,27 +52,6 @@ public class SNS1012Controller extends BaseController {
     @PostMapping(value = "/cwo/action")
     public ResponseEntity<?> contentWriting(@RequestBody DT_Content dto, HttpServletRequest request){
         try {
-            /**
-             * 쿠키 체크.
-             * Todo : 추후에 사용할까?...
-             * */
-//            String cookieValue = "";
-//            for (Cookie cookie : request.getCookies()) {
-//                if(cookie.getName().equals("JY-ACCESS-TOKEN")){
-//                    cookieValue = cookie.getValue();
-//                }
-//            }
-//
-//            if (null != cookieValue) {
-//                boolean tokenBool = quickTokenDecryption(cookieValue);
-//                if(tokenBool != true){
-//                    Exception e = new Exception("error");
-//                    throw e;
-//                }
-//            }else{
-//                Exception e = new Exception("error");
-//                throw e;
-//            }
 
             if (dto.getFiles().size() != 0) {
                 dto.setContentThumbnail(dto.getFiles().get(0).getFilePath());

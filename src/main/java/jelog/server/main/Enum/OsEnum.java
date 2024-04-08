@@ -34,7 +34,8 @@ public enum OsEnum {
     //-----------------------------------------------------------
     OP_None("OP_None",0),
     OP_Windows("OP_Windows", 10000),
-    OP_Mobile("OP_Mobile", 10001),
+    OP_IOS("OP_IOS", 10001),
+    OP_Mobile("OP_Mobile", 10002),
 
     //-----------------------------------------------------------
     OP_User0("OP_Guest", 20000),

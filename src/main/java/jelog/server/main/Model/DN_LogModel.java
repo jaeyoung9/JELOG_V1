@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
  * ------------------------------------------------------------
  * 2023-07-19               MinJaeYoung                최초생성
  * ------------------------------------------------------------
+ * 2024-04-08               MinJaeYoung                Object - dseIP 컬럼추가
  */
 
 @Builder
@@ -43,6 +44,7 @@ public class DN_LogModel {
     private OsEnum dnOs;
 
     private String dseSignID;
+    private String dseIP;
     private String queryString;
 
     @CreationTimestamp

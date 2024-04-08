@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
  * ------------------------------------------------------------
  * 2023-07-31               MinJaeYoung                최초생성
  * ------------------------------------------------------------
+ * 2024-04-08               jyMin                @Autowired 수정
  */
 
 @Slf4j
@@ -27,6 +28,10 @@ public class DN_CommentService {
      * Repository
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
+    private final DN_CommentRepositories commentRepositories;
+
     @Autowired
-    private DN_CommentRepositories dn_commentRepositories;
+    private DN_CommentService(DN_CommentRepositories commentRepositories){
+        this.commentRepositories = commentRepositories;
+    }
 }

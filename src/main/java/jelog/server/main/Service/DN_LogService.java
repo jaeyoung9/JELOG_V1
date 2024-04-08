@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
  * ------------------------------------------------------------
  * 2023-07-20               MinJaeYoung                최초생성
  * ------------------------------------------------------------
+ * 2024-04-08               jyMin                @Autowired 수정
  */
 
 @Slf4j
@@ -27,8 +28,11 @@ public class DN_LogService {
      * Repository
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
-    @Autowired
-    private DN_LogRepositories dn_logRepositories;
 
+    private final DN_LogRepositories dn_logRepositories;
+    @Autowired
+    public DN_LogService(DN_LogRepositories dn_logRepositories){
+        this.dn_logRepositories = dn_logRepositories;
+    }
 
 }
