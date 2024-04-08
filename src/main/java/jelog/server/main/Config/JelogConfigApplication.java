@@ -93,6 +93,7 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/public/**","/api/ko-jy/**","/api/view/public/**", "/", "/templates/**").permitAll()
+                .antMatchers("/api/pro").permitAll()
                 .antMatchers("/api/view/auth/**").access("hasRole('USER') or hasRole('ADMIN')")
                 .antMatchers("/api/republic/**", "/api/view/republic/**", "/api/auth/**").hasRole("ADMIN")
                 .antMatchers("/static/images/**","/static/css/**", "/static/js/**", "/static/favicon/**", "/favicon.ico").permitAll() // Allow access to CSS and JS files in the /static/ folder

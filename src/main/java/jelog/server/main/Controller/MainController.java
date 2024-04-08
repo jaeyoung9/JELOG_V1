@@ -24,4 +24,11 @@ public class MainController {
         modelAndView.addObject("data", "page/main");
         return modelAndView;
     }
+
+    @GetMapping("/api/pro")
+    public ModelAndView index2(){
+        ModelAndView modelAndView = new ModelAndView("fragments/layout");
+        modelAndView.addObject("data", "authPage/authInSign");
+        return modelAndView;
+    }
 }
