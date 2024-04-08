@@ -1,42 +1,31 @@
 # 개인 블로그 프로젝트(Jelog)
 
-이 프로젝트는 개인 블로그를 개발하기 위해 Java 기반으로 만들어졌습니다. Spring Boot 및 JPA Spring Data를 사용하여 개발되었습니다.
+Java와 Spring Boot를 기반으로 한 개인 블로그 개발 프로젝트입니다. 현재는 진행 중인 사이드 프로젝트로, 개인적인 블로그 서비스 제공을 목표로 하고 있습니다.
 
-## 프로젝트 소개
+## 🚀 프로젝트 소개
 
-이 블로그 프로젝트는 개인이 진행하는 사이드 프로젝트로, 현생 개발을 진행하고 있기에 천천히 진행되는 개인 프로젝트 입니다.
+개인 블로그 서비스를 제공하기 위해 시작된 이 프로젝트는 Java를 주 언어로 사용하며, Spring Data JPA를 활용하여 개발되고 있습니다. 앱 통합까지 계획하고 있는 단계별 프로젝트입니다.
 
-개인 블로그 서비스를 제공하기 위해 시작되었습니다. 
+### 현재 기능
+- 회원가입
+- 게시물 검색, 열람
 
-Java 언어를 기반으로 하며, Spring Data JPA를 사용하여 개발되었습니다. 프로젝트는 현재 진행 중이며, 향후에는 앱 통합을 진행할 계획입니다.
+### 계획 중인 기능
+- **관리자 페이지**: 사용자 및 게시물 관리
+- **댓글 기능**: 게시물에 대한 댓글 작성 지원
 
-## 프로젝트 현황 및 향후 계획
+## 🛠 사용 기술
+- **Java**
+- **Spring Boot**
+- **JPA Spring Data**
+- **Thymeleaf**: 템플릿 엔진
+- **MySQL**: 데이터베이스
+- **HTML/CSS/JavaScript**: 프론트엔드
 
-프로젝트의 현재 상태에서는 아래와 같은 주요 기능이 구현되어 있습니다:
-- 방문자는 회원가입을 할 수 있습니다.
-- 방문자는 게시물을 읽을 수 있습니다.
-
-향후 추가할 예정인 기능은 다음과 같습니다:
-- 관리자 페이지: 관리자는 사용자 및 게시물을 관리할 수 있습니다.
-- 댓글 기능: 방문자가 게시물에 댓글을 달 수 있습니다.
-
-## 사용 기술
-
-- Java
-- Spring Boot
-- JPA Spring Data
-- Thymeleaf (템플릿 엔진)
-- MySQL (데이터베이스)
-- HTML, CSS, JavaScript (프론트엔드)
-
-## 참고 문서
-
+## 📚 참고 문서
 - [Spring Boot 공식 문서](https://docs.spring.io/spring-boot/docs/current/reference/html/)
 - [Spring Data JPA 공식 문서](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)
 - [Thymeleaf 공식 문서](https://www.thymeleaf.org/documentation.html)
 
-## 라이센스
-
-이 프로젝트는 [Creative Commons Attribution-NonCommercial (CC BY-NC)](https://creativecommons.org/licenses/by-nc/4.0/) 라이센스 하에 배포됩니다. 
-이 라이센스에 따라, 비상업적 목적으로 이 프로젝트를 자유롭게 공유하고 수정할 수 있습니다. 
-상업적 사용은 허용되지 않습니다.
+## 📄 라이센스
+본 프로젝트는 [Creative Commons Attribution-NonCommercial (CC BY-NC)](https://creativecommons.org/licenses/by-nc/4.0/) 라이센스 하에 배포됩니다. 비상업적 사용에 한해 자유롭게 공유 및 수정이 가능합니다.
