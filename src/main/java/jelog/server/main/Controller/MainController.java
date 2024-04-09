@@ -1,5 +1,7 @@
 package jelog.server.main.Controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,8 +29,14 @@ public class MainController {
 
     @GetMapping("/api/pro")
     public ModelAndView index2(){
-        ModelAndView modelAndView = new ModelAndView("fragments/layout");
-        modelAndView.addObject("data", "authPage/authInSign");
-        return modelAndView;
+        // 로그인 페이지 리다이렉트.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || "anonymousUser".equals(authentication.getPrincipal().toString())) {
+            ModelAndView modelAndView = new ModelAndView("fragments/layout");
+            modelAndView.addObject("data", "authPage/authInSign");
+            return modelAndView;
+        }else{
+            return new ModelAndView("redirect:/api/view/republic/mains");
+        }
     }
 }

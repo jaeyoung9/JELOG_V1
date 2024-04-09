@@ -16,9 +16,11 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -84,7 +86,23 @@ public class JwtProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("JY-ACCESS-TOKEN");
+
+        String bearerToken = request.getHeader("JY-ACCESS-TOKEN");
+
+        if (bearerToken != null) {
+            return bearerToken;
+        }
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            return Arrays.stream(cookies)
+                    .filter(cookie -> "JY-ACCESS-TOKEN".equals(cookie.getName()))
+                    .findFirst()
+                    .map(Cookie::getValue)
+                    .orElse(null);
+        }
+
+        return null;
     }
 
     public boolean validateToken(String jwtToken) {

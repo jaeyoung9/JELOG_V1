@@ -32,19 +32,6 @@ public class JwtAuthenticationFilter extends GenericFilter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        // Type
-//        HttpServletRequest httpRequest = (HttpServletRequest) request;
-//        HttpServletResponse httpResponse = (HttpServletResponse) response;
-//
-//        String requestURI = httpRequest.getRequestURI();
-//
-//        if (requestURI.endsWith(".css")) {
-//            httpResponse.setContentType("text/css");
-//        } else if (requestURI.endsWith(".js")) {
-//            httpResponse.setContentType("application/javascript");
-//        }
-
-
         // Token
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
 
@@ -52,8 +39,6 @@ public class JwtAuthenticationFilter extends GenericFilter {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
-
 
         chain.doFilter(request,response);
     }
