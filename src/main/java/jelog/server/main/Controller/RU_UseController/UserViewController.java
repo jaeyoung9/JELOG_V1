@@ -25,22 +25,5 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class UserViewController extends BaseController {
 
-    /**
-     * [Sign]
-     * Sing In
-     * */
-    @GetMapping("/in/sign/")
-    public ModelAndView showMainPage() {
-        // 로그인 페이지 리다이렉트.
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null || "anonymousUser".equals(authentication.getPrincipal().toString())) {
-            ModelAndView modelAndView = new ModelAndView("fragments/layout");
-            modelAndView.addObject("data", "page/inSign");
-            return modelAndView;
-        }else {
-            return new ModelAndView("redirect:/");
-        }
-
-    }
 
 }

@@ -20,6 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class MainController {
+
+    /**
+     * [Main]
+     * Main Page
+     * */
     @GetMapping("/")
     public ModelAndView index(){
         ModelAndView modelAndView = new ModelAndView("fragments/layout");
@@ -27,6 +32,28 @@ public class MainController {
         return modelAndView;
     }
 
+    /**
+     * [Sign]
+     * Sing In
+     * */
+    @GetMapping("/api/view/public/in/sign/")
+    public ModelAndView index1() {
+        // 로그인 페이지 리다이렉트.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || "anonymousUser".equals(authentication.getPrincipal().toString())) {
+            ModelAndView modelAndView = new ModelAndView("fragments/layout");
+            modelAndView.addObject("data", "page/inSign");
+            return modelAndView;
+        }else {
+            return new ModelAndView("redirect:/");
+        }
+
+    }
+
+    /**
+     * [Sign]
+     * Auth Sing In
+     * */
     @GetMapping("/api/pro")
     public ModelAndView index2(){
         // 로그인 페이지 리다이렉트.
