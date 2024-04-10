@@ -7,6 +7,7 @@ import jelog.server.main.Model.Jwt.Authority;
 import jelog.server.main.Repositories.DN_UserRepositories;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,14 +34,23 @@ public class DatabaseSeeder implements CommandLineRunner {
     public DatabaseSeeder(DN_UserRepositories userRepositories){
         this.userRepositories = userRepositories;
     }
+    @Value("${object.model.id}")
+    private String dataId;
+    @Value("${object.model.pw}")
+    private String dataPw;
+    @Value("${object.model.adminRole}")
+    private String dataRole;
+    @Value("${object.model.adminRoleVal}")
+    private String dataRoleVal;
 
     @Override
     @Transactional
-    public void run(String[] args) throws Exception {
+    public void run(String[] args) {
 
         try{
+
             // 계정 있는경우 생성안함
-            if(userRepositories.existsByDaSignID("jyMin")){
+            if(userRepositories.existsByDaSignID(dataId)){
                 logger.info(() -> "Seeder skipped: An Admin account that has already been created.");
                 return;
             }
@@ -48,16 +58,16 @@ public class DatabaseSeeder implements CommandLineRunner {
             // 솔트 값 생성
             String Salt = Encrypt.getSalt();
             DN_UserModel dataUser = DN_UserModel.builder()
-                    .daSignID("jyMin")
+                    .daSignID(dataId)
                     .dnName("관리자")
-                    .dnPasswd(Encrypt.getEncrypt("971027", Salt))
+                    .dnPasswd(Encrypt.getEncrypt(dataPw, Salt))
                     .dnSalt(Salt)
                     .dnGuest(false)
-                    .dnUserAuthEnum(OsEnum.OP_User2)
+                    .dnUserAuthEnum(OsEnum.fromValue(dataRole))
                     .build();
 
             Authority role = Authority.builder()
-                    .name("ROLE_ADMIN")
+                    .name(dataRoleVal)
                     .build();
 
             dataUser.setRoles(Collections.singletonList(role));

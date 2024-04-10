@@ -33,7 +33,7 @@ public class MainController {
     }
 
     /**
-     * [Sign]
+     * [Sign View]
      * Sing In
      * */
     @GetMapping("/api/view/public/in/sign/")
@@ -51,7 +51,7 @@ public class MainController {
     }
 
     /**
-     * [Sign]
+     * [Sign View]
      * Auth Sing In
      * */
     @GetMapping("/api/pro")
