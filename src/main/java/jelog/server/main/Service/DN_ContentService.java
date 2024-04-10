@@ -86,6 +86,8 @@ public class DN_ContentService {
 
     /**
      * [Content] Create Content
+     * @param entity 게시글 데이터
+     * @return DN_Content content 데이터
      * */
     public DN_Content createContent(DT_Content entity){
 

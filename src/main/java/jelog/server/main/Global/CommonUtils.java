@@ -17,6 +17,11 @@ import java.util.Locale;
  * ------------------------------------------------------------
  */
 public class CommonUtils {
+
+    /**
+     * @param userAgent 사용자 브라우저 정보
+     * @return OsEnum 사용자 OS 여부
+     * */
     public static OsEnum detectOS(String userAgent){
         if(userAgent == null) return OsEnum.OP_None;
         userAgent = userAgent.toLowerCase();

@@ -47,10 +47,10 @@ public class SNS1012Controller extends BaseController {
     /**
      * [writingOut]
      * contentWritingOut New
-     *
+     * @return Json Data
      * */
     @PostMapping(value = "/cwo/action")
-    public ResponseEntity<?> contentWriting(@RequestBody DT_Content dto, HttpServletRequest request){
+    public ResponseEntity<?> contentWriting(@RequestBody DT_Content dto){
         try {
 
             if (dto.getFiles().size() != 0) {
