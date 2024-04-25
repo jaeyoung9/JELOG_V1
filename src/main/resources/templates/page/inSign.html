@@ -1,47 +1,53 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
 <div th:fragment="body">
-<div class="body-login-container">
-    <div class="login-container" id="login-container" style="display: block">
-        <div class="login-SignIn" id="loginFormContainer">
-            <h1 class="login-h1">SignIn</h1>
-            <form class="loginForm" id="loginForm">
-                <div class="login-input-box" id="login-input-box">
-                    <div class="login-input-group">
-                        <input class="sign-input" type="text" id="username" name="username" placeholder="ID" required autocomplete="username">
-                        <input class="sign-input" type="password" id="password" name="password" placeholder="Password" required autocomplete="current-password">
-                    </div>
-                    <button class="loginButton" type="button" id="loginButton">SignIn</button>
-                    <input class="SignUpButton" type="button" onclick="toggleForm('signup')" value="Signup"/>
-                    <p id="message" class="message"></p>
+    <div class="body-login-container">
+        <!-- 로그인 섹션 -->
+        <div class="login-container" id="login-container">
+            <h1 class="form-title">PROJECT</h1>
+            <form class="form outBox" id="loginForm">
+                <div class="inputBox">
+                    <input class="input-field" type="text" id="username" name="username" placeholder=" " required autocomplete="username">
+                    <label for="username">아이디</label>
                 </div>
+                <div class="inputBox">
+                    <input class="input-field" type="password" id="password" name="password" placeholder=" " required autocomplete="current-password">
+                    <label for="password">비밀번호</label>
+                </div>
+                <button class="form-button" type="button" id="loginButton">로그인</button>
+                <p class="switch-button" onclick="toggleForm('signup')">회원가입</p>
+                <p id="message" class="message"></p>
+            </form>
+        </div>
+
+        <!-- 회원가입 섹션 -->
+        <div class="signup-container" id="signup-container" style="display:none;">
+            <h1 class="form-title">PROJECT</h1>
+            <form class="form outBox" id="SignUpForm">
+                <div class="inputBox">
+                    <input class="input-field" type="text" id="signUpName" name="signUpName" placeholder=" " title="이곳에 아이디를 입력하세요." required>
+                    <label for="password">아이디</label>
+                </div>
+                <div class="inputBox">
+                    <input class="input-field" type="password" id="signUpPassword" name="signUpPassword" placeholder=" " title="최소 8자, 대소문자, 숫자, 특수문자를 포함해야 합니다." required>
+                    <label for="password">비밀번호</label>
+                </div>
+                <div class="inputBox">
+                    <input class="input-field" type="password" id="signUpCheckPassword" name="signUpCheckPassword" placeholder=" " title="비밀번호를 다시 입력해 주세요." required>
+                    <label for="password">비밀번호 확인</label>
+                </div>
+                <input type="checkbox" id="cd1">
+                <label for="cd1" style="font-size: 12px;"><a href="#" onclick="openModal()">[필수] 개인정보 수집 및 이용</a></label>
+                <br>
+                <button class="form-button" type="button" id="SignUpButton">회원가입</button>
+                <p class="switch-button" onclick="toggleForm('login')">로그인</p>
+                <p id="SignMessage" class="message"></p>
             </form>
         </div>
     </div>
-    <div class="signup-container" id="signup-container">
-        <div class="login-SignUp" id="signupFormContainer">
-            <h1 class="login-h1">SignUp</h1>
-            <form class="SignUpForm" id="SignUpForm">
-                <div class="login-input-box" id="Sign-input-box">
-                    <div class="login-input-group">
-                        <input class="sign-input" title="이곳에 아이디를 입력하세요." type="text" id="signUpName" name="signUpName" placeholder="ID"/>
-                        <input class="sign-input" title="이곳에 비밀번호를 입력하세요. 최소 8자, 대소문자, 숫자, 특수문자를 포함해야 합니다." type="Password" id="signUpPassword" name="signUpPassword" placeholder="Password"/>
-                        <input class="sign-input" title="이곳에 검증 비밀번호를 입력하세요."type="Password" id="signUpCheckPassword" name="signUpCheckPassword" placeholder="Re-Password"/>
-                    </div>
-                      <input type="checkbox" id="cd1">
-                      <label for="cd1" style="font-size: 12px;"><a href="#" onclick="openModal()">[필수] 개인정보 수집 및 이용</a></label>
-                    <br>
-                    <button class="SignUpButton" type="button" id="SignUpButton">SignUp</button>
-                    <input class="loginButton" type="button" onclick="toggleForm('login')" value="SignIn"/>
-                    <p id="SignMessage" class="message"></p>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <script type="text/javascript" th:src="@{/static/js/signJs.js}"></script>
-
+    <!--약관 섹션-->
     <!-- 모달 약관 서버로 데이터를 빼야함. -->
     <div id="privacyModal" class="modal">
         <!-- 모달 내용 -->
