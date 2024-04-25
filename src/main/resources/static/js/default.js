@@ -59,7 +59,7 @@
 
                             if (imgSrcDataPart === filePathDataPart) {
                                 const imgTag = new Image();
-                                imgTag.style = 'width: 500px; height:auto; object-fit:cover;';
+                                imgTag.className = 'item-details';
                                 imgTag.src = `data:${file.mediaType};base64,` + file.resultFile;
                                 contentBody = contentBody.replace(img, imgTag.outerHTML);
                             } else {
