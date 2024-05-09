@@ -2,8 +2,6 @@ package jelog.server.main.Controller.SNS1011;
 
 import jelog.server.main.Controller.BaseController;
 import jelog.server.main.Dto.DT_Comment;
-import jelog.server.main.Dto.DT_Content;
-import jelog.server.main.Dto.DT_Files;
 import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Global.ResponseDTO;
 import jelog.server.main.Model.DN_Comment;
@@ -21,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Description :
@@ -103,7 +98,6 @@ public class SNS1011Controller extends BaseController {
             cookie.setPath("/");
             response.addCookie(cookie);
         }
-
 
 
         Map<String, Object> map = new HashMap<>();
