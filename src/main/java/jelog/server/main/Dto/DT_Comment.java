@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DT_Comment {
-
+    private int contentId;
     private int commentId;
     private int replyCommentId;
     private String dnUid;
@@ -32,6 +32,7 @@ public class DT_Comment {
     private DT_Content content; // Dependency reference
 
     public DT_Comment(DN_Comment dnComment) {
+        this.contentId = dnComment.getContentId();
         this.commentId = dnComment.getCommentId();
         this.replyCommentId = dnComment.getReplyCommentId();
         this.dnUid = dnComment.getDnUid();

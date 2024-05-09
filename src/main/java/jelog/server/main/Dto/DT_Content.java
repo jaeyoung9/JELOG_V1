@@ -40,6 +40,7 @@ public class DT_Content {
 
     private List<DT_Comment> comments;
 
+    /* Table -> DTO **/
     public DT_Content(DN_Content content) {
         this.contentId = content.getContentId();
         this.contentCategories = content.getContentCategories();

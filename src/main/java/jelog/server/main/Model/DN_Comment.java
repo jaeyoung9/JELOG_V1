@@ -5,9 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * Description :
@@ -35,10 +39,9 @@ public class DN_Comment {
     private int commentId;
     private int contentId;
 
-    @Nullable
+    @ColumnDefault("0")
     private int replyCommentId;
 
-    @Nullable
     private String dnUid;
 
     private String commentBody;
@@ -48,6 +51,12 @@ public class DN_Comment {
 
     @Nullable
     private String commentPwd;
+
+    @CreationTimestamp
+    public LocalDateTime inDate;
+
+    @UpdateTimestamp
+    public LocalDateTime upDate;
 
     @ManyToOne
     @JsonBackReference

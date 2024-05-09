@@ -32,7 +32,7 @@ public class DT_Files {
 
 
     private DT_Content content; // Dependency reference
-
+    /* Table -> DTO **/
     public DT_Files(DN_Files dnFiles) {
         this.fileId = dnFiles.getFileId();
         this.filePath = dnFiles.getFilePath();
