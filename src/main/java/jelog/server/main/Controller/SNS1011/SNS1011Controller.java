@@ -120,6 +120,7 @@ public class SNS1011Controller extends BaseController {
     @PostMapping("/mains/relay/{listNumber}/comments/")
     public ResponseEntity<?> storeComment(@PathVariable int listNumber, @RequestBody DT_Comment dto){
         try{
+            dto.setCommentBody(encodeForHtml(dto.getCommentBody()));
             DN_Comment checkComment = commentService.createComment(dto);
             Map<String, Object> map = new HashMap<>();
             map.put("data", checkComment);

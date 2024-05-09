@@ -163,4 +163,39 @@ public class BaseController {
         return hexString.toString();
     }
 
+    /**
+     * [Base] HTML 엔티티 인코딩을 사용하여 XSS를 방지
+     * @return String input
+     * */
+    public String encodeForHtml(String input) {
+        if (input == null) {
+            return null;
+        }
+        StringBuilder encoded = new StringBuilder(input.length());
+        for (char c : input.toCharArray()) {
+            switch (c) {
+                case '&':
+                    encoded.append("&amp;");
+                    break;
+                case '<':
+                    encoded.append("&lt;");
+                    break;
+                case '>':
+                    encoded.append("&gt;");
+                    break;
+                case '"':
+                    encoded.append("&quot;");
+                    break;
+                case '\'':
+                    encoded.append("&#x27;");
+                    break;
+                case '/':
+                    encoded.append("&#x2F;");
+                    break;
+                default:
+                    encoded.append(c);
+            }
+        }
+        return encoded.toString();
+    }
 }
