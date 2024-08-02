@@ -78,4 +78,22 @@ public class GlobalExceptionHandler {
         log.error("Data integrity violation!", e);
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({NullPointerException.class})
+    public void handleNullPointerException(NullPointerException e) {
+        log.error("Null pointer exception occurred!", e);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({IllegalArgumentException.class})
+    public void handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error("Bad arguments provided!", e);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({EntityNotFoundException.class})
+    public void handleEntityNotFoundException(EntityNotFoundException e) {
+        log.error("Entity not found!", e);
+    }
+
 }
