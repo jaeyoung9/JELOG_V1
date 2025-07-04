@@ -8,6 +8,8 @@ import jelog.server.main.Model.DN_Comment;
 import jelog.server.main.Model.DN_Content;
 import jelog.server.main.Service.DN_CommentService;
 import jelog.server.main.Service.DN_ContentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.NoSuchAlgorithmException;
@@ -40,6 +43,8 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api/public")
 public class SNS1011Controller extends BaseController {
+
+    private static final Logger log = LoggerFactory.getLogger(SNS1011Controller.class);
 
     /**
      * [Variables]
@@ -112,7 +117,7 @@ public class SNS1011Controller extends BaseController {
      * 1. 상세 페이지 댓글 등록
      * */
     @PostMapping("/mains/relay/{listNumber}/comments/")
-    public ResponseEntity<?> storeComment(@PathVariable int listNumber, @RequestBody DT_Comment dto){
+    public ResponseEntity<?> storeComment(@PathVariable int listNumber, @RequestBody @Valid DT_Comment dto){
         try{
             dto.setCommentBody(encodeForHtml(dto.getCommentBody()));
             DN_Comment checkComment = commentService.createComment(dto);
@@ -120,8 +125,13 @@ public class SNS1011Controller extends BaseController {
             map.put("data", checkComment);
             ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
             return ResponseEntity.ok().body(responseDTO);
-        }catch (Exception e){
-            return null;
+        } catch (Exception e) {
+            log.error("Error processing comment submission", e);
+            ResponseDTO responseDTO = ResponseDTO.builder()
+                .result(jelog.server.main.Global.ResponseResult.FAIL)
+                .message("댓글 등록 중 오류가 발생했습니다.")
+                .build();
+            return ResponseEntity.badRequest().body(responseDTO);
         }
     }
 }
