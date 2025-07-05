@@ -36,7 +36,9 @@
 }
 
 .comment-form button:hover {
-    background-color: #007bff;
+    background-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
 }
 
 /* 댓글 목록 스타일 */
@@ -44,15 +46,11 @@
     margin-top: 10px;
 }
 
-/*.comment-item {*/
-/*    padding: 10px;*/
-/*    border-bottom: 1px solid #eee;*/
-/*    margin-bottom: 10px;*/
-/*}*/
+/* Removed commented code - using improved .comment-item below */
 
 .comment-item {
     padding: 10px;
-    background-color: #ffffff; /* 조금 더 어두운 배경색 사용 */
+    background-color: #f8f9fa; /* 약간 회색빛 배경색 사용 */
     border-radius: 4px;
     border-bottom: 1px solid #eee;
     margin-bottom: 10px;
@@ -85,4 +83,67 @@
 .comment-date {
     display: inline-block;
     margin-right: 5px; /* 오른쪽 여백 */
+}
+
+/* 반응형 디자인 */
+@media screen and (max-width: 768px) {
+    .content-comment {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .comment-form textarea {
+        height: 80px;
+        font-size: 14px;
+    }
+    
+    .comment-form button {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    
+    .comment-item {
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+    
+    .comment-content {
+        font-size: 14px;
+    }
+    
+    .comment-meta {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .content-comment {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .comment-form textarea {
+        height: 70px;
+        padding: 8px;
+        font-size: 13px;
+    }
+    
+    .comment-form button {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+    
+    .comment-item {
+        padding: 6px;
+        margin-bottom: 6px;
+    }
+    
+    .comment-content {
+        font-size: 13px;
+        line-height: 1.4;
+    }
+    
+    .comment-meta {
+        font-size: 10px;
+    }
 }

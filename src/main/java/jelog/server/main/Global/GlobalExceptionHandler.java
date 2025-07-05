@@ -121,10 +121,5 @@ public class GlobalExceptionHandler {
         log.error("Bad arguments provided!", e);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({EntityNotFoundException.class})
-    public void handleEntityNotFoundException(EntityNotFoundException e) {
-        log.error("Entity not found!", e);
-    }
 
 }

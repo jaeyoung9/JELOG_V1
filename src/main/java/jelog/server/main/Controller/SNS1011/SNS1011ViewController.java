@@ -49,4 +49,15 @@ public class SNS1011ViewController extends BaseController {
         return modelAndView;
     }
 
+    /**
+     * [Search]
+     * Search Results Page
+     * */
+    @GetMapping("/search")
+    public ModelAndView showSearchResults() {
+        ModelAndView modelAndView = new ModelAndView("fragments/layout");
+        modelAndView.addObject("data", "page/search-results");
+        return modelAndView;
+    }
+
 }

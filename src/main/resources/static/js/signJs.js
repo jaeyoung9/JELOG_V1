@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 const result = data.result;
 
-                if (result.code === 200) {
+                if (result === "SUCCESS") {
                     messageElement.textContent = "Login successful!";
                     messageElement.style.color = "green";
 
@@ -40,14 +40,16 @@ document.addEventListener("DOMContentLoaded", function() {
                     const accessToken = data.payload["JY-ACCESS-TOKEN"];
                     setCookie('JY-ACCESS-TOKEN', accessToken);
 
-                    window.location.replace("/api/view/public/mains");
+                    // Redirect to admin dashboard
+                    window.location.replace("/api/view/republic/mains");
                 } else {
                     messageElement.textContent = "Login failed. Please check your credentials.";
                     messageElement.style.color = "red";
                 }
             })
             .catch(error => {
-                toastr.error('알수없는 오류.');
+                console.error('Login error:', error);
+                toastr.error('로그인 중 오류가 발생했습니다.');
                 messageElement.textContent = "Login failed. Please check your credentials.";
                 messageElement.style.color = "red";
             });
@@ -106,15 +108,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     const result = data.result;
 
-                    if (result.code === 200) {
+                    if (result === "SUCCESS") {
                         toastr.success('회원가입 완료.');
                         toggleForm('login');
                     }else {
-                        toastr.error('다시 시도해주세요.');
+                        toastr.error('회원가입에 실패했습니다: ' + (data.message || '다시 시도해주세요.'));
                         throw Error;
                     }
                 }).catch(error => {
-                    toastr.error('다시 시도해주세요.');
+                    console.error('Signup error:', error);
+                    toastr.error('회원가입 중 오류가 발생했습니다.');
                     throw Error;
             });
         }catch (error){

@@ -1,12 +1,66 @@
-<footer class="footer" th:fragment="footer">
+<footer class="modern-footer" th:fragment="footer">
   <div class="footer-container">
-    <div class="inner">
-      <div class="footer-message">Connect with us</div>
-      <div class="footer-contact">
-        <span>Email: <a href="mailto:jae.o.jy@gmail.com">jae.o.jy@gmail.com</a></span>
+    <div class="footer-content">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <i class="fas fa-code"></i>
+          <span>Jelog</span>
+        </div>
+        <p class="footer-description">
+          개발자를 위한 기술 블로그입니다.<br>
+          다양한 개발 기술과 경험을 공유합니다.
+        </p>
       </div>
+      
+      <div class="footer-section">
+        <h4 class="footer-title">카테고리</h4>
+        <ul class="footer-links">
+          <li><a href="#" onclick="filterByCategory('Java')">Java</a></li>
+          <li><a href="#" onclick="filterByCategory('JavaScript')">JavaScript</a></li>
+          <li><a href="#" onclick="filterByCategory('Python')">Python</a></li>
+          <li><a href="#" onclick="filterByCategory('Security')">보안</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4 class="footer-title">링크</h4>
+        <ul class="footer-links">
+          <li><a href="/">홈</a></li>
+          <li><a href="/api/view/public/in/sign/">로그인</a></li>
+          <li><a href="#" onclick="showPrivacyPolicy()">개인정보처리방침</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4 class="footer-title">연락처</h4>
+        <div class="footer-contact">
+          <a href="mailto:jae.o.jy@gmail.com" class="contact-link">
+            <i class="fas fa-envelope"></i>
+            jae.o.jy@gmail.com
+          </a>
+        </div>
+        <div class="footer-social">
+          <a href="#" class="social-link" aria-label="GitHub">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="#" class="social-link" aria-label="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="#" class="social-link" aria-label="Twitter">
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
       <div class="footer-copyright">
-        <span>&copy; 2023 Website. All rights reserved.</span>
+        <span>&copy; 2024 Jelog. All rights reserved. Made with ❤️ by MinJaeYoung</span>
+      </div>
+      <div class="footer-back-to-top">
+        <button class="back-to-top-btn" onclick="scrollToTop()" aria-label="맨 위로">
+          <i class="fas fa-chevron-up"></i>
+        </button>
       </div>
     </div>
   </div>

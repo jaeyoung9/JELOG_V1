@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시물 작성/편집 - Jelog Admin</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/headerStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-style.css}">
+    
+    <!-- Rich Text Editor CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .post-editor-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .editor-header {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .editor-form {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        
+        .editor-container {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .ql-editor {
+            min-height: 300px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .tag-input-container {
+            position: relative;
+        }
+        
+        .tag-input {
+            padding-bottom: 2rem;
+        }
+        
+        .tag-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+        
+        .tag-suggestion {
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .tag-suggestion:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .tag-item {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tag-remove {
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        
+        .thumbnail-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 6px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .thumbnail-upload:hover {
+            border-color: var(--primary-color);
+            background-color: #f8fafc;
+        }
+        
+        .thumbnail-preview {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+        
+        .meta-section {
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .meta-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-item input {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-outline:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-draft {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-published {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+        
+        .upload-instructions {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .word-count {
+            text-align: right;
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .checkbox-group {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="post-editor-container">
+        <div class="editor-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 style="margin: 0; color: #1f2937;">
+                        <i class="fas fa-edit"></i>
+                        <span th:text="${post?.contentId ? '게시물 편집' : '새 게시물 작성'}">새 게시물 작성</span>
+                    </h1>
+                    <p style="margin: 0.5rem 0 0 0; color: #6b7280;">
+                        <span th:if="${post?.contentId}">
+                            마지막 수정: <span th:text="${#temporals.format(post.upDate, 'yyyy-MM-dd HH:mm')}"></span>
+                        </span>
+                        <span th:unless="${post?.contentId}">새로운 게시물을 작성하세요</span>
+                    </p>
+                </div>
+                <div th:if="${post?.contentId}">
+                    <span class="status-indicator" th:classappend="${post.status == 'PUBLISHED'} ? 'status-published' : 'status-draft'">
+                        <i class="fas fa-circle" style="font-size: 0.5rem;"></i>
+                        <span th:text="${post.status == 'PUBLISHED' ? '게시됨' : '임시저장'}"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <form class="editor-form" id="postForm">
+            <input type="hidden" id="contentId" name="contentId" th:value="${post?.contentId}">
+            
+            <!-- 기본 정보 -->
+            <div class="form-row">
+                <div class="form-col" style="flex: 2;">
+                    <div class="form-group">
+                        <label for="contentTitle" class="form-label">
+                            <i class="fas fa-heading"></i> 제목 *
+                        </label>
+                        <input type="text" id="contentTitle" name="contentTitle" class="form-control" 
+                               th:value="${post?.contentTitle}" placeholder="게시물 제목을 입력하세요" required>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="contentCategories" class="form-label">
+                            <i class="fas fa-folder"></i> 카테고리
+                        </label>
+                        <select id="contentCategories" name="contentCategories" class="form-control form-select">
+                            <option value="">카테고리 선택</option>
+                            <option value="Other" th:selected="${post?.contentCategories?.name() == 'Other'}">기타</option>
+                            <option value="Java" th:selected="${post?.contentCategories?.name() == 'Java'}">Java</option>
+                            <option value="JavaScript" th:selected="${post?.contentCategories?.name() == 'JavaScript'}">JavaScript</option>
+                            <option value="C" th:selected="${post?.contentCategories?.name() == 'C'}">C</option>
+                            <option value="Python" th:selected="${post?.contentCategories?.name() == 'Python'}">Python</option>
+                            <option value="Shell" th:selected="${post?.contentCategories?.name() == 'Shell'}">Shell Script</option>
+                            <option value="Security" th:selected="${post?.contentCategories?.name() == 'Security'}">보안</option>
+                            <option value="DeveloperCareerSkills" th:selected="${post?.contentCategories?.name() == 'DeveloperCareerSkills'}">개발자 커리어</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 썸네일 업로드 -->
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-image"></i> 썸네일 이미지
+                </label>
+                <div class="thumbnail-upload" onclick="document.getElementById('thumbnailInput').click()">
+                    <input type="file" id="thumbnailInput" accept="image/*" style="display: none;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #9ca3af; margin-bottom: 0.5rem;"></i>
+                    <p style="margin: 0; color: #6b7280;">클릭하여 썸네일 이미지를 업로드하세요</p>
+                    <p class="upload-instructions">JPG, PNG, GIF 파일만 지원됩니다 (최대 10MB)</p>
+                </div>
+                <img id="thumbnailPreview" class="thumbnail-preview" style="display: none;" 
+                     th:src="${post?.contentThumbnail}" th:style="${post?.contentThumbnail} ? 'display: block;' : 'display: none;'">
+                <input type="hidden" id="contentThumbnail" name="contentThumbnail" th:value="${post?.contentThumbnail}">
+            </div>
+
+            <!-- 내용 작성 -->
+            <div class="form-group">
+                <label for="contentBody" class="form-label">
+                    <i class="fas fa-align-left"></i> 내용 *
+                </label>
+                <div class="editor-container">
+                    <div id="contentEditor"></div>
+                </div>
+                <div class="word-count">
+                    <span id="wordCount">0</span> 글자
+                </div>
+                <textarea id="contentBody" name="contentBody" style="display: none;" th:text="${post?.contentBody}"></textarea>
+            </div>
+
+            <!-- 요약 -->
+            <div class="form-group">
+                <label for="contentSummary" class="form-label">
+                    <i class="fas fa-align-center"></i> 요약 (SEO 및 미리보기용)
+                </label>
+                <textarea id="contentSummary" name="contentSummary" class="form-control" rows="3" 
+                          th:text="${post?.contentSummary}" placeholder="게시물의 간단한 요약을 작성하세요 (최대 500자)"></textarea>
+            </div>
+
+            <!-- 태그 -->
+            <div class="form-group">
+                <label for="tags" class="form-label">
+                    <i class="fas fa-tags"></i> 태그
+                </label>
+                <div class="tag-input-container">
+                    <input type="text" id="tagInput" class="form-control" placeholder="태그를 입력하고 Enter를 누르세요">
+                    <div class="tag-suggestions" id="tagSuggestions" style="display: none;"></div>
+                </div>
+                <div class="tag-list" id="tagList"></div>
+                <input type="hidden" id="tags" name="tags" th:value="${post?.tags}">
+            </div>
+
+            <!-- SEO 메타 정보 -->
+            <div class="meta-section">
+                <h3 class="meta-title">
+                    <i class="fas fa-search"></i> SEO 설정
+                </h3>
+                
+                <div class="form-group">
+                    <label for="slug" class="form-label">URL Slug</label>
+                    <input type="text" id="slug" name="slug" class="form-control" 
+                           th:value="${post?.slug}" placeholder="url-friendly-slug">
+                    <p style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">
+                        URL에 사용될 고유 식별자입니다. 비워두면 제목에서 자동 생성됩니다.
+                    </p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="metaDescription" class="form-label">Meta Description</label>
+                        <textarea id="metaDescription" name="metaDescription" class="form-control" rows="2" 
+                                  th:text="${post?.metaDescription}" placeholder="검색 결과에 표시될 설명 (최대 160자)"></textarea>
+                    </div>
+                    <div class="form-col">
+                        <label for="metaKeywords" class="form-label">Meta Keywords</label>
+                        <input type="text" id="metaKeywords" name="metaKeywords" class="form-control" 
+                               th:value="${post?.metaKeywords}" placeholder="keyword1, keyword2, keyword3">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 추가 설정 -->
+            <div class="meta-section">
+                <h3 class="meta-title">
+                    <i class="fas fa-cog"></i> 게시 설정
+                </h3>
+                
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="featured" name="featured" 
+                               th:checked="${post?.featured}">
+                        <label for="featured">추천 게시물로 설정</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="allowComments" name="allowComments" 
+                               th:checked="${post?.allowComments}" checked>
+                        <label for="allowComments">댓글 허용</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 액션 버튼 -->
+            <div class="action-buttons">
+                <button type="button" class="btn btn-outline" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i> 취소
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                    <i class="fas fa-save"></i> 임시저장
+                </button>
+                <button type="button" class="btn btn-primary" onclick="publishPost()">
+                    <i class="fas fa-paper-plane"></i> 
+                    <span th:text="${post?.status == 'PUBLISHED' ? '업데이트' : '게시하기'}">게시하기</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script>
+        // Rich Text Editor 초기화
+        const quill = new Quill('#contentEditor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'direction': 'rtl' }],
+                    [{ 'size': ['small', false, 'large', 'huge'] }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'font': [] }],
+                    [{ 'align': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            },
+            placeholder: '게시물 내용을 작성하세요...'
+        });
+
+        // 기존 내용 로드
+        const existingContent = document.getElementById('contentBody').value;
+        if (existingContent) {
+            quill.root.innerHTML = existingContent;
+        }
+
+        // 에디터 내용 변경 시 hidden input 업데이트 및 글자 수 카운트
+        quill.on('text-change', function() {
+            document.getElementById('contentBody').value = quill.root.innerHTML;
+            updateWordCount();
+        });
+
+        // 글자 수 카운트 업데이트
+        function updateWordCount() {
+            const text = quill.getText();
+            const wordCount = text.trim().length;
+            document.getElementById('wordCount').textContent = wordCount.toLocaleString();
+        }
+
+        // 초기 글자 수 설정
+        updateWordCount();
+
+        // 태그 관리
+        let tags = [];
+        const tagInput = document.getElementById('tagInput');
+        const tagList = document.getElementById('tagList');
+        const tagsHidden = document.getElementById('tags');
+
+        // 기존 태그 로드
+        const existingTags = tagsHidden.value;
+        if (existingTags) {
+            tags = existingTags.split(',').map(tag => tag.trim()).filter(tag => tag);
+            renderTags();
+        }
+
+        tagInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addTag(this.value.trim());
+                this.value = '';
+            }
+        });
+
+        function addTag(tagText) {
+            if (tagText && !tags.includes(tagText)) {
+                tags.push(tagText);
+                renderTags();
+                updateTagsInput();
+            }
+        }
+
+        function removeTag(tagText) {
+            tags = tags.filter(tag => tag !== tagText);
+            renderTags();
+            updateTagsInput();
+        }
+
+        function renderTags() {
+            tagList.innerHTML = tags.map(tag => `
+                <span class="tag-item">
+                    ${tag}
+                    <span class="tag-remove" onclick="removeTag('${tag}')">&times;</span>
+                </span>
+            `).join('');
+        }
+
+        function updateTagsInput() {
+            tagsHidden.value = tags.join(',');
+        }
+
+        // 썸네일 업로드
+        document.getElementById('thumbnailInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // 파일 크기 체크 (10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('파일 크기는 10MB를 초과할 수 없습니다.');
+                    return;
+                }
+
+                // 이미지 미리보기
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('thumbnailPreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+
+                // 파일 업로드
+                uploadThumbnail(file);
+            }
+        });
+
+        // 썸네일 업로드 함수
+        function uploadThumbnail(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/api/files/images', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result === 'SUCCESS') {
+                    document.getElementById('contentThumbnail').value = data.payload.fileUrl;
+                } else {
+                    alert('썸네일 업로드에 실패했습니다: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('썸네일 업로드 중 오류가 발생했습니다.');
+            });
+        }
+
+        // 제목에서 자동으로 slug 생성
+        document.getElementById('contentTitle').addEventListener('input', function() {
+            const slugInput = document.getElementById('slug');
+            if (!slugInput.value) {
+                const slug = this.value
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^-|-$/g, '');
+                slugInput.value = slug;
+            }
+        });
+
+        // 임시저장
+        function saveDraft() {
+            submitPost('DRAFT');
+        }
+
+        // 게시하기
+        function publishPost() {
+            submitPost('PUBLISHED');
+        }
+
+        // 게시물 저장/업데이트
+        function submitPost(status) {
+            const formData = new FormData(document.getElementById('postForm'));
+            formData.set('status', status);
+            formData.set('contentBody', quill.root.innerHTML);
+
+            const contentId = document.getElementById('contentId').value;
+            const url = contentId ? `/api/blog/posts/${contentId}` : '/api/blog/posts';
+            const method = contentId ? 'PUT' : 'POST';
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(Object.fromEntries(formData))
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result === 'SUCCESS') {
+                    alert(status === 'DRAFT' ? '임시저장되었습니다.' : '게시되었습니다.');
+                    if (!contentId) {
+                        // 새 게시물인 경우 편집 페이지로 이동
+                        window.location.href = `/admin/posts/edit/${data.payload.post.contentId}`;
+                    }
+                } else {
+                    alert('저장에 실패했습니다: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('저장 중 오류가 발생했습니다.');
+            });
+        }
+
+        // 페이지 이탈 시 경고
+        let hasUnsavedChanges = false;
+        
+        quill.on('text-change', () => hasUnsavedChanges = true);
+        document.getElementById('contentTitle').addEventListener('input', () => hasUnsavedChanges = true);
+        
+        window.addEventListener('beforeunload', function(e) {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+</body>
+</html>

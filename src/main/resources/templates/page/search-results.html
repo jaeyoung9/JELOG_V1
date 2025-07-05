@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div th:fragment="body">
+    <!-- Search Results Header -->
+    <div class="search-results-header">
+        <div class="container">
+            <h1 class="search-title">검색 결과</h1>
+            <div class="search-info">
+                <span class="search-keyword" id="searchKeyword"></span>에 대한 
+                <span class="result-count" id="resultCount">0</span>개의 검색 결과
+            </div>
+            
+            <!-- Advanced Search Form -->
+            <div class="advanced-search-form" id="advancedSearchForm" style="display: none;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="advKeyword">키워드</label>
+                        <input type="text" id="advKeyword" class="form-control" placeholder="검색할 키워드를 입력하세요">
+                    </div>
+                    <div class="form-group">
+                        <label for="advCategory">카테고리</label>
+                        <select id="advCategory" class="form-control">
+                            <option value="">전체 카테고리</option>
+                            <option value="Java">Java</option>
+                            <option value="JavaScript">JavaScript</option>
+                            <option value="Python">Python</option>
+                            <option value="C">C</option>
+                            <option value="Shell">Shell Script</option>
+                            <option value="Security">보안</option>
+                            <option value="DeveloperCareerSkills">개발자 커리어</option>
+                            <option value="Other">기타</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="advDateFrom">시작 날짜</label>
+                        <input type="date" id="advDateFrom" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="advDateTo">종료 날짜</label>
+                        <input type="date" id="advDateTo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="advAuthor">작성자</label>
+                        <input type="text" id="advAuthor" class="form-control" placeholder="작성자명">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" onclick="performAdvancedSearch()">고급 검색</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetAdvancedSearch()">초기화</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Controls -->
+    <div class="search-controls">
+        <div class="container">
+            <div class="controls-left">
+                <button class="btn btn-outline" onclick="toggleAdvancedSearch()">
+                    <i class="fas fa-sliders-h"></i> 고급 검색
+                </button>
+            </div>
+            <div class="controls-right">
+                <select id="sortBy" class="form-control" onchange="applySorting()">
+                    <option value="latest">최신순</option>
+                    <option value="popular">인기순</option>
+                    <option value="views">조회수순</option>
+                    <option value="relevance">관련도순</option>
+                </select>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="list" onclick="changeView('list')">
+                        <i class="fas fa-list"></i>
+                    </button>
+                    <button class="view-btn" data-view="grid" onclick="changeView('grid')">
+                        <i class="fas fa-th"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results Content -->
+    <div class="search-results-content">
+        <div class="container">
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>검색 중입니다...</p>
+            </div>
+
+            <!-- No Results -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <div class="no-results-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>검색 결과가 없습니다</h3>
+                <p>다른 키워드로 검색해보거나 맞춤법을 확인해주세요.</p>
+                <div class="search-suggestions">
+                    <h4>다음 키워드는 어떠세요?</h4>
+                    <div class="suggested-keywords" id="suggestedKeywords"></div>
+                </div>
+            </div>
+
+            <!-- Results List -->
+            <div class="results-list" id="resultsList">
+                <!-- Results will be populated here by JavaScript -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Searches -->
+    <div class="related-searches" id="relatedSearches" style="display: none;">
+        <div class="container">
+            <h3>관련 검색어</h3>
+            <div class="related-keywords" id="relatedKeywords"></div>
+        </div>
+    </div>
+
+    <style>
+        .search-results-header {
+            background: #f8fafc;
+            padding: 2rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .search-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0 0 1rem 0;
+        }
+
+        .search-info {
+            color: #718096;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-keyword {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .result-count {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .advanced-search-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-top: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+        }
+
+        .form-control {
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .search-controls {
+            background: white;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 80px;
+            z-index: 10;
+        }
+
+        .search-controls .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .view-toggle {
+            display: flex;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            padding: 0.5rem 0.75rem;
+            border: none;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            background: #f7fafc;
+        }
+
+        .view-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .search-results-content {
+            padding: 2rem 0;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 4rem 0;
+            color: #718096;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f1f5f9;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 4rem 0;
+            color: #718096;
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+        }
+
+        .suggested-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .keyword-tag {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .keyword-tag:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .results-list {
+            margin-bottom: 2rem;
+        }
+
+        .result-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .result-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-summary {
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .result-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #a0aec0;
+        }
+
+        .result-category {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+
+        .results-list.grid-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .related-searches {
+            background: #f8fafc;
+            padding: 2rem 0;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .related-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-outline:hover {
+            background: #f7fafc;
+        }
+
+        @media (max-width: 768px) {
+            .search-controls .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .results-list.grid-view {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script>
+        // Search Results Page JavaScript
+        let currentPage = 0;
+        let currentKeyword = '';
+        let currentCategory = '';
+        let currentSort = 'latest';
+        let currentView = 'list';
+
+        // Initialize page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSearchResults();
+        });
+
+        function initializeSearchResults() {
+            // Get search parameters from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            currentKeyword = urlParams.get('q') || '';
+            currentCategory = urlParams.get('category') || '';
+            
+            // Update UI
+            document.getElementById('searchKeyword').textContent = currentKeyword;
+            if (currentCategory) {
+                document.getElementById('advCategory').value = currentCategory;
+            }
+            
+            // Perform initial search
+            if (currentKeyword) {
+                performSearch();
+            }
+        }
+
+        async function performSearch() {
+            showLoading();
+            
+            try {
+                let url = `/api/search/posts?keyword=${encodeURIComponent(currentKeyword)}&page=${currentPage}&size=10&sortBy=${currentSort}`;
+                if (currentCategory) {
+                    url += `&category=${currentCategory}`;
+                }
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.result === 'SUCCESS') {
+                    displayResults(data.payload);
+                    updatePagination(data.payload);
+                } else {
+                    showNoResults();
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                showNoResults();
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function displayResults(data) {
+            const resultsList = document.getElementById('resultsList');
+            const resultCount = document.getElementById('resultCount');
+            
+            resultCount.textContent = data.totalElements;
+            
+            if (data.posts && data.posts.length > 0) {
+                resultsList.innerHTML = data.posts.map(post => `
+                    <div class="result-item" onclick="viewPost(${post.contentId})">
+                        <h3 class="result-title">${post.contentTitle}</h3>
+                        <p class="result-summary">${post.contentSummary || extractSummary(post.contentBody)}</p>
+                        <div class="result-meta">
+                            <span class="result-category">${getCategoryName(post.contentCategories)}</span>
+                            <span>${formatDate(post.publishedDate)}</span>
+                            <span>${post.views} 조회</span>
+                            <span>by ${post.author}</span>
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('noResults').style.display = 'none';
+                resultsList.style.display = 'block';
+            } else {
+                showNoResults();
+            }
+        }
+
+        function showNoResults() {
+            document.getElementById('resultsList').style.display = 'none';
+            document.getElementById('noResults').style.display = 'block';
+            document.getElementById('resultCount').textContent = '0';
+            
+            // Load suggested keywords
+            loadSuggestedKeywords();
+        }
+
+        async function loadSuggestedKeywords() {
+            try {
+                const response = await fetch('/api/search/popular-keywords?limit=5');
+                const data = await response.json();
+                
+                if (data.result === 'SUCCESS' && data.payload.keywords) {
+                    const container = document.getElementById('suggestedKeywords');
+                    container.innerHTML = data.payload.keywords.map(keyword => 
+                        `<span class="keyword-tag" onclick="searchKeyword('${keyword}')">${keyword}</span>`
+                    ).join('');
+                }
+            } catch (error) {
+                console.error('Error loading suggested keywords:', error);
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('resultsList').style.display = 'none';
+            document.getElementById('noResults').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingState').style.display = 'none';
+        }
+
+        function updatePagination(data) {
+            const pagination = document.getElementById('pagination');
+            const { currentPage, totalPages, hasNext, hasPrevious } = data;
+            
+            let paginationHtml = '';
+            
+            if (hasPrevious) {
+                paginationHtml += `<button class="page-btn" onclick="goToPage(${currentPage - 1})">이전</button>`;
+            }
+            
+            const startPage = Math.max(0, currentPage - 2);
+            const endPage = Math.min(totalPages - 1, currentPage + 2);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const activeClass = i === currentPage ? 'active' : '';
+                paginationHtml += `<button class="page-btn ${activeClass}" onclick="goToPage(${i})">${i + 1}</button>`;
+            }
+            
+            if (hasNext) {
+                paginationHtml += `<button class="page-btn" onclick="goToPage(${currentPage + 1})">다음</button>`;
+            }
+            
+            pagination.innerHTML = paginationHtml;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            performSearch();
+            window.scrollTo(0, 0);
+        }
+
+        function applySorting() {
+            currentSort = document.getElementById('sortBy').value;
+            currentPage = 0;
+            performSearch();
+        }
+
+        function changeView(view) {
+            currentView = view;
+            const resultsList = document.getElementById('resultsList');
+            const viewBtns = document.querySelectorAll('.view-btn');
+            
+            viewBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === view);
+            });
+            
+            if (view === 'grid') {
+                resultsList.classList.add('grid-view');
+            } else {
+                resultsList.classList.remove('grid-view');
+            }
+        }
+
+        function toggleAdvancedSearch() {
+            const form = document.getElementById('advancedSearchForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function performAdvancedSearch() {
+            const searchData = {
+                keyword: document.getElementById('advKeyword').value,
+                category: document.getElementById('advCategory').value,
+                dateFrom: document.getElementById('advDateFrom').value,
+                dateTo: document.getElementById('advDateTo').value,
+                author: document.getElementById('advAuthor').value
+            };
+            
+            showLoading();
+            
+            try {
+                const response = await fetch('/api/search/advanced', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(searchData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.result === 'SUCCESS') {
+                    displayResults(data.payload);
+                    updatePagination(data.payload);
+                } else {
+                    showNoResults();
+                }
+            } catch (error) {
+                console.error('Advanced search error:', error);
+                showNoResults();
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function resetAdvancedSearch() {
+            document.getElementById('advKeyword').value = '';
+            document.getElementById('advCategory').value = '';
+            document.getElementById('advDateFrom').value = '';
+            document.getElementById('advDateTo').value = '';
+            document.getElementById('advAuthor').value = '';
+        }
+
+        function searchKeyword(keyword) {
+            currentKeyword = keyword;
+            currentPage = 0;
+            document.getElementById('searchKeyword').textContent = keyword;
+            performSearch();
+            
+            // Update URL
+            const newUrl = `${window.location.pathname}?q=${encodeURIComponent(keyword)}`;
+            window.history.pushState({}, '', newUrl);
+        }
+
+        function viewPost(postId) {
+            window.location.href = `/api/view/public/mains/relay/${postId}/`;
+        }
+
+        function getCategoryName(category) {
+            const categoryMap = {
+                'Java': 'Java',
+                'JavaScript': 'JavaScript',
+                'Python': 'Python',
+                'C': 'C',
+                'Shell': 'Shell Script',
+                'Security': '보안',
+                'DeveloperCareerSkills': '개발자 커리어',
+                'Other': '기타'
+            };
+            return categoryMap[category] || '기타';
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ko-KR');
+        }
+
+        function extractSummary(content) {
+            if (!content) return '';
+            const text = content.replace(/<[^>]*>/g, '');
+            return text.length > 150 ? text.substring(0, 150) + '...' : text;
+        }
+    </script>
+</div>
+</html>

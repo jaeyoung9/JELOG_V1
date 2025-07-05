@@ -50,11 +50,16 @@ public class SNS1012Controller extends BaseController {
      * @return Json Data
      * */
     @PostMapping(value = "/cwo/action")
-    public ResponseEntity<?> contentWriting(@RequestBody DT_Content dto){
+    public ResponseEntity<?> contentWriting(@RequestBody DT_Content dto, HttpServletRequest request){
         try {
-
-            if (dto.getFiles().size() != 0) {
+            // Handle files safely
+            if (dto.getFiles() != null && dto.getFiles().size() != 0) {
                 dto.setContentThumbnail(dto.getFiles().get(0).getFilePath());
+            }
+
+            // Set a default author if not provided
+            if (dto.getAuthor() == null || dto.getAuthor().trim().isEmpty()) {
+                dto.setAuthor("작성자");
             }
 
             DN_Content checkContent = contentService.createContent(dto);
@@ -63,7 +68,15 @@ public class SNS1012Controller extends BaseController {
             ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
             return ResponseEntity.ok().body(responseDTO);
         }catch (Exception e){
-            return null;
+            e.printStackTrace(); // Add logging for debugging
+            Map<String, Object> errorMap = new HashMap<>();
+            errorMap.put("error", "Content creation failed: " + e.getMessage());
+            ResponseDTO responseDTO = ResponseDTO.builder()
+                .result(jelog.server.main.Global.ResponseResult.FAIL)
+                .message("게시물 작성 중 오류가 발생했습니다.")
+                .payload(errorMap)
+                .build();
+            return ResponseEntity.badRequest().body(responseDTO);
         }
     }
 }

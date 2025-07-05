@@ -27,4 +27,9 @@ public class ResponseResult {
     public String message;
     public Date response_time;
     public String request_action;
+    
+    // Constants for common responses
+    public static final String SUCCESS = "SUCCESS";
+    public static final String FAIL = "FAIL";
+    public static final String ERROR = "ERROR";
 }

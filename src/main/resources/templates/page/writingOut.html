@@ -1,33 +1,598 @@
 <div th:fragment="body">
-    <div class="editor-container" id="editor-container">
-        <input class="title-input" type="text" id="title-input" placeholder="Title">
-
-        <div class="formatting-buttons" name="formatting-buttons" id="formatting-buttons">
-            <button class="formatting-button" type="button" data-cmd="justifyLeft"><i class="fas fa-align-left"></i></button>
-            <button class="formatting-button" type="button" data-cmd="justifyCenter"><i class="fas fa-align-center"></i></button>
-            <button class="formatting-button" type="button" data-cmd="justifyFull"><i class="fas fa-align-justify"></i></button>
-            <button class="formatting-button" type="button" data-cmd="justifyRight"><i class="fas fa-align-right"></i></button>
-            <button class="formatting-button" type="button" data-cmd="bold"><i class="fas fa-bold"></i></button>
-            <button class="formatting-button" type="button" data-cmd="italic"><i class="fas fa-italic"></i></button>
-            <button class="formatting-button" type="button" data-cmd="underline"><i class="fas fa-underline"></i></button>
-            <button class="formatting-button" type="button" data-cmd="insertOrderedList"><i class="fas fa-list-ol"></i></button>
-            <button class="formatting-button" type="button" data-cmd="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
-            <button class="formatting-button" type="button" data-cmd="createLink"><i class="fas fa-link"></i></button>
-            <button class="formatting-button" type="button" data-cmd="insertImage" id="image-upload-button"><i class="far fa-image"></i><input type="file" id="image-upload-input" accept="image/*" style="display: none;"></button>
-            <button class="formatting-button" type="button" data-cmd="showCode" name="active"><i class="fas fa-code"></i></button>
-            <select class="formatting-select" id="selectEl">
-                <option value="Other_Categories">Other</option>
-                <option value="Java_Categories">Java</option>
-                <option value="JavaScript_Categories">JavaScript</option>
-                <option value="C_Categories">C</option>
-                <option value="Python">Python</option>
-                <option value="ShellScript_Categories">Shell</option>
-                <option value="Security_Categories">Security</option>
-                <option value="DeveloperCareerSkills_Categories">DeveloperCareerSkills</option>
-            </select>
+    <!-- Enhanced Post Editor -->
+    <div class="editor-wrapper">
+        <!-- Editor Header -->
+        <div class="editor-header">
+            <div class="editor-header-content">
+                <h1 class="editor-title">
+                    <i class="fas fa-edit"></i>
+                    새 게시물 작성
+                </h1>
+                <div class="editor-actions">
+                    <button class="btn-secondary" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i>
+                        취소
+                    </button>
+                    <button class="btn-primary" id="preview-button">
+                        <i class="fas fa-eye"></i>
+                        미리보기
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="text-area" id="text-area" name="textField" contenteditable="true" placeholder="Enter details..."></div>
-        <button id="submit-button" type="button" class="submit-button">POST</button>
-        <script type="text/javascript" th:src="@{/static/js/editor.js}"></script>
+
+        <!-- Main Editor Container -->
+        <div class="editor-container" id="editor-container">
+            <!-- Post Metadata -->
+            <div class="post-metadata">
+                <div class="metadata-row">
+                    <div class="title-section">
+                        <label for="title-input" class="input-label">제목</label>
+                        <input class="title-input" type="text" id="title-input" placeholder="게시물 제목을 입력하세요..." maxlength="100">
+                        <div class="char-counter">
+                            <span id="title-counter">0</span>/100
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metadata-row">
+                    <div class="category-section">
+                        <label for="selectEl" class="input-label">카테고리</label>
+                        <select class="category-select" id="selectEl">
+                            <option value="">카테고리 선택</option>
+                            <option value="Java">Java</option>
+                            <option value="JavaScript">JavaScript</option>
+                            <option value="Python">Python</option>
+                            <option value="C">C/C++</option>
+                            <option value="Shell">Shell Script</option>
+                            <option value="Security">보안</option>
+                            <option value="DeveloperCareerSkills">개발자 커리어</option>
+                            <option value="Other">기타</option>
+                        </select>
+                    </div>
+                    
+                    <div class="tags-section">
+                        <label for="tags-input" class="input-label">태그</label>
+                        <input type="text" id="tags-input" class="tags-input" placeholder="태그를 입력하고 Enter를 눌러주세요">
+                        <div class="tags-list" id="tags-list"></div>
+                    </div>
+                </div>
+
+                <div class="metadata-row">
+                    <div class="summary-section">
+                        <label for="summary-input" class="input-label">요약</label>
+                        <textarea id="summary-input" class="summary-input" placeholder="게시물 요약을 작성해주세요 (선택사항)" maxlength="200" rows="2"></textarea>
+                        <div class="char-counter">
+                            <span id="summary-counter">0</span>/200
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formatting Toolbar -->
+            <div class="formatting-toolbar" name="formatting-buttons" id="formatting-buttons">
+                <div class="toolbar-group">
+                    <button class="formatting-button" type="button" data-cmd="bold" title="굵게">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="italic" title="기울임">
+                        <i class="fas fa-italic"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="underline" title="밑줄">
+                        <i class="fas fa-underline"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="strikeThrough" title="취소선">
+                        <i class="fas fa-strikethrough"></i>
+                    </button>
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <div class="toolbar-group">
+                    <button class="formatting-button" type="button" data-cmd="justifyLeft" title="왼쪽 정렬">
+                        <i class="fas fa-align-left"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="justifyCenter" title="가운데 정렬">
+                        <i class="fas fa-align-center"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="justifyRight" title="오른쪽 정렬">
+                        <i class="fas fa-align-right"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="justifyFull" title="양쪽 정렬">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <div class="toolbar-group">
+                    <button class="formatting-button" type="button" data-cmd="insertOrderedList" title="번호 목록">
+                        <i class="fas fa-list-ol"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="insertUnorderedList" title="불릿 목록">
+                        <i class="fas fa-list-ul"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="indent" title="들여쓰기">
+                        <i class="fas fa-indent"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="outdent" title="내어쓰기">
+                        <i class="fas fa-outdent"></i>
+                    </button>
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <div class="toolbar-group">
+                    <button class="formatting-button" type="button" data-cmd="createLink" title="링크 삽입">
+                        <i class="fas fa-link"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="insertImage" id="image-upload-button" title="이미지 삽입">
+                        <i class="fas fa-image"></i>
+                        <input type="file" id="image-upload-input" accept="image/*" style="display: none;" multiple>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="insertCode" title="코드 블록">
+                        <i class="fas fa-code"></i>
+                    </button>
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <div class="toolbar-group">
+                    <button class="formatting-button" type="button" data-cmd="undo" title="실행취소">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button class="formatting-button" type="button" data-cmd="redo" title="다시실행">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <div class="toolbar-group">
+                    <button class="formatting-button toggle-button" type="button" data-cmd="showCode" name="active" title="HTML 코드 보기">
+                        <i class="fas fa-code"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Editor -->
+            <div class="content-editor">
+                <div class="text-area" id="text-area" name="textField" contenteditable="true" placeholder="게시물 내용을 작성해주세요...
+                
+팁: 
+- 이미지를 드래그 앤 드롭하거나 복사하여 붙여넣을 수 있습니다
+- Ctrl+B (굵게), Ctrl+I (기울임), Ctrl+U (밑줄) 단축키를 사용할 수 있습니다
+- 링크를 붙여넣으면 자동으로 링크가 생성됩니다"></div>
+                
+                <!-- Word Count -->
+                <div class="word-count">
+                    글자 수: <span id="word-count">0</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="editor-actions-bottom">
+                <button class="btn-secondary" type="button" onclick="saveDraft()">
+                    <i class="fas fa-save"></i>
+                    임시저장
+                </button>
+                <button id="submit-button" type="button" class="btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                    게시물 발행
+                </button>
+            </div>
+        </div>
+
+        <!-- Preview Modal -->
+        <div class="preview-modal" id="preview-modal" style="display: none;">
+            <div class="preview-content">
+                <div class="preview-header">
+                    <h3>게시물 미리보기</h3>
+                    <button class="close-preview" onclick="closePreview()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="preview-body" id="preview-body">
+                    <!-- Preview content will be inserted here -->
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Enhanced Editor Styles -->
+    <style>
+        .editor-wrapper {
+            min-height: 100vh;
+            background: #f8fafc;
+        }
+
+        .editor-header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .editor-header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .editor-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .editor-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .post-metadata {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+
+        .metadata-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metadata-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .title-section {
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .title-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .title-input:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .category-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .category-select:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .tags-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tags-input:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .tag-item {
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .summary-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 60px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .summary-input:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .char-counter {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.75rem;
+            font-size: 0.75rem;
+            color: #6b7280;
+            background: white;
+            padding: 0.25rem;
+        }
+
+        .formatting-toolbar {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px 8px 0 0;
+            padding: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .toolbar-separator {
+            width: 1px;
+            height: 24px;
+            background: #d1d5db;
+            margin: 0 0.5rem;
+        }
+
+        .formatting-button {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #374151;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .formatting-button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+
+        .formatting-button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .content-editor {
+            position: relative;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .text-area {
+            min-height: 500px;
+            padding: 2rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .text-area:empty:before {
+            content: attr(placeholder);
+            color: #9ca3af;
+            white-space: pre-line;
+        }
+
+        .word-count {
+            position: absolute;
+            bottom: 1rem;
+            right: 1.5rem;
+            font-size: 0.75rem;
+            color: #6b7280;
+            background: #f9fafb;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .editor-actions-bottom {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .preview-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .preview-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-body {
+            padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .close-preview {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+
+        .close-preview:hover {
+            background: #f3f4f6;
+        }
+
+        @media (max-width: 768px) {
+            .editor-header-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .editor-actions {
+                justify-content: space-between;
+            }
+
+            .formatting-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .toolbar-group {
+                justify-content: center;
+            }
+
+            .toolbar-separator {
+                width: 100%;
+                height: 1px;
+                margin: 0.5rem 0;
+            }
+
+            .metadata-row {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-modal {
+                padding: 1rem;
+            }
+
+            .preview-content {
+                max-width: 100%;
+            }
+        }
+    </style>
+
+    <script type="text/javascript" th:src="@{/static/js/editor.js}"></script>
 </div>

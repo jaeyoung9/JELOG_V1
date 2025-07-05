@@ -4,10 +4,11 @@ import jelog.server.main.Global.Jwt.CustomAccessDeniedHandler;
 import jelog.server.main.Global.Jwt.JwtAuthenticationFilter;
 import jelog.server.main.Global.Jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.mybatis.spring.annotation.MapperScan;
+// MyBatis imports commented out - using JPA instead
+// import org.apache.ibatis.session.SqlSessionFactory;
+// import org.mybatis.spring.SqlSessionFactoryBean;
+// import org.mybatis.spring.SqlSessionTemplate;
+// import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -48,11 +49,12 @@ import javax.sql.DataSource;
  * @EnableWebSecurity 적용 완료.
  */
 @Configuration
-@MapperScan(value = {"jelog.server.main.Mapper"})
+// @MapperScan(value = {"jelog.server.main.Mapper"}) // Commented out - using JPA instead
 @EnableTransactionManagement
-@EnableWebSecurity
+// @EnableWebSecurity // Commented out - using newer SecurityConfig.java instead
 @RequiredArgsConstructor
-public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
+public class JelogConfigApplication {
+    // extends WebSecurityConfigurerAdapter - removed deprecated class
     /**
      * Bane Setting
      * */
@@ -63,61 +65,20 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
 
-    private final JwtProvider jwtProvider;
-    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    // Security configuration moved to SecurityConfig.java
+    // private final JwtProvider jwtProvider;
+    // private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    /**     * WebSecurity
-     * @param web WebSecurity
-     */
-    //-------------------------------------------------------------------------------------------------------------------------------------
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-    }
-
-    /**
-     * HttpSecurity
-     * @param http Web Security Setting
-     */
-    //-------------------------------------------------------------------------------------------------------------------------------------
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .httpBasic()
-                .disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(customAccessDeniedHandler)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/api/public/**","/api/ko-jy/**","/api/view/public/**", "/", "/templates/**").permitAll()
-                .antMatchers("/api/pro").permitAll()
-                .antMatchers("/api/view/auth/**").access("hasRole('USER') or hasRole('ADMIN')")
-                .antMatchers("/api/republic/**", "/api/view/republic/**", "/api/auth/**").hasRole("ADMIN")
-                .antMatchers("/static/images/**","/static/css/**", "/static/js/**", "/static/favicon/**", "/favicon.ico").permitAll() // Allow access to CSS and JS files in the /static/ folder
-                .anyRequest().authenticated()
-                .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
-    }
-
-    /**
-     * PasswordEncoder
-     * @return PasswordEncoder
-     */
-    //-------------------------------------------------------------------------------------------------------------------------------------
+    // PasswordEncoder moved to SecurityConfig.java to avoid conflicts
+    /*
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+    */
 
-    /**
-     * Sql data Base 쿼리 매퍼 사용시.
-     * @return Sql data Base 쿼리 매퍼 사용시.
-     * */
-    //-------------------------------------------------------------------------------------------------------------------------------------
-//    @Lazy
+    // MyBatis configuration commented out - using JPA instead
+    /*
     @Bean
     public SqlSessionFactory sqlSession(DataSource dataSource) throws Exception{
         SqlSessionFactoryBean sqlOptions = new SqlSessionFactoryBean();
@@ -127,11 +88,11 @@ public class JelogConfigApplication extends WebSecurityConfigurerAdapter{
         return sqlOptions.getObject();
     }
 
-    //-------------------------------------------------------------------------------------------------------------------------------------
     @Bean
     public SqlSessionTemplate sqlTemplate(SqlSessionFactory sqlSessionFactory) throws Exception{
         return new SqlSessionTemplate(sqlSessionFactory);
     }
+    */
 
     /**
      * File Option 파일서비스 담당

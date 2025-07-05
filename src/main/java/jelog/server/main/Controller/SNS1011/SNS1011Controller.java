@@ -65,10 +65,43 @@ public class SNS1011Controller extends BaseController {
      * Main Page Result Data
      * */
     @GetMapping(value = "/mains/")
-    public ResponseEntity<?> mains(@PageableDefault(size = 10) Pageable pageable, String Title, OsEnum Categories){
+    public ResponseEntity<?> mains(@PageableDefault(size = 10) Pageable pageable, 
+                                  @RequestParam(required = false) String Title, 
+                                  @RequestParam(required = false) OsEnum Categories,
+                                  @RequestParam(required = false) String sort){
 
         Map<String, Object> map = new HashMap<>();
+        
+        // Handle sorting - convert "latest" to actual field name
+        if ("latest".equals(sort)) {
+            // Create new pageable with proper sorting by inDate descending
+            pageable = org.springframework.data.domain.PageRequest.of(
+                pageable.getPageNumber(), 
+                pageable.getPageSize(), 
+                org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "inDate")
+            );
+        }
+        
         map.put("data",contentService.findPage(pageable, Title, Categories));
+        ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
+    /**
+     * [Main]
+     * Featured Content
+     * */
+    @GetMapping(value = "/mains/featured")
+    public ResponseEntity<?> featuredContent(@RequestParam(defaultValue = "3") int size){
+        Map<String, Object> map = new HashMap<>();
+        
+        // Create pageable for featured content
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(
+            0, size, 
+            org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "views", "inDate")
+        );
+        
+        map.put("data", contentService.findPage(pageable, null, null));
         ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
         return ResponseEntity.ok().body(responseDTO);
     }

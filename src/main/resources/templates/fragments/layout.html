@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="fragments/layout">
 <head>
-    <title>project min</title>
+    <title>Jelog - 개발자 기술 블로그</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no" />
+    <meta name="description" content="개발자를 위한 기술 블로그입니다. 다양한 개발 기술과 경험을 공유합니다." />
+    <meta name="author" content="MinJaeYoung" />
+    <meta name="theme-color" content="#007bff" />
     
     <link rel="shortcut icon" th:href="@{/static/favicon/favicon.ico}" />
-    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" th:href="@{/static/css/headerStyle.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/modern-responsive.css}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script type="text/javascript" th:src="@{/static/js/cookie.js}"></script>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
+<div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
 <div th:insert="fragments/header :: header"></div>
-<div th:replace="${data} :: body"></div>
+<main class="main-content">
+    <div th:replace="${data} :: body"></div>
+</main>
 <div th:insert="fragments/footer :: footer"></div>
 
 </body>

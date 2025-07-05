@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 대시보드 - Jelog Admin</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/headerStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-style.css}">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color), #4f46e5);
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-title {
+            font-size: 2rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 700;
+        }
+        
+        .dashboard-subtitle {
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .stat-icon.users { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .stat-icon.posts { background: linear-gradient(135deg, #10b981, #059669); }
+        .stat-icon.comments { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .stat-icon.views { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin: 0.25rem 0 0 0;
+        }
+        
+        .stat-change {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .stat-change.positive {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .stat-change.negative {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0 0 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        .activity-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .activity-icon.post { background: #10b981; }
+        .activity-icon.comment { background: #f59e0b; }
+        .activity-icon.user { background: #3b82f6; }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-text {
+            font-size: 0.875rem;
+            color: #374151;
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .activity-time {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin: 0;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+            text-align: center;
+            transition: transform 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .action-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin: 0 auto 1rem auto;
+        }
+        
+        .action-icon.new-post { background: linear-gradient(135deg, #10b981, #059669); }
+        .action-icon.manage-posts { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .action-icon.manage-users { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .action-icon.settings { background: linear-gradient(135deg, #6b7280, #4b5563); }
+        
+        .action-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .action-description {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin: 0;
+        }
+        
+        .recent-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .content-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .content-item:last-child {
+            border-bottom: none;
+        }
+        
+        .content-thumbnail {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #f3f4f6;
+        }
+        
+        .content-info {
+            flex: 1;
+        }
+        
+        .content-title {
+            font-weight: 500;
+            color: #1f2937;
+            margin: 0 0 0.25rem 0;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+        
+        .content-meta {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin: 0;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: #dc2626;
+            background: #fee2e2;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 1024px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .recent-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 대시보드 헤더 -->
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">
+                <i class="fas fa-tachometer-alt"></i>
+                관리자 대시보드
+            </h1>
+            <p class="dashboard-subtitle">Jelog 블로그 관리 시스템에 오신 것을 환영합니다</p>
+        </div>
+
+        <!-- 통계 카드 -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon users">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +12%
+                    </div>
+                </div>
+                <h3 class="stat-number" id="totalUsers">-</h3>
+                <p class="stat-label">총 사용자</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon posts">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +8%
+                    </div>
+                </div>
+                <h3 class="stat-number" id="totalPosts">-</h3>
+                <p class="stat-label">총 게시물</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon comments">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +15%
+                    </div>
+                </div>
+                <h3 class="stat-number" id="totalComments">-</h3>
+                <p class="stat-label">총 댓글</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon views">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        +25%
+                    </div>
+                </div>
+                <h3 class="stat-number" id="todayVisitors">-</h3>
+                <p class="stat-label">오늘 방문자</p>
+            </div>
+        </div>
+
+        <!-- 빠른 작업 -->
+        <div class="quick-actions">
+            <a href="/api/view/republic/writing" class="action-card">
+                <div class="action-icon new-post">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <h3 class="action-title">새 게시물 작성</h3>
+                <p class="action-description">새로운 블로그 게시물을 작성합니다</p>
+            </a>
+
+            <a href="/api/view/republic/posts" class="action-card">
+                <div class="action-icon manage-posts">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <h3 class="action-title">게시물 관리</h3>
+                <p class="action-description">기존 게시물을 편집하거나 관리합니다</p>
+            </a>
+
+            <a href="/api/view/republic/users" class="action-card">
+                <div class="action-icon manage-users">
+                    <i class="fas fa-user-cog"></i>
+                </div>
+                <h3 class="action-title">사용자 관리</h3>
+                <p class="action-description">사용자 계정을 관리합니다</p>
+            </a>
+
+            <a href="/api/view/republic/settings" class="action-card">
+                <div class="action-icon settings">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h3 class="action-title">시스템 설정</h3>
+                <p class="action-description">블로그 설정을 관리합니다</p>
+            </a>
+        </div>
+
+        <!-- 차트 및 활동 내역 -->
+        <div class="dashboard-content">
+            <div class="chart-section">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    방문자 통계 (최근 30일)
+                </h2>
+                <div class="chart-container">
+                    <canvas id="visitorChart"></canvas>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <h2 class="section-title">
+                    <i class="fas fa-clock"></i>
+                    최근 활동
+                </h2>
+                <div id="recentActivity">
+                    <div class="loading">활동 내역을 불러오는 중...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 최근 콘텐츠 -->
+        <div class="recent-content">
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-file-alt"></i>
+                    최근 게시물
+                </h2>
+                <div id="recentPosts">
+                    <div class="loading">게시물을 불러오는 중...</div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-comments"></i>
+                    최근 댓글
+                </h2>
+                <div id="recentComments">
+                    <div class="loading">댓글을 불러오는 중...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 대시보드 데이터 로드
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/republic/dashboard');
+                const data = await response.json();
+                
+                if (data.result === 'SUCCESS') {
+                    updateStatistics(data.payload);
+                } else {
+                    console.error('Failed to load dashboard data:', data.message);
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        // 통계 업데이트
+        function updateStatistics(data) {
+            document.getElementById('totalUsers').textContent = (data.totalUsers || 0).toLocaleString();
+            document.getElementById('totalPosts').textContent = (data.totalPosts || 0).toLocaleString();
+            document.getElementById('totalComments').textContent = (data.totalComments || 0).toLocaleString();
+            document.getElementById('todayVisitors').textContent = (data.todayVisitors || 0).toLocaleString();
+        }
+
+        // 방문자 차트 초기화
+        function initVisitorChart() {
+            const ctx = document.getElementById('visitorChart').getContext('2d');
+            
+            // 임시 데이터 (실제로는 서버에서 받아와야 함)
+            const labels = [];
+            const data = [];
+            const now = new Date();
+            
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date(now);
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' }));
+                data.push(Math.floor(Math.random() * 100) + 20);
+            }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '일별 방문자',
+                        data: data,
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 최근 활동 로드
+        async function loadRecentActivity() {
+            const activities = [
+                { type: 'post', text: '새 게시물 "Spring Boot 튜토리얼"이 게시되었습니다', time: '5분 전' },
+                { type: 'comment', text: '김철수님이 댓글을 작성했습니다', time: '12분 전' },
+                { type: 'user', text: '새 사용자 이영희님이 가입했습니다', time: '1시간 전' },
+                { type: 'post', text: '게시물 "React 기초"가 수정되었습니다', time: '2시간 전' },
+                { type: 'comment', text: '박민수님이 댓글을 작성했습니다', time: '3시간 전' }
+            ];
+
+            const container = document.getElementById('recentActivity');
+            container.innerHTML = activities.map(activity => `
+                <div class="activity-item">
+                    <div class="activity-icon ${activity.type}">
+                        <i class="fas fa-${activity.type === 'post' ? 'file-alt' : activity.type === 'comment' ? 'comment' : 'user'}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">${activity.text}</p>
+                        <p class="activity-time">${activity.time}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 최근 게시물 로드
+        async function loadRecentPosts() {
+            try {
+                // 임시 데이터 (실제로는 API에서 받아와야 함)
+                const posts = [
+                    { title: 'Spring Boot 완벽 가이드', date: '2024-01-15', views: 1234 },
+                    { title: 'React 상태 관리 패턴', date: '2024-01-14', views: 892 },
+                    { title: 'MySQL 성능 최적화', date: '2024-01-13', views: 567 },
+                    { title: 'Docker 컨테이너 배포', date: '2024-01-12', views: 445 },
+                    { title: 'JavaScript ES6+ 기능', date: '2024-01-11', views: 678 }
+                ];
+
+                const container = document.getElementById('recentPosts');
+                container.innerHTML = posts.map(post => `
+                    <div class="content-item">
+                        <div class="content-thumbnail"></div>
+                        <div class="content-info">
+                            <h4 class="content-title">${post.title}</h4>
+                            <p class="content-meta">${post.date} • 조회수 ${post.views.toLocaleString()}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('recentPosts').innerHTML = '<div class="error">게시물을 불러올 수 없습니다.</div>';
+            }
+        }
+
+        // 최근 댓글 로드
+        async function loadRecentComments() {
+            try {
+                // 임시 데이터 (실제로는 API에서 받아와야 함)
+                const comments = [
+                    { author: '김철수', content: '정말 유익한 글이었습니다. 감사합니다!', time: '30분 전' },
+                    { author: '이영희', content: '질문이 있는데요, 이 부분에 대해서...', time: '1시간 전' },
+                    { author: '박민수', content: '코드 예제가 정말 도움이 되었어요.', time: '2시간 전' },
+                    { author: '최순자', content: '다음 편도 기대하겠습니다!', time: '3시간 전' },
+                    { author: '장길산', content: '오타가 하나 있는 것 같아요.', time: '5시간 전' }
+                ];
+
+                const container = document.getElementById('recentComments');
+                container.innerHTML = comments.map(comment => `
+                    <div class="content-item">
+                        <div class="content-thumbnail" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                            ${comment.author.charAt(0)}
+                        </div>
+                        <div class="content-info">
+                            <h4 class="content-title">${comment.content}</h4>
+                            <p class="content-meta">${comment.author} • ${comment.time}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('recentComments').innerHTML = '<div class="error">댓글을 불러올 수 없습니다.</div>';
+            }
+        }
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            initVisitorChart();
+            loadRecentActivity();
+            loadRecentPosts();
+            loadRecentComments();
+        });
+
+        // 5분마다 데이터 새로고침
+        setInterval(loadDashboardData, 5 * 60 * 1000);
+    </script>
+</body>
+</html>

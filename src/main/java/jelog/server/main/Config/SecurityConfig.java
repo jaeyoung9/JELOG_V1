@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -79,7 +80,7 @@ public class SecurityConfig {
                 .contentTypeOptions().and()
                 .httpStrictTransportSecurity(hstsConfig -> hstsConfig
                     .maxAgeInSeconds(31536000)
-                    .includeSubdomains(true)
+                    .includeSubDomains(true)
                     .preload(true)
                 )
                 .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
@@ -88,11 +89,13 @@ public class SecurityConfig {
             )
             
             // 요청 권한 설정
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/api/public/**", "/css/**", "/js/**", "/images/**", "/favicon/**").permitAll()
-                .requestMatchers("/api/view/public/**").permitAll()
-                .requestMatchers("/api/pro", "/api/view/republic/**").hasRole("USER")
-                .requestMatchers("/api/adm/**").hasRole("ADMIN")
+            .authorizeRequests(auth -> auth
+                .antMatchers("/", "/api/public/**", "/static/**", "/css/**", "/js/**", "/images/**", "/favicon/**").permitAll()
+                .antMatchers("/api/view/public/**").permitAll()
+                .antMatchers("/api/ko-jy/in/sign/", "/api/ko-jy/up/sign/").permitAll()
+                .antMatchers("/api/search/popular-keywords").permitAll()
+                .antMatchers("/api/pro").hasRole("USER")
+                .antMatchers("/api/view/republic/**", "/api/republic/**", "/api/adm/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             
