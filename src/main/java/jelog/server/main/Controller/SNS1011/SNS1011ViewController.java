@@ -45,7 +45,7 @@ public class SNS1011ViewController extends BaseController {
 
         ModelAndView modelAndView = new ModelAndView("fragments/layout");
         modelAndView.addObject("contentNumber", listNumber);
-        modelAndView.addObject("data", "page/details");
+        modelAndView.addObject("data", "page/enhanced-details");
         return modelAndView;
     }
 

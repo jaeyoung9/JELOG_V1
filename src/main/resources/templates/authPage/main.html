@@ -611,7 +611,7 @@
         async function loadDashboardData() {
             try {
                 // Load statistics
-                const statsResponse = await fetch('/api/ko-jy/admin/dashboard');
+                const statsResponse = await fetch('/api/republic/dashboard');
                 if (statsResponse.ok) {
                     const statsData = await statsResponse.json();
                     if (statsData.result === 'SUCCESS') {
@@ -620,7 +620,7 @@
                 }
 
                 // Load recent posts
-                const postsResponse = await fetch('/api/ko-jy/admin/recent-posts');
+                const postsResponse = await fetch('/api/republic/recent-posts');
                 if (postsResponse.ok) {
                     const postsData = await postsResponse.json();
                     if (postsData.result === 'SUCCESS') {
@@ -629,7 +629,7 @@
                 }
 
                 // Load recent comments
-                const commentsResponse = await fetch('/api/ko-jy/admin/recent-comments');
+                const commentsResponse = await fetch('/api/republic/recent-comments');
                 if (commentsResponse.ok) {
                     const commentsData = await commentsResponse.json();
                     if (commentsData.result === 'SUCCESS') {

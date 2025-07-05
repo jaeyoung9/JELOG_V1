@@ -433,15 +433,29 @@ public class DN_ContentService {
     }
     
     /**
+     * Get total views across all published posts
+     */
+    public long getTotalViews() {
+        return dn_contentRepositories.sumViewsByStatus("PUBLISHED");
+    }
+    
+    /**
      * Get posts for admin (all statuses)
      */
-    public Page<DN_Content> getPostsForAdmin(Pageable pageable, String keyword, String status) {
-        if (StringUtils.hasText(status) && StringUtils.hasText(keyword)) {
-            return dn_contentRepositories.findByStatusAndContentTitleContainingIgnoreCase(status, keyword, pageable);
+    public Page<DN_Content> getPostsForAdmin(Pageable pageable, String title, String category, String status) {
+        if (StringUtils.hasText(status) && StringUtils.hasText(title) && StringUtils.hasText(category)) {
+            OsEnum categoryEnum = OsEnum.valueOf(category);
+            return dn_contentRepositories.findByStatusAndContentTitleContainingIgnoreCaseAndContentCategories(
+                status, title, categoryEnum, pageable);
+        } else if (StringUtils.hasText(status) && StringUtils.hasText(title)) {
+            return dn_contentRepositories.findByStatusAndContentTitleContainingIgnoreCase(status, title, pageable);
+        } else if (StringUtils.hasText(status) && StringUtils.hasText(category)) {
+            OsEnum categoryEnum = OsEnum.valueOf(category);
+            return dn_contentRepositories.findByStatusAndContentCategories(status, categoryEnum, pageable);
         } else if (StringUtils.hasText(status)) {
             return dn_contentRepositories.findByStatus(status, pageable);
-        } else if (StringUtils.hasText(keyword)) {
-            return dn_contentRepositories.findByContentTitleContainingIgnoreCase(keyword, pageable);
+        } else if (StringUtils.hasText(title)) {
+            return dn_contentRepositories.findByContentTitleContainingIgnoreCase(title, pageable);
         } else {
             return dn_contentRepositories.findAll(pageable);
         }
@@ -466,7 +480,7 @@ public class DN_ContentService {
      */
     @Transactional
     @CacheEvict(value = "contents", allEntries = true)
-    public void deletePostByAdmin(int postId) {
+    public void deletePost(int postId) {
         dn_contentRepositories.deleteById(postId);
     }
     

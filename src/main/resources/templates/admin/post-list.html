@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시물 관리 - Jelog Admin</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/headerStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-style.css}">
+    <link rel="stylesheet" th:href="@{/css/enhanced-admin.css}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.bootstrap5.min.css">
+    
+    <style>
+        .admin-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), #4f46e5);
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .page-subtitle {
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .posts-toolbar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .toolbar-top {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .toolbar-left {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+        }
+        
+        .toolbar-right {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .search-box {
+            position: relative;
+            min-width: 300px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+        
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            background: white;
+            min-width: 150px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .bulk-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px dashed #e1e5e9;
+        }
+        
+        .bulk-actions.hidden {
+            display: none;
+        }
+        
+        .posts-table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+            overflow: hidden;
+        }
+        
+        .posts-table {
+            width: 100%;
+        }
+        
+        .posts-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+            padding: 1rem;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .posts-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: middle;
+        }
+        
+        .posts-table tbody tr:hover {
+            background: #f8fafc;
+        }
+        
+        .post-thumbnail {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #f3f4f6;
+        }
+        
+        .post-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0 0 0.25rem 0;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+        
+        .post-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .post-title a:hover {
+            color: var(--primary-color);
+        }
+        
+        .post-excerpt {
+            color: #6b7280;
+            font-size: 0.75rem;
+            margin: 0;
+            line-height: 1.4;
+        }
+        
+        .post-meta {
+            font-size: 0.75rem;
+            color: #6b7280;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-published {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-draft {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-private {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .post-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .pagination-container {
+            padding: 1.5rem;
+            background: white;
+            border-top: 1px solid #e1e5e9;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .toolbar-top {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .toolbar-left,
+            .toolbar-right {
+                justify-content: center;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .posts-table {
+                font-size: 0.75rem;
+            }
+            
+            .posts-table th,
+            .posts-table td {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 페이지 헤더 -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-file-alt"></i>
+                게시물 관리
+            </h1>
+            <p class="page-subtitle">블로그 게시물을 관리하고 편집합니다</p>
+        </div>
+
+        <!-- 게시물 도구모음 -->
+        <div class="posts-toolbar">
+            <div class="toolbar-top">
+                <div class="toolbar-left">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="제목, 내용, 작성자로 검색..." id="searchInput">
+                    </div>
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">모든 카테고리</option>
+                        <option value="Java">Java</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="Python">Python</option>
+                        <option value="C">C/C++</option>
+                        <option value="Shell">Shell</option>
+                        <option value="Security">보안</option>
+                        <option value="DeveloperCareerSkills">커리어</option>
+                        <option value="Other">기타</option>
+                    </select>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">모든 상태</option>
+                        <option value="published">게시됨</option>
+                        <option value="draft">임시저장</option>
+                        <option value="private">비공개</option>
+                    </select>
+                </div>
+                <div class="toolbar-right">
+                    <button class="btn btn-secondary" onclick="refreshPosts()">
+                        <i class="fas fa-sync-alt"></i>
+                        새로고침
+                    </button>
+                    <a href="/api/view/republic/posts/new" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        새 게시물
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 일괄 작업 -->
+            <div class="bulk-actions hidden" id="bulkActions">
+                <span><strong id="selectedCount">0</strong>개 선택됨</span>
+                <button class="btn btn-sm btn-success" onclick="bulkPublish()">
+                    <i class="fas fa-eye"></i>
+                    게시
+                </button>
+                <button class="btn btn-sm btn-warning" onclick="bulkDraft()">
+                    <i class="fas fa-edit"></i>
+                    임시저장
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="bulkDelete()">
+                    <i class="fas fa-trash"></i>
+                    삭제
+                </button>
+            </div>
+        </div>
+
+        <!-- 게시물 테이블 -->
+        <div class="posts-table-container">
+            <table class="posts-table" id="postsTable">
+                <thead>
+                    <tr>
+                        <th width="50">
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th width="80">썸네일</th>
+                        <th>제목</th>
+                        <th width="120">카테고리</th>
+                        <th width="100">상태</th>
+                        <th width="100">통계</th>
+                        <th width="120">작성일</th>
+                        <th width="160">작업</th>
+                    </tr>
+                </thead>
+                <tbody id="postsTableBody">
+                    <!-- 게시물 데이터가 여기에 로드됩니다 -->
+                </tbody>
+            </table>
+            
+            <!-- 페이지네이션 -->
+            <div class="pagination-container">
+                <nav aria-label="게시물 페이지네이션">
+                    <div class="pagination" id="pagination"></div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- 삭제 확인 모달 -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">게시물 삭제</h3>
+                <button class="modal-close" onclick="closeModal('deleteModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>정말로 이 게시물을 삭제하시겠습니까?</p>
+                <p><strong>이 작업은 되돌릴 수 없습니다.</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('deleteModal')">취소</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">삭제</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 일괄 삭제 확인 모달 -->
+    <div class="modal" id="bulkDeleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">일괄 삭제</h3>
+                <button class="modal-close" onclick="closeModal('bulkDeleteModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong id="bulkDeleteCount">0</strong>개의 게시물을 삭제하시겠습니까?</p>
+                <p><strong>이 작업은 되돌릴 수 없습니다.</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('bulkDeleteModal')">취소</button>
+                <button class="btn btn-danger" onclick="confirmBulkDelete()">삭제</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+    <script th:src="@{/js/enhanced-admin-posts.js}"></script>
+    
+    <script>
+        // 페이지 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePostsManagement();
+        });
+    </script>
+</body>
+</html>

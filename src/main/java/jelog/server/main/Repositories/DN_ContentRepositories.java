@@ -81,6 +81,10 @@ public interface DN_ContentRepositories extends JpaRepository<DN_Content, Intege
     long countByAuthor(String author);
     long countByStatusAndContentCategories(String status, OsEnum category);
     
+    // Sum methods for statistics
+    @Query("SELECT COALESCE(SUM(c.views), 0) FROM DN_Content c WHERE c.status = :status")
+    long sumViewsByStatus(@Param("status") String status);
+    
     // Admin methods
     Page<DN_Content> findByContentTitleContainingIgnoreCase(String title, Pageable pageable);
     
@@ -121,4 +125,7 @@ public interface DN_ContentRepositories extends JpaRepository<DN_Content, Intege
     
     // Draft methods for authors
     Page<DN_Content> findByStatusAndAuthor(String status, String author, Pageable pageable);
+    
+    // Migration methods
+    long countByContentCategoriesIsNotNullAndCategoryIdIsNull();
 }

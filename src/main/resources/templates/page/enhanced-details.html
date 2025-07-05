@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div th:fragment="body">
+    <!-- Enhanced Post Detail Page -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/enhanced-details.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/comments.css}" />
+    
+    <!-- Post Loading State -->
+    <div class="post-loading" id="postLoading">
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>게시물을 불러오는 중...</p>
+        </div>
+    </div>
+    
+    <!-- Main Post Container -->
+    <article class="post-container" id="postContainer" style="display: none;">
+        <!-- Post Hero Section -->
+        <div class="post-hero">
+            <div class="post-hero-content">
+                <!-- Breadcrumb Navigation -->
+                <nav class="breadcrumb" id="breadcrumb">
+                    <a href="/" class="breadcrumb-item">
+                        <i class="fas fa-home"></i>
+                        홈
+                    </a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-item" id="categoryBreadcrumb">게시물</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current" id="titleBreadcrumb">상세보기</span>
+                </nav>
+                
+                <!-- Post Meta Info -->
+                <div class="post-meta">
+                    <span class="post-category" id="postCategory">
+                        <i class="fas fa-tag"></i>
+                        카테고리
+                    </span>
+                    <span class="post-date" id="postDate">
+                        <i class="fas fa-calendar-alt"></i>
+                        날짜
+                    </span>
+                    <span class="post-reading-time" id="readingTime">
+                        <i class="fas fa-clock"></i>
+                        읽는 시간
+                    </span>
+                </div>
+                
+                <!-- Post Title -->
+                <h1 class="post-title" id="postTitle">게시물 제목</h1>
+                
+                <!-- Post Stats -->
+                <div class="post-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-eye"></i>
+                        <span id="postViews">0</span>
+                        <span class="stat-label">조회</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-heart"></i>
+                        <span id="postLikes">0</span>
+                        <span class="stat-label">좋아요</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-comment"></i>
+                        <span id="postComments">0</span>
+                        <span class="stat-label">댓글</span>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="post-actions">
+                    <button class="action-btn like-btn" id="likeBtn" onclick="toggleLike()">
+                        <i class="fas fa-heart"></i>
+                        좋아요
+                    </button>
+                    <button class="action-btn share-btn" onclick="sharePost()">
+                        <i class="fas fa-share-alt"></i>
+                        공유
+                    </button>
+                    <button class="action-btn bookmark-btn" onclick="toggleBookmark()">
+                        <i class="fas fa-bookmark"></i>
+                        북마크
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Post Content -->
+        <div class="post-content-wrapper">
+            <div class="post-content-container">
+                <!-- Table of Contents -->
+                <aside class="table-of-contents" id="tableOfContents">
+                    <h3 class="toc-title">
+                        <i class="fas fa-list"></i>
+                        목차
+                    </h3>
+                    <div class="toc-content" id="tocContent">
+                        <!-- TOC will be dynamically generated -->
+                    </div>
+                </aside>
+                
+                <!-- Main Content -->
+                <main class="post-main-content">
+                    <!-- Post Thumbnail -->
+                    <div class="post-thumbnail" id="postThumbnail" style="display: none;">
+                        <img id="thumbnailImage" alt="게시물 썸네일" />
+                    </div>
+                    
+                    <!-- Post Body -->
+                    <div class="post-body" id="postBody">
+                        <!-- Content will be inserted here -->
+                    </div>
+                    
+                    <!-- Post Content (for app.js compatibility) -->
+                    <div class="post-content" id="postContent" style="display: none;">
+                        <!-- Content will be inserted here by app.js -->
+                    </div>
+                    
+                    <!-- Post Tags -->
+                    <div class="post-tags" id="postTags" style="display: none;">
+                        <h4 class="tags-title">
+                            <i class="fas fa-tags"></i>
+                            태그
+                        </h4>
+                        <div class="tags-list" id="tagsList">
+                            <!-- Tags will be inserted here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Social Share -->
+                    <div class="social-share">
+                        <h4 class="share-title">이 글이 도움이 되셨나요?</h4>
+                        <div class="share-buttons">
+                            <button class="share-btn twitter" onclick="shareToTwitter()">
+                                <i class="fab fa-twitter"></i>
+                                Twitter
+                            </button>
+                            <button class="share-btn facebook" onclick="shareToFacebook()">
+                                <i class="fab fa-facebook-f"></i>
+                                Facebook
+                            </button>
+                            <button class="share-btn linkedin" onclick="shareToLinkedIn()">
+                                <i class="fab fa-linkedin-in"></i>
+                                LinkedIn
+                            </button>
+                            <button class="share-btn copy-link" onclick="copyLink()">
+                                <i class="fas fa-link"></i>
+                                링크 복사
+                            </button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        
+        <!-- Related Posts -->
+        <section class="related-posts" id="relatedPosts">
+            <div class="related-container">
+                <h3 class="related-title">
+                    <i class="fas fa-lightbulb"></i>
+                    관련 게시물
+                </h3>
+                <div class="related-posts-grid" id="relatedPostsGrid">
+                    <!-- Related posts will be inserted here -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Comments Section -->
+        <section class="comments-section" id="commentsSection">
+            <div class="comments-container">
+                <h3 class="comments-title">
+                    <i class="fas fa-comments"></i>
+                    댓글 <span class="comments-count" id="commentsCount">0</span>
+                </h3>
+                
+                <!-- Comment Form -->
+                <div class="comment-form-container">
+                    <form class="enhanced-comment-form" id="commentForm">
+                        <div class="form-group">
+                            <label for="commentName">이름</label>
+                            <input type="text" id="commentName" name="commentName" placeholder="이름을 입력하세요" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="commentEmail">이메일 (선택)</label>
+                            <input type="email" id="commentEmail" name="commentEmail" placeholder="이메일을 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label for="commentText">댓글</label>
+                            <textarea id="commentText" name="commentText" placeholder="댓글을 입력하세요..." rows="4" required></textarea>
+                            <div class="character-count">
+                                <span id="charCount">0</span>/500
+                            </div>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            댓글 등록
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Comments List -->
+                <div class="comments-list" id="commentsList">
+                    <!-- Comments will be inserted here -->
+                </div>
+            </div>
+        </section>
+    </article>
+    
+    <!-- Floating Action Menu -->
+    <div class="floating-menu" id="floatingMenu">
+        <button class="floating-btn main-btn" onclick="toggleFloatingMenu()">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div class="floating-actions" id="floatingActions">
+            <button class="floating-btn" onclick="scrollToTop()" title="맨 위로">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            <button class="floating-btn" onclick="scrollToComments()" title="댓글로 이동">
+                <i class="fas fa-comment"></i>
+            </button>
+            <button class="floating-btn" onclick="toggleDarkMode()" title="다크 모드">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="floating-btn" onclick="increaseFontSize()" title="글자 크기 증가">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Progress Bar -->
+    <div class="reading-progress" id="readingProgress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <!-- Consolidated Application JavaScript -->
+    <script type="text/javascript" th:src="@{/js/app.js}"></script>
+    <script type="text/javascript">
+        // Set content number globally for the app to use
+        window.contentNumber = [[${contentNumber}]];
+    </script>
+</div>
+</html>

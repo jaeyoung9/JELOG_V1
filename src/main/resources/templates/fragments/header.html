@@ -12,22 +12,8 @@
         <nav class="desktop-nav">
             <ul class="nav-list">
                 <li><a href="/" class="nav-link active">홈</a></li>
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-link dropdown-toggle">
-                        카테고리 <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" class="dropdown-link" onclick="filterByCategory('Java')">Java</a></li>
-                        <li><a href="#" class="dropdown-link" onclick="filterByCategory('JavaScript')">JavaScript</a></li>
-                        <li><a href="#" class="dropdown-link" onclick="filterByCategory('Python')">Python</a></li>
-                        <li><a href="#" class="dropdown-link" onclick="filterByCategory('C')">C/C++</a></li>
-                        <li><a href="#" class="dropdown-link" onclick="filterByCategory('Shell')">Shell Script</a></li>
-                        <li><a href="#" class="dropdown-link" onclick="filterByCategory('Security')">보안</a></li>
-                        <li><a href="#" class="dropdown-link" onclick="filterByCategory('DeveloperCareerSkills')">개발자 커리어</a></li>
-                        <li><a href="#" class="dropdown-link" onclick="filterByCategory('Other')">기타</a></li>
-                    </ul>
-                </li>
                 <li id="header-nav-writing" style="display: none;"><a href="/api/view/auth/cwo/new" class="nav-link">글쓰기</a></li>
+                <li id="header-nav-sign" style="display: none;"><a href="/api/view/republic/posts" class="nav-link">관리</a></li>
             </ul>
         </nav>
 
@@ -77,20 +63,12 @@
         <nav class="mobile-nav">
             <ul class="mobile-nav-list">
                 <li><a href="/" class="mobile-nav-link"><i class="fas fa-home"></i> 홈</a></li>
-                <li><a href="#" class="mobile-nav-link" onclick="filterByCategory('Java')"><i class="fab fa-java"></i> Java</a></li>
-                <li><a href="#" class="mobile-nav-link" onclick="filterByCategory('JavaScript')"><i class="fab fa-js-square"></i> JavaScript</a></li>
-                <li><a href="#" class="mobile-nav-link" onclick="filterByCategory('Python')"><i class="fab fa-python"></i> Python</a></li>
-                <li><a href="#" class="mobile-nav-link" onclick="filterByCategory('C')"><i class="fas fa-code"></i> C/C++</a></li>
-                <li><a href="#" class="mobile-nav-link" onclick="filterByCategory('Shell')"><i class="fas fa-terminal"></i> Shell Script</a></li>
-                <li><a href="#" class="mobile-nav-link" onclick="filterByCategory('Security')"><i class="fas fa-shield-alt"></i> 보안</a></li>
-                <li><a href="#" class="mobile-nav-link" onclick="filterByCategory('DeveloperCareerSkills')"><i class="fas fa-briefcase"></i> 개발자 커리어</a></li>
-                <li><a href="#" class="mobile-nav-link" onclick="filterByCategory('Other')"><i class="fas fa-ellipsis-h"></i> 기타</a></li>
                 <li id="mobile-nav-writing" style="display: none;"><a href="/api/view/auth/cwo/new" class="mobile-nav-link"><i class="fas fa-edit"></i> 글쓰기</a></li>
             </ul>
         </nav>
     </div>
 
-    <script type="text/javascript" th:src="@{/static/js/headerJs.js}"></script>
-    <script type="text/javascript" th:src="@{/static/js/modern-header.js}"></script>
-    <script type="text/javascript" th:src="@{/static/js/default.js}"></script>
+    <script type="text/javascript" th:src="@{/js/headerJs.js}"></script>
+    <script type="text/javascript" th:src="@{/js/modern-header.js}"></script>
+    <script type="text/javascript" th:src="@{/js/default.js}"></script>
 </header>

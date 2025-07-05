@@ -31,6 +31,9 @@ class BlogApp {
             this.loadPopularTags();
             this.loadPosts();
             
+            // Load real statistics for hero section
+            this.loadRealStatistics();
+            
             // Fallback timeout - if still loading after 10 seconds, show mock data
             setTimeout(() => {
                 if (this.isLoading) {
@@ -78,12 +81,19 @@ class BlogApp {
             });
         }
 
-        // Category filters
+        // Category filters - remove any existing event listeners first
         document.querySelectorAll('.category-btn').forEach(btn => {
+            // Remove onclick attribute to prevent conflicts
+            btn.removeAttribute('onclick');
             btn.addEventListener('click', (e) => {
-                this.handleCategoryChange(e.target.dataset.category);
+                e.preventDefault();
+                const category = e.currentTarget.dataset.category || '';
+                console.log('Category button clicked:', category, 'Button element:', e.currentTarget);
+                this.handleCategoryChange(category);
             });
         });
+        
+        console.log('Category buttons found and bound:', document.querySelectorAll('.category-btn').length);
 
         // Sort functionality
         const sortSelect = document.getElementById('sortSelect');
@@ -156,6 +166,8 @@ class BlogApp {
     }
 
     handleCategoryChange(category) {
+        console.log('Category changed to:', category);
+        
         // Update active button
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.category === category);
@@ -165,6 +177,8 @@ class BlogApp {
         this.currentPage = 0;
         this.hasNextPage = true;
         this.totalPages = 0;
+        
+        console.log('About to load posts for category:', category);
         this.loadPosts();
     }
 
@@ -252,27 +266,23 @@ class BlogApp {
 
     async loadPosts() {
         if (this.isLoading) return;
-        
-        console.log('Loading posts...', { 
-            page: this.currentPage, 
-            sort: this.currentSort, 
-            keyword: this.currentKeyword, 
-            category: this.currentCategory 
-        });
-        
+
+        // Remove excessive debug logging for production
+        // console.log('Loading posts...', {
+        //     page: this.currentPage,
+        //     sort: this.currentSort,
+        //     keyword: this.currentKeyword,
+        //     category: this.currentCategory
+        // });
+
         this.isLoading = true;
         this.showLoading();
 
         try {
             let url = `/api/public/mains/?page=${this.currentPage}&size=12`;
-            console.log('Loading posts with params:', {
-                page: this.currentPage,
-                keyword: this.currentKeyword,
-                category: this.currentCategory,
-                sort: this.currentSort
-            });
-            
-            // Handle sorting parameter to match SNS1011Controller
+
+            // Only append relevant query parameters
+            // Sorting
             if (this.currentSort === 'latest') {
                 url += `&sort=latest`;
             } else if (this.currentSort === 'popular' || this.currentSort === 'views') {
@@ -280,16 +290,17 @@ class BlogApp {
             } else if (this.currentSort === 'comments') {
                 url += `&sort=comments`;
             }
-            
+
+            // Keyword
             if (this.currentKeyword) {
                 url += `&Title=${encodeURIComponent(this.currentKeyword)}`;
             }
-            
+
+            // Category, mapping frontend to backend enum
             if (this.currentCategory) {
-                // Map frontend category to backend enum title
                 const categoryTitleMapping = {
                     'Java': 'Java_Categories',
-                    'JavaScript': 'JavaScript_Categories', 
+                    'JavaScript': 'JavaScript_Categories',
                     'Python': 'Python',
                     'C': 'C_Categories',
                     'Shell': 'ShellScript_Categories',
@@ -297,97 +308,53 @@ class BlogApp {
                     'DeveloperCareerSkills': 'DeveloperCareerSkills_Categories',
                     'Other': 'Other_Categories'
                 };
-                
                 const enumTitle = categoryTitleMapping[this.currentCategory] || this.currentCategory;
-                url += `&Categories=${enumTitle}`;
-                console.log('Category filter:', this.currentCategory, '-> Enum title:', enumTitle);
+                url += `&Categories=${encodeURIComponent(enumTitle)}`;
             }
 
-            console.log('Fetching from URL:', url);
-            
+            // Only one fetch per filter set
             const response = await fetch(url);
-            console.log('Response status:', response.status);
-            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
             const data = await response.json();
-            console.log('API Response:', data);
-            
+
             if (data.result === 'SUCCESS') {
-                // Handle the actual response structure from SNS1011Controller
                 let posts = [];
                 let totalElements = 0;
                 let pageData = {};
-                
-                console.log('Raw API response payload:', data.payload);
-                
-                if (data.payload && data.payload.data) {
-                    // This is the actual response structure from SNS1011Controller
+                // Unified parsing for Spring Page object
+                if (data.payload && data.payload.data && Array.isArray(data.payload.data.content)) {
                     const pageResponse = data.payload.data;
-                    console.log('Page response:', pageResponse);
-                    
-                    if (Array.isArray(pageResponse.content)) {
-                        // Spring Page object with content array
-                        posts = pageResponse.content;
-                        totalElements = pageResponse.totalElements || posts.length;
-                        this.totalPages = pageResponse.totalPages || Math.ceil(totalElements / 12);
-                        this.hasNextPage = !pageResponse.last;
-                        
-                        pageData = {
-                            currentPage: pageResponse.number || this.currentPage,
-                            totalPages: this.totalPages,
-                            hasNext: this.hasNextPage,
-                            hasPrevious: (pageResponse.number || this.currentPage) > 0
-                        };
-                    } else {
-                        // Handle case where data might be a direct array or other structure
-                        console.warn('Unexpected page response structure:', pageResponse);
-                        posts = [];
-                        totalElements = 0;
-                        this.totalPages = 0;
-                        this.hasNextPage = false;
-                        
-                        pageData = { 
-                            currentPage: 0, 
-                            totalPages: 0,
-                            hasNext: false,
-                            hasPrevious: false 
-                        };
-                    }
+                    posts = pageResponse.content;
+                    totalElements = pageResponse.totalElements || posts.length;
+                    this.totalPages = pageResponse.totalPages || Math.ceil(totalElements / 12);
+                    this.hasNextPage = !pageResponse.last;
+                    pageData = {
+                        currentPage: pageResponse.number || this.currentPage,
+                        totalPages: this.totalPages,
+                        hasNext: this.hasNextPage,
+                        hasPrevious: (pageResponse.number || this.currentPage) > 0
+                    };
                 } else {
-                    console.warn('Unexpected response structure:', data.payload);
+                    // Fallback for unexpected structure
                     posts = [];
                     totalElements = 0;
                     this.totalPages = 0;
                     this.hasNextPage = false;
-                    
-                    pageData = { 
-                        currentPage: 0, 
+                    pageData = {
+                        currentPage: 0,
                         totalPages: 0,
                         hasNext: false,
-                        hasPrevious: false 
+                        hasPrevious: false
                     };
                 }
-                
-                console.log('Pagination info:', { 
-                    currentPage: this.currentPage, 
-                    totalPages: this.totalPages, 
-                    hasNextPage: this.hasNextPage,
-                    postsCount: posts.length,
-                    totalElements: totalElements
-                });
-                
-                console.log('About to render posts:', posts);
                 this.renderPosts(posts, totalElements);
                 this.renderPagination(pageData);
             } else {
-                console.error('API returned error:', data.message || 'Unknown error');
                 this.showMockPosts();
             }
         } catch (error) {
-            console.error('Error loading posts:', error);
             this.showMockPosts();
         } finally {
             this.isLoading = false;
@@ -403,7 +370,7 @@ class BlogApp {
     }
 
     renderPosts(posts, totalCount) {
-        console.log('Rendering posts:', { count: posts.length, totalCount });
+        console.log('Rendering posts:', { count: posts.length, totalCount, currentCategory: this.currentCategory });
         
         const container = document.getElementById('contentList');
         const countElement = document.getElementById('contentCount');
@@ -423,11 +390,12 @@ class BlogApp {
         container.style.display = 'grid';
 
         if (!posts || posts.length === 0) {
+            console.log('No posts to display for category:', this.currentCategory);
             container.innerHTML = `
                 <div class="no-content">
                     <i class="fas fa-inbox"></i>
                     <h3>게시물이 없습니다</h3>
-                    <p>아직 게시물이 작성되지 않았습니다.</p>
+                    <p>${this.currentCategory ? `'${this.getCategoryName(this.currentCategory)}' 카테고리에 게시물이 없습니다.` : '아직 게시물이 작성되지 않았습니다.'}</p>
                 </div>
             `;
             if (emptyState) {
@@ -531,6 +499,13 @@ class BlogApp {
         if (!container) return;
 
         const { currentPage, totalPages, hasNext, hasPrevious } = pageData;
+        
+        // Don't show pagination if there's only one page or no posts
+        if (totalPages <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+        
         let paginationHtml = '';
 
         // Previous button
@@ -538,10 +513,11 @@ class BlogApp {
             paginationHtml += `<button class="page-button" onclick="goToPage(${currentPage - 1})">이전</button>`;
         }
 
-        // Page numbers
+        // Page numbers - fix the issue with showing "1" instead of actual page numbers
         const startPage = Math.max(0, currentPage - 2);
         const endPage = Math.min(totalPages - 1, currentPage + 2);
 
+        // Show first page if we're not starting from 0
         if (startPage > 0) {
             paginationHtml += `<button class="page-button" onclick="goToPage(0)">1</button>`;
             if (startPage > 1) {
@@ -549,11 +525,13 @@ class BlogApp {
             }
         }
 
+        // Show page numbers around current page
         for (let i = startPage; i <= endPage; i++) {
             const isActive = i === currentPage ? 'active' : '';
             paginationHtml += `<button class="page-button ${isActive}" onclick="goToPage(${i})">${i + 1}</button>`;
         }
 
+        // Show last page if we're not ending at the last page
         if (endPage < totalPages - 1) {
             if (endPage < totalPages - 2) {
                 paginationHtml += `<span class="ellipsis">...</span>`;
@@ -634,6 +612,72 @@ class BlogApp {
         if (!content) return '';
         const text = content.replace(/<[^>]*>/g, '');
         return text.length > 150 ? text.substring(0, 150) + '...' : text;
+    }
+
+    // Load real statistics from the API (method added to BlogApp class)
+    async loadRealStatistics() {
+        console.log('Loading real statistics...');
+        try {
+            const response = await fetch('/api/public/stats');
+            console.log('Stats API response:', response.status);
+            const data = await response.json();
+            console.log('Stats data received:', data);
+            
+            if (data.result === 'SUCCESS' && data.payload && data.payload.data) {
+                const stats = data.payload.data;
+                console.log('Statistics to update:', stats);
+                
+                // Update total posts
+                const totalPostsElement = document.getElementById('totalPosts');
+                console.log('totalPosts element found:', !!totalPostsElement);
+                if (totalPostsElement && typeof stats.totalPosts === 'number') {
+                    console.log('Updating totalPosts to:', stats.totalPosts);
+                    this.animateCounterUpdate(totalPostsElement, stats.totalPosts);
+                }
+                
+                // Update total views
+                const totalViewsElement = document.getElementById('totalViews');
+                console.log('totalViews element found:', !!totalViewsElement);
+                if (totalViewsElement && typeof stats.totalViews === 'number') {
+                    console.log('Updating totalViews to:', stats.totalViews);
+                    this.animateCounterUpdate(totalViewsElement, stats.totalViews);
+                }
+                
+                // Categories count
+                const totalCategoriesElement = document.getElementById('totalCategories');
+                console.log('totalCategories element found:', !!totalCategoriesElement);
+                if (totalCategoriesElement && typeof stats.totalCategories === 'number') {
+                    console.log('Updating totalCategories to:', stats.totalCategories);
+                    totalCategoriesElement.textContent = stats.totalCategories;
+                }
+            } else {
+                console.error('Invalid stats response structure:', data);
+            }
+        } catch (error) {
+            console.error('Error loading statistics:', error);
+            // Fallback to default values
+            const totalPostsElement = document.getElementById('totalPosts');
+            const totalViewsElement = document.getElementById('totalViews');
+            if (totalPostsElement) totalPostsElement.textContent = '0';
+            if (totalViewsElement) totalViewsElement.textContent = '0';
+        }
+    }
+
+    // Animate counter updates (method added to BlogApp class)
+    animateCounterUpdate(element, targetValue) {
+        const duration = 1500;
+        const startValue = 0;
+        const increment = targetValue / (duration / 16);
+        let currentValue = startValue;
+        
+        const timer = setInterval(() => {
+            currentValue += increment;
+            if (currentValue >= targetValue) {
+                currentValue = targetValue;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(currentValue).toLocaleString();
+        }, 16);
     }
 
     showMockPosts() {
@@ -793,7 +837,7 @@ async function toggleLike(postId) {
 // Initialize the app when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     window.blogApp = new BlogApp();
-    
+
     // Initialize sidebar if present
     if (document.getElementById('sidebarTotalPosts')) {
         loadSidebarData();
@@ -803,7 +847,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load sidebar data
 async function loadSidebarData() {
     console.log('Loading sidebar data...');
-    
+
     try {
         // Load popular posts using the existing API
         const popularResponse = await fetch('/api/public/mains/?sort=views&size=5');
@@ -832,12 +876,12 @@ async function loadSidebarData() {
                 } else if (Array.isArray(allPostsData.payload)) {
                     allPosts = allPostsData.payload;
                 }
-                
+
                 // Calculate stats from all posts
                 const totalPosts = allPosts.length;
                 const totalViews = allPosts.reduce((sum, post) => sum + (post.views || 0), 0);
                 const totalComments = allPosts.reduce((sum, post) => sum + (post.commentCount || 0), 0);
-                
+
                 updateSidebarStats({
                     totalPosts,
                     totalViews,
@@ -852,7 +896,7 @@ async function loadSidebarData() {
             { content: '실제 프로젝트에 적용해보겠습니다.', author: 'User2', date: new Date().toLocaleDateString() },
             { content: '더 자세한 설명이 있으면 좋겠어요.', author: 'User3', date: new Date().toLocaleDateString() }
         ]);
-        
+
     } catch (error) {
         console.error('Error loading sidebar data:', error);
         showMockSidebarData();
@@ -936,6 +980,54 @@ function showMockSidebarData() {
         { content: '더 자세한 설명이 있으면 좋겠어요.', author: 'User3', date: '2024-01-13' }
     ]);
 }
+
+// Global functions that need to be accessible from HTML onclick handlers
+window.goToPage = function(pageNumber) {
+    if (window.blogApp && pageNumber >= 0) {
+        window.blogApp.currentPage = pageNumber;
+        window.blogApp.loadPosts();
+    }
+};
+
+window.viewPost = function(contentId) {
+    window.location.href = `/api/view/public/mains/relay/${contentId}/`;
+};
+
+window.filterByCategory = function(category) {
+    console.log('filterByCategory called with:', category);
+    if (window.blogApp) {
+        console.log('BlogApp found, calling handleCategoryChange');
+        window.blogApp.handleCategoryChange(category);
+    } else {
+        console.error('BlogApp not found in window.blogApp');
+    }
+};
+
+window.searchByTag = function(tag) {
+    if (window.blogApp) {
+        window.blogApp.handleSearch(tag);
+    }
+};
+
+// Wrapper function for global loadRealStatistics access
+window.loadRealStatistics = function() {
+    if (window.blogApp && typeof window.blogApp.loadRealStatistics === 'function') {
+        window.blogApp.loadRealStatistics();
+    } else {
+        console.error('BlogApp not initialized or loadRealStatistics method not found');
+    }
+};
+
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing BlogApp...');
+
+    // Initialize the blog app
+    window.blogApp = new BlogApp();
+    console.log('BlogApp initialized:', window.blogApp);
+
+    // Statistics will be loaded by BlogApp.init() method
+});
 
 // Additional CSS for enhanced features
 const enhancedStyles = `

@@ -108,4 +108,11 @@ public class DN_CommentService {
         comment = commentRepositories.save(comment);
         return comment;
     }
+    
+    /**
+     * Get total comment count
+     */
+    public long getTotalCommentCount() {
+        return commentRepositories.count();
+    }
 }

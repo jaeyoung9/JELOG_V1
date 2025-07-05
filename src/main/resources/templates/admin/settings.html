@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시스템 설정 - Jelog Admin</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css"  th:href="@{/css/headerStyle.css}">
+    <link rel="stylesheet" type="text/css"  th:href="@{/css/admin-style.css}">
+    <link rel="stylesheet" type="text/css"  th:href="@{/css/enhanced-admin.css}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .settings-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .settings-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .settings-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f3f4f6;
+        }
+        
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-color), #4f46e5);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .section-info h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .section-info p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.875rem;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-info {
+            flex: 1;
+            margin-right: 2rem;
+        }
+        
+        .setting-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+        }
+        
+        .setting-description {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        .setting-control {
+            flex-shrink: 0;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: #ccc;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .toggle-switch.active {
+            background: var(--primary-color);
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #e1e5e9;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+        
+        .backup-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #e1e5e9;
+        }
+        
+        .backup-info {
+            flex: 1;
+        }
+        
+        .backup-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .backup-date {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin: 0;
+        }
+        
+        .backup-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .log-viewer {
+            background: #1a1a1a;
+            color: #f0f0f0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .log-time {
+            color: #888;
+            font-size: 0.75rem;
+        }
+        
+        .log-level-info { color: #4ade80; }
+        .log-level-warn { color: #facc15; }
+        .log-level-error { color: #f87171; }
+        
+        .maintenance-banner {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .maintenance-banner.active {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .setting-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .setting-info {
+                margin-right: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <!-- 페이지 헤더 -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-cog"></i>
+                시스템 설정
+            </h1>
+            <p class="page-subtitle">블로그 시스템 설정을 관리합니다</p>
+        </div>
+
+        <!-- 설정 네비게이션 -->
+        <div class="settings-nav">
+            <div class="nav-tabs">
+                <a href="#general" class="nav-tab active" onclick="switchTab('general')">
+                    <i class="fas fa-sliders-h"></i>
+                    일반 설정
+                </a>
+                <a href="#security" class="nav-tab" onclick="switchTab('security')">
+                    <i class="fas fa-shield-alt"></i>
+                    보안 설정
+                </a>
+                <a href="#performance" class="nav-tab" onclick="switchTab('performance')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    성능 설정
+                </a>
+                <a href="#backup" class="nav-tab" onclick="switchTab('backup')">
+                    <i class="fas fa-database"></i>
+                    백업 관리
+                </a>
+                <a href="#system" class="nav-tab" onclick="switchTab('system')">
+                    <i class="fas fa-server"></i>
+                    시스템 정보
+                </a>
+            </div>
+        </div>
+
+        <!-- 유지보수 모드 배너 -->
+        <div class="maintenance-banner" id="maintenanceBanner">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>유지보수 모드가 활성화되어 있습니다.</strong> 
+            사용자는 임시로 사이트에 접근할 수 없습니다.
+        </div>
+
+        <!-- 일반 설정 -->
+        <div class="tab-content active" id="general">
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="section-info">
+                        <h2>사이트 설정</h2>
+                        <p>블로그의 기본 정보와 표시 설정을 관리합니다</p>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">사이트 제목</h3>
+                        <p class="setting-description">브라우저 탭과 검색 결과에 표시되는 사이트 이름입니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="text" class="form-control" value="Jelog - 개발자 블로그" id="siteTitle">
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">사이트 설명</h3>
+                        <p class="setting-description">검색 엔진과 소셜 미디어에서 표시되는 사이트 설명입니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <textarea class="form-control" rows="3" id="siteDescription">개발자를 위한 기술 블로그입니다. 다양한 프로그래밍 언어와 개발 도구에 대한 실무 경험을 공유합니다.</textarea>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">페이지당 게시물 수</h3>
+                        <p class="setting-description">메인 페이지에서 한 번에 표시할 게시물의 개수입니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <select class="form-control" id="postsPerPage">
+                            <option value="5">5개</option>
+                            <option value="10" selected>10개</option>
+                            <option value="15">15개</option>
+                            <option value="20">20개</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">댓글 시스템</h3>
+                        <p class="setting-description">게시물에 댓글을 허용할지 설정합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" onclick="toggleSetting('commentsEnabled')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">검색 엔진 최적화</h3>
+                        <p class="setting-description">검색 엔진에서 사이트를 인덱싱하도록 허용합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" onclick="toggleSetting('seoEnabled')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">유지보수 모드</h3>
+                        <p class="setting-description">사이트를 임시로 비활성화하고 유지보수 페이지를 표시합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" onclick="toggleSetting('maintenanceMode')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 보안 설정 -->
+        <div class="tab-content" id="security">
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="section-info">
+                        <h2>보안 설정</h2>
+                        <p>사이트 보안과 접근 제어를 관리합니다</p>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">HTTPS 강제 사용</h3>
+                        <p class="setting-description">모든 HTTP 요청을 HTTPS로 리다이렉트합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" onclick="toggleSetting('forceHttps')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">로그인 시도 제한</h3>
+                        <p class="setting-description">잘못된 로그인 시도 횟수를 제한합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="input-group">
+                            <input type="number" class="form-control" value="5" min="1" max="10" id="maxLoginAttempts">
+                            <span class="text-muted">회</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">세션 만료 시간</h3>
+                        <p class="setting-description">사용자 세션이 만료되는 시간을 설정합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <select class="form-control" id="sessionTimeout">
+                            <option value="30">30분</option>
+                            <option value="60" selected>1시간</option>
+                            <option value="120">2시간</option>
+                            <option value="480">8시간</option>
+                            <option value="1440">24시간</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">IP 차단 목록</h3>
+                        <p class="setting-description">접근을 차단할 IP 주소를 관리합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="192.168.1.1" id="blockIpInput">
+                            <button class="btn btn-primary btn-sm" onclick="addBlockedIp()">추가</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">2단계 인증</h3>
+                        <p class="setting-description">관리자 계정에 대해 2단계 인증을 활성화합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" onclick="toggleSetting('twoFactorAuth')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 성능 설정 -->
+        <div class="tab-content" id="performance">
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <div class="section-info">
+                        <h2>성능 최적화</h2>
+                        <p>사이트 속도와 성능을 개선하는 설정입니다</p>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">캐시 활성화</h3>
+                        <p class="setting-description">페이지와 데이터베이스 쿼리 결과를 캐시합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" onclick="toggleSetting('cacheEnabled')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">이미지 압축</h3>
+                        <p class="setting-description">업로드된 이미지를 자동으로 압축하여 용량을 줄입니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" onclick="toggleSetting('imageCompression')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">CDN 사용</h3>
+                        <p class="setting-description">정적 파일을 CDN을 통해 제공합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" onclick="toggleSetting('cdnEnabled')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">데이터베이스 최적화</h3>
+                        <p class="setting-description">데이터베이스 테이블을 정리하고 최적화합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-primary" onclick="optimizeDatabase()">
+                            <i class="fas fa-database"></i>
+                            최적화 실행
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">캐시 비우기</h3>
+                        <p class="setting-description">모든 캐시를 삭제하고 새로 생성합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-warning" onclick="clearCache()">
+                            <i class="fas fa-trash"></i>
+                            캐시 비우기
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 백업 관리 -->
+        <div class="tab-content" id="backup">
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="section-info">
+                        <h2>백업 관리</h2>
+                        <p>데이터베이스와 파일을 백업하고 복원합니다</p>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">자동 백업</h3>
+                        <p class="setting-description">정기적으로 자동 백업을 수행합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="toggle-switch active" onclick="toggleSetting('autoBackup')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">백업 주기</h3>
+                        <p class="setting-description">자동 백업이 실행되는 주기를 설정합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <select class="form-control" id="backupInterval">
+                            <option value="daily" selected>매일</option>
+                            <option value="weekly">매주</option>
+                            <option value="monthly">매월</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3 class="setting-title">수동 백업</h3>
+                        <p class="setting-description">즉시 전체 시스템 백업을 생성합니다</p>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-primary" onclick="createBackup()">
+                            <i class="fas fa-download"></i>
+                            백업 생성
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 백업 목록 -->
+                <div style="margin-top: 2rem;">
+                    <h4>백업 파일 목록</h4>
+                    <div id="backupList">
+                        <div class="backup-item">
+                            <div class="backup-info">
+                                <h5 class="backup-name">full-backup-2024-01-15.sql</h5>
+                                <p class="backup-date">2024년 1월 15일 10:30 AM - 5.2MB</p>
+                            </div>
+                            <div class="backup-actions">
+                                <button class="btn btn-sm btn-success" onclick="downloadBackup('full-backup-2024-01-15.sql')">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning" onclick="restoreBackup('full-backup-2024-01-15.sql')">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteBackup('full-backup-2024-01-15.sql')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="backup-item">
+                            <div class="backup-info">
+                                <h5 class="backup-name">full-backup-2024-01-14.sql</h5>
+                                <p class="backup-date">2024년 1월 14일 10:30 AM - 4.8MB</p>
+                            </div>
+                            <div class="backup-actions">
+                                <button class="btn btn-sm btn-success" onclick="downloadBackup('full-backup-2024-01-14.sql')">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning" onclick="restoreBackup('full-backup-2024-01-14.sql')">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteBackup('full-backup-2024-01-14.sql')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 시스템 정보 -->
+        <div class="tab-content" id="system">
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="section-info">
+                        <h2>시스템 정보</h2>
+                        <p>서버 상태와 시스템 리소스를 모니터링합니다</p>
+                    </div>
+                </div>
+                
+                <!-- 시스템 통계 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 class="stat-value" id="serverUptime">72시간</h3>
+                        <p class="stat-label">서버 가동시간</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-value" id="memoryUsage">42%</h3>
+                        <p class="stat-label">메모리 사용률</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-value" id="diskUsage">67%</h3>
+                        <p class="stat-label">디스크 사용률</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-value" id="cpuUsage">15%</h3>
+                        <p class="stat-label">CPU 사용률</p>
+                    </div>
+                </div>
+                
+                <!-- 시스템 로그 -->
+                <div style="margin-top: 2rem;">
+                    <h4>시스템 로그 (최근 10개)</h4>
+                    <div class="log-viewer" id="systemLogs">
+                        <div class="log-entry">
+                            <span class="log-time">[2024-01-15 14:23:15]</span>
+                            <span class="log-level-info">[INFO]</span>
+                            User 'admin' logged in successfully
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">[2024-01-15 14:22:30]</span>
+                            <span class="log-level-info">[INFO]</span>
+                            Database backup completed successfully
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">[2024-01-15 14:20:45]</span>
+                            <span class="log-level-warn">[WARN]</span>
+                            High memory usage detected (85%)
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">[2024-01-15 14:18:12]</span>
+                            <span class="log-level-info">[INFO]</span>
+                            Cache cleared successfully
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">[2024-01-15 14:15:33]</span>
+                            <span class="log-level-error">[ERROR]</span>
+                            Failed login attempt from IP 192.168.1.100
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 저장 버튼 -->
+        <div class="text-center" style="margin-top: 2rem;">
+            <button class="btn btn-primary btn-lg" onclick="saveSettings()">
+                <i class="fas fa-save"></i>
+                설정 저장
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="resetSettings()">
+                <i class="fas fa-undo"></i>
+                기본값으로 복원
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script th:src="@{/js/enhanced-admin-settings.js}"></script>
+    
+    <script>
+        // 페이지 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSettings();
+            loadSystemStats();
+            
+            // 5초마다 시스템 통계 업데이트
+            setInterval(loadSystemStats, 5000);
+        });
+    </script>
+</body>
+</html>

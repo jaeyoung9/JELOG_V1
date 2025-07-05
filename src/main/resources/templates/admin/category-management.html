@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div th:fragment="body">
+    <!-- Category Management -->
+    
+    <!-- Page Header -->
+    <div class="admin-header">
+        <div class="admin-header-content">
+            <h1 class="admin-title">
+                <i class="fas fa-tags"></i>
+                카테고리 관리
+            </h1>
+            <p class="admin-subtitle">블로그 카테고리를 동적으로 관리합니다</p>
+        </div>
+        <div class="admin-header-actions">
+            <button class="btn btn-primary" onclick="openCreateCategoryModal()">
+                <i class="fas fa-plus"></i>
+                새 카테고리 생성
+            </button>
+            <button class="btn btn-secondary" onclick="initializeDefaultCategories()">
+                <i class="fas fa-sync"></i>
+                기본 카테고리 초기화
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-tags text-primary"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number" id="totalCategories">-</h3>
+                <p class="stat-label">총 카테고리</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-star text-warning"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number" id="featuredCategories">-</h3>
+                <p class="stat-label">추천 카테고리</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-file-alt text-success"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number" id="categoriesWithPosts">-</h3>
+                <p class="stat-label">게시물이 있는 카테고리</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-chart-bar text-info"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-number" id="totalPostsInCategories">-</h3>
+                <p class="stat-label">총 게시물 수</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="admin-filters">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="categorySearch">검색</label>
+                <input type="text" id="categorySearch" placeholder="카테고리명으로 검색..." class="form-control">
+            </div>
+            <div class="filter-group">
+                <label for="statusFilter">상태</label>
+                <select id="statusFilter" class="form-control">
+                    <option value="">전체</option>
+                    <option value="ACTIVE">활성</option>
+                    <option value="INACTIVE">비활성</option>
+                    <option value="DELETED">삭제됨</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="parentFilter">상위 카테고리</label>
+                <select id="parentFilter" class="form-control">
+                    <option value="">전체</option>
+                    <option value="root">최상위만</option>
+                </select>
+            </div>
+            <div class="filter-actions">
+                <button class="btn btn-primary" onclick="searchCategories()">
+                    <i class="fas fa-search"></i>
+                    검색
+                </button>
+                <button class="btn btn-secondary" onclick="resetFilters()">
+                    <i class="fas fa-undo"></i>
+                    초기화
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Table -->
+    <div class="admin-table-container">
+        <div class="table-header">
+            <h3>카테고리 목록</h3>
+            <div class="table-actions">
+                <button class="btn btn-sm btn-outline-primary" onclick="toggleView()">
+                    <i class="fas fa-th" id="viewToggleIcon"></i>
+                    <span id="viewToggleText">카드 보기</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Table View -->
+        <div class="table-responsive" id="tableView">
+            <table class="table admin-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th onclick="sortBy('name')">
+                            이름 <i class="fas fa-sort"></i>
+                        </th>
+                        <th onclick="sortBy('slug')">
+                            슬러그 <i class="fas fa-sort"></i>
+                        </th>
+                        <th>아이콘</th>
+                        <th onclick="sortBy('postCount')">
+                            게시물 수 <i class="fas fa-sort"></i>
+                        </th>
+                        <th onclick="sortBy('status')">
+                            상태 <i class="fas fa-sort"></i>
+                        </th>
+                        <th onclick="sortBy('createdAt')">
+                            생성일 <i class="fas fa-sort"></i>
+                        </th>
+                        <th>작업</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryTableBody">
+                    <!-- Categories will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Card View -->
+        <div class="category-cards" id="cardView" style="display: none;">
+            <!-- Category cards will be loaded here -->
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>카테고리를 불러오는 중...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-tags"></i>
+            <h3>카테고리가 없습니다</h3>
+            <p>새 카테고리를 생성하여 시작하세요.</p>
+            <button class="btn btn-primary" onclick="openCreateCategoryModal()">
+                <i class="fas fa-plus"></i>
+                카테고리 생성
+            </button>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container">
+        <nav class="pagination-nav" id="paginationNav">
+            <!-- Pagination will be generated here -->
+        </nav>
+    </div>
+
+    <!-- Category Create/Edit Modal -->
+    <div class="modal fade" id="categoryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalTitle">카테고리 생성</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="categoryForm">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="categoryName">카테고리명 *</label>
+                                    <input type="text" id="categoryName" name="name" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="categorySlug">슬러그</label>
+                                    <input type="text" id="categorySlug" name="slug" class="form-control">
+                                    <small class="form-text text-muted">비워두면 자동 생성됩니다</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="categoryDescription">설명</label>
+                            <textarea id="categoryDescription" name="description" class="form-control" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="categoryIcon">아이콘</label>
+                                    <input type="text" id="categoryIcon" name="icon" class="form-control" placeholder="fas fa-folder">
+                                    <small class="form-text text-muted">Font Awesome 클래스</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="categoryColor">색상</label>
+                                    <input type="color" id="categoryColor" name="color" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="categoryParent">상위 카테고리</label>
+                                    <select id="categoryParent" name="parentId" class="form-control">
+                                        <option value="">없음 (최상위)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="categorySortOrder">정렬 순서</label>
+                                    <input type="number" id="categorySortOrder" name="sortOrder" class="form-control" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="categoryStatus">상태</label>
+                                    <select id="categoryStatus" name="status" class="form-control">
+                                        <option value="ACTIVE">활성</option>
+                                        <option value="INACTIVE">비활성</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="form-check mt-4">
+                                        <input type="checkbox" id="categoryFeatured" name="featured" class="form-check-input">
+                                        <label for="categoryFeatured" class="form-check-label">추천 카테고리</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- SEO Fields -->
+                        <div class="form-group">
+                            <label>SEO 설정</label>
+                            <div class="seo-fields">
+                                <div class="form-group">
+                                    <label for="categoryMetaTitle">메타 제목</label>
+                                    <input type="text" id="categoryMetaTitle" name="metaTitle" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="categoryMetaDescription">메타 설명</label>
+                                    <textarea id="categoryMetaDescription" name="metaDescription" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="categoryMetaKeywords">메타 키워드</label>
+                                    <input type="text" id="categoryMetaKeywords" name="metaKeywords" class="form-control" placeholder="키워드1, 키워드2, 키워드3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            저장
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Management JavaScript -->
+    <script>
+        class CategoryManagement {
+            constructor() {
+                this.currentPage = 0;
+                this.currentSort = 'name';
+                this.currentOrder = 'asc';
+                this.filters = {};
+                this.viewMode = 'table'; // table or card
+                this.editingCategoryId = null;
+                
+                this.init();
+            }
+            
+            async init() {
+                this.bindEvents();
+                await this.loadStatistics();
+                await this.loadCategories();
+                await this.loadParentOptions();
+            }
+            
+            bindEvents() {
+                // Search and filters
+                document.getElementById('categorySearch').addEventListener('input', 
+                    this.debounce(() => this.searchCategories(), 300));
+                
+                document.getElementById('statusFilter').addEventListener('change', () => this.searchCategories());
+                document.getElementById('parentFilter').addEventListener('change', () => this.searchCategories());
+                
+                // Form submission
+                document.getElementById('categoryForm').addEventListener('submit', (e) => this.handleFormSubmit(e));
+                
+                // Auto-generate slug from name
+                document.getElementById('categoryName').addEventListener('input', (e) => {
+                    const slug = this.generateSlug(e.target.value);
+                    document.getElementById('categorySlug').value = slug;
+                });
+            }
+            
+            async loadStatistics() {
+                try {
+                    const response = await fetch('/api/republic/categories/statistics');
+                    const data = await response.json();
+                    
+                    if (data.result === 'SUCCESS' && data.payload.statistics) {
+                        this.updateStatistics(data.payload.statistics);
+                    }
+                } catch (error) {
+                    console.error('Error loading statistics:', error);
+                }
+            }
+            
+            updateStatistics(stats) {
+                document.getElementById('totalCategories').textContent = stats.totalCategories || 0;
+                document.getElementById('featuredCategories').textContent = stats.featuredCategories || 0;
+                document.getElementById('categoriesWithPosts').textContent = stats.categoriesWithPosts || 0;
+                document.getElementById('totalPostsInCategories').textContent = (stats.totalPosts || 0).toLocaleString();
+            }
+            
+            async loadCategories(page = 0) {
+                try {
+                    this.showLoading();
+                    
+                    const params = new URLSearchParams({
+                        page: page,
+                        size: 20,
+                        sort: `${this.currentSort},${this.currentOrder}`,
+                        ...this.filters
+                    });
+                    
+                    const response = await fetch(`/api/republic/categories?${params}`);
+                    const data = await response.json();
+                    
+                    if (data.result === 'SUCCESS') {
+                        this.renderCategories(data.payload);
+                        this.renderPagination(data.payload);
+                    } else {
+                        this.showError('카테고리를 불러올 수 없습니다.');
+                    }
+                } catch (error) {
+                    console.error('Error loading categories:', error);
+                    this.showError('카테고리를 불러오는 중 오류가 발생했습니다.');
+                } finally {
+                    this.hideLoading();
+                }
+            }
+            
+            renderCategories(data) {
+                const categories = data.categories || [];
+                
+                if (categories.length === 0) {
+                    this.showEmpty();
+                    return;
+                }
+                
+                this.hideEmpty();
+                
+                if (this.viewMode === 'table') {
+                    this.renderTableView(categories);
+                } else {
+                    this.renderCardView(categories);
+                }
+            }
+            
+            renderTableView(categories) {
+                const tbody = document.getElementById('categoryTableBody');
+                tbody.innerHTML = categories.map(category => `
+                    <tr data-id="${category.id}">
+                        <td>
+                            <input type="checkbox" class="category-select" value="${category.id}">
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="${category.icon || 'fas fa-folder'}" style="color: ${category.color || '#6c757d'}; margin-right: 8px;"></i>
+                                <span>${category.name}</span>
+                                ${category.featured ? '<i class="fas fa-star text-warning ms-2" title="추천"></i>' : ''}
+                            </div>
+                        </td>
+                        <td><code>${category.slug}</code></td>
+                        <td>
+                            <i class="${category.icon || 'fas fa-folder'}" style="color: ${category.color || '#6c757d'};"></i>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">${category.postCount || 0}</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-${this.getStatusColor(category.status)}">${this.getStatusText(category.status)}</span>
+                        </td>
+                        <td>${new Date(category.createdAt).toLocaleDateString('ko-KR')}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" onclick="categoryManagement.editCategory(${category.id})" title="수정">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="categoryManagement.deleteCategory(${category.id})" title="삭제">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            renderCardView(categories) {
+                const container = document.getElementById('cardView');
+                container.innerHTML = categories.map(category => `
+                    <div class="category-card" data-id="${category.id}">
+                        <div class="category-card-header">
+                            <div class="category-icon" style="color: ${category.color || '#6c757d'};">
+                                <i class="${category.icon || 'fas fa-folder'}"></i>
+                            </div>
+                            <div class="category-actions">
+                                <button class="btn btn-sm btn-outline-primary" onclick="categoryManagement.editCategory(${category.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="categoryManagement.deleteCategory(${category.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="category-card-body">
+                            <h5 class="category-title">${category.name}</h5>
+                            <p class="category-description">${category.description || '설명 없음'}</p>
+                            <div class="category-meta">
+                                <span class="badge bg-info">${category.postCount || 0} 게시물</span>
+                                <span class="badge bg-${this.getStatusColor(category.status)}">${this.getStatusText(category.status)}</span>
+                                ${category.featured ? '<span class="badge bg-warning">추천</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            getStatusColor(status) {
+                const colors = {
+                    'ACTIVE': 'success',
+                    'INACTIVE': 'warning',
+                    'DELETED': 'danger'
+                };
+                return colors[status] || 'secondary';
+            }
+            
+            getStatusText(status) {
+                const texts = {
+                    'ACTIVE': '활성',
+                    'INACTIVE': '비활성',
+                    'DELETED': '삭제됨'
+                };
+                return texts[status] || status;
+            }
+            
+            generateSlug(name) {
+                return name.toLowerCase()
+                          .replace(/[^a-z0-9가-힣]/g, '-')
+                          .replace(/-+/g, '-')
+                          .replace(/^-|-$/g, '');
+            }
+            
+            debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+            
+            showLoading() {
+                document.getElementById('loadingState').style.display = 'block';
+                document.getElementById('tableView').style.display = 'none';
+                document.getElementById('cardView').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'none';
+            }
+            
+            hideLoading() {
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById(this.viewMode === 'table' ? 'tableView' : 'cardView').style.display = 'block';
+            }
+            
+            showEmpty() {
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('tableView').style.display = 'none';
+                document.getElementById('cardView').style.display = 'none';
+            }
+            
+            hideEmpty() {
+                document.getElementById('emptyState').style.display = 'none';
+            }
+            
+            showError(message) {
+                // Implement error display
+                console.error(message);
+            }
+        }
+
+        // Global functions
+        function openCreateCategoryModal() {
+            categoryManagement.editingCategoryId = null;
+            document.getElementById('categoryModalTitle').textContent = '카테고리 생성';
+            document.getElementById('categoryForm').reset();
+            // Open modal (Bootstrap 5)
+            new bootstrap.Modal(document.getElementById('categoryModal')).show();
+        }
+
+        function initializeDefaultCategories() {
+            if (confirm('기본 카테고리를 초기화하시겠습니까? 기존 카테고리는 유지됩니다.')) {
+                categoryManagement.initializeDefaultCategories();
+            }
+        }
+
+        function searchCategories() {
+            categoryManagement.searchCategories();
+        }
+
+        function resetFilters() {
+            categoryManagement.resetFilters();
+        }
+
+        function toggleView() {
+            categoryManagement.toggleView();
+        }
+
+        function sortBy(field) {
+            categoryManagement.sortBy(field);
+        }
+
+        function toggleSelectAll() {
+            categoryManagement.toggleSelectAll();
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            window.categoryManagement = new CategoryManagement();
+        });
+    </script>
+</div>
+</html>

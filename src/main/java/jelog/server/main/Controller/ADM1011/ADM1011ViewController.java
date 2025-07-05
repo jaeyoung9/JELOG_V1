@@ -98,4 +98,11 @@ public class ADM1011ViewController extends BaseController {
         return modelAndView;
     }
 
+    @GetMapping("/categories")
+    public ModelAndView manageCategories() {
+        ModelAndView modelAndView = new ModelAndView("fragments/layout");
+        modelAndView.addObject("data", "admin/category-management");
+        return modelAndView;
+    }
+
 }

@@ -59,6 +59,71 @@
             text-decoration: none;
             color: white;
         }
+        
+        /* Blog Statistics Styles */
+        .blog-stats {
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e3f2fd 100%);
+            border-radius: 15px;
+            border: 1px solid #e1e8ed;
+        }
+        
+        .stats-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin: 0 0 20px 0;
+            font-weight: 600;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-3px);
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .blog-stats {
+                padding: 20px;
+            }
+            
+            .stat-number {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -69,7 +134,85 @@
             요청하신 페이지가 존재하지 않습니다.<br>
             URL을 확인하시거나 홈으로 돌아가주세요.
         </p>
+        
+        <!-- Real-time Blog Statistics -->
+        <div class="blog-stats">
+            <h3 class="stats-title">🏠 JELOG 블로그 현황</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalPosts">-</div>
+                    <div class="stat-label">총 게시물</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalViews">-</div>
+                    <div class="stat-label">총 조회수</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalCategories">8</div>
+                    <div class="stat-label">카테고리</div>
+                </div>
+            </div>
+        </div>
+        
         <a href="/" class="home-button">홈으로 돌아가기</a>
     </div>
+    
+    <!-- JavaScript to load real statistics -->
+    <script>
+        // Load real-time statistics
+        async function loadBlogStats() {
+            try {
+                const response = await fetch('/api/public/stats');
+                const data = await response.json();
+                
+                if (data.result === 'SUCCESS' && data.payload && data.payload.data) {
+                    const stats = data.payload.data;
+                    
+                    // Update total posts
+                    const totalPostsElement = document.getElementById('totalPosts');
+                    if (totalPostsElement && typeof stats.totalPosts === 'number') {
+                        animateNumber(totalPostsElement, stats.totalPosts);
+                    }
+                    
+                    // Update total views
+                    const totalViewsElement = document.getElementById('totalViews');
+                    if (totalViewsElement && typeof stats.totalViews === 'number') {
+                        animateNumber(totalViewsElement, stats.totalViews);
+                    }
+                    
+                    // Update categories
+                    const totalCategoriesElement = document.getElementById('totalCategories');
+                    if (totalCategoriesElement && typeof stats.totalCategories === 'number') {
+                        totalCategoriesElement.textContent = stats.totalCategories;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+                // Fallback to default values
+                document.getElementById('totalPosts').textContent = '0';
+                document.getElementById('totalViews').textContent = '0';
+            }
+        }
+        
+        // Animate numbers
+        function animateNumber(element, targetValue) {
+            const duration = 1500;
+            const startValue = 0;
+            const increment = targetValue / (duration / 16);
+            let currentValue = startValue;
+            
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    currentValue = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(currentValue).toLocaleString();
+            }, 16);
+        }
+        
+        // Load stats when page loads
+        document.addEventListener('DOMContentLoaded', loadBlogStats);
+    </script>
 </body>
 </html>

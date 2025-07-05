@@ -1,5 +1,7 @@
 package jelog.server.main.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jelog.server.main.Enum.OsEnum;
 import jelog.server.main.Enum.OsEnumConverter;
@@ -60,9 +62,19 @@ public class DN_Content {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contentSequence")
     private int contentId;
 
+    // Legacy category support (for backward compatibility)
     @Convert(converter = OsEnumConverter.class)
     @Column(name = "contentCategories")
     private OsEnum contentCategories;
+    
+    // New dynamic category support
+    @Column(name = "category_id")
+    private Long categoryId;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private DN_Category category;
 
     @Column(name = "contentThumbnail")
     private String contentThumbnail;
@@ -166,6 +178,54 @@ public class DN_Content {
     
     public int getCommentCount() {
         return comments != null ? comments.size() : 0;
+    }
+
+    // Helper methods for category management
+    @JsonIgnore
+    public DN_Category getEffectiveCategory() {
+        return this.category;
+    }
+    
+    public String getEffectiveCategoryName() {
+        if (this.category != null) {
+            return this.category.getName();
+        }
+        if (this.contentCategories != null) {
+            // Fallback to enum name mapping
+            switch (this.contentCategories) {
+                case Java: return "Java";
+                case JavaScript: return "JavaScript";
+                case Python: return "Python";
+                case C: return "C/C++";
+                case Shell: return "Shell Script";
+                case Security: return "보안";
+                case DeveloperCareerSkills: return "개발자 커리어";
+                case Other:
+                default: return "기타";
+            }
+        }
+        return "기타";
+    }
+    
+    public String getEffectiveCategorySlug() {
+        if (this.category != null) {
+            return this.category.getSlug();
+        }
+        if (this.contentCategories != null) {
+            // Fallback to enum slug mapping
+            switch (this.contentCategories) {
+                case Java: return "java";
+                case JavaScript: return "javascript";
+                case Python: return "python";
+                case C: return "c-cpp";
+                case Shell: return "shell";
+                case Security: return "security";
+                case DeveloperCareerSkills: return "career";
+                case Other:
+                default: return "other";
+            }
+        }
+        return "other";
     }
 
 }

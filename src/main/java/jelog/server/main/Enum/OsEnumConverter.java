@@ -25,6 +25,9 @@ public class OsEnumConverter implements AttributeConverter<OsEnum,Integer> {
      * */
     @Override
     public Integer convertToDatabaseColumn(OsEnum osEnum){
+        if (osEnum == null) {
+            return null;
+        }
         return osEnum.getTitleCode();
     }
 
@@ -33,6 +36,14 @@ public class OsEnumConverter implements AttributeConverter<OsEnum,Integer> {
      * */
     @Override
     public OsEnum convertToEntityAttribute(Integer data){
-        return OsEnum.LegacyCode(data);
+        if (data == null) {
+            return null;
+        }
+        try {
+            return OsEnum.LegacyCode(data);
+        } catch (IllegalArgumentException e) {
+            // If enum value doesn't exist, return Other as fallback
+            return OsEnum.Other;
+        }
     }
 }

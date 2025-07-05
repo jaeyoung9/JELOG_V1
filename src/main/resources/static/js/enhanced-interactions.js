@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupHeroSearch();
     setupCategoryFilters();
     setupContentCards();
-    loadInitialStats();
+
 });
 
 /**
@@ -450,14 +450,41 @@ function updateContentCount(count) {
 }
 
 /**
- * Load initial statistics
+ * Load initial statistics from API
  */
-function loadInitialStats() {
-    // Mock stats - replace with actual API calls
-    updateHeroStats({
-        totalPosts: 42,
-        totalViews: 1250
-    });
+async function loadInitialStats() {
+    console.log('Loading initial statistics from API...');
+    try {
+        const response = await fetch('/api/public/stats');
+        const data = await response.json();
+        
+        if (data.result === 'SUCCESS' && data.payload && data.payload.data) {
+            const stats = data.payload.data;
+            console.log('Real stats loaded:', stats);
+            
+            updateHeroStats({
+                totalPosts: stats.totalPosts || 0,
+                totalViews: stats.totalViews || 0,
+                totalCategories: stats.totalCategories || 8
+            });
+        } else {
+            console.warn('Invalid stats response, using fallback values');
+            // Fallback to mock stats
+            updateHeroStats({
+                totalPosts: 42,
+                totalViews: 1250,
+                totalCategories: 8
+            });
+        }
+    } catch (error) {
+        console.error('Error loading initial statistics:', error);
+        // Fallback to mock stats
+        updateHeroStats({
+            totalPosts: 42,
+            totalViews: 1250,
+            totalCategories: 8
+        });
+    }
 }
 
 /**
@@ -466,13 +493,23 @@ function loadInitialStats() {
 function updateHeroStats(stats) {
     const totalPostsElement = document.getElementById('totalPosts');
     const totalViewsElement = document.getElementById('totalViews');
+    const totalCategoriesElement = document.getElementById('totalCategories');
     
-    if (totalPostsElement && stats.totalPosts) {
+    console.log('Updating hero stats with:', stats);
+    
+    if (totalPostsElement && typeof stats.totalPosts === 'number') {
+        console.log('Animating totalPosts to:', stats.totalPosts);
         animateNumber(totalPostsElement, stats.totalPosts);
     }
     
-    if (totalViewsElement && stats.totalViews) {
+    if (totalViewsElement && typeof stats.totalViews === 'number') {
+        console.log('Animating totalViews to:', stats.totalViews);
         animateNumber(totalViewsElement, stats.totalViews);
+    }
+    
+    if (totalCategoriesElement && typeof stats.totalCategories === 'number') {
+        console.log('Setting totalCategories to:', stats.totalCategories);
+        totalCategoriesElement.textContent = stats.totalCategories;
     }
 }
 

@@ -8,6 +8,7 @@ import jelog.server.main.Model.DN_Comment;
 import jelog.server.main.Model.DN_Content;
 import jelog.server.main.Service.DN_CommentService;
 import jelog.server.main.Service.DN_ContentService;
+import jelog.server.main.Service.DN_CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,12 +52,14 @@ public class SNS1011Controller extends BaseController {
      * DN_ContentService
      * */
     //-------------------------------------------------------------------------------------------------------------------------------------
-    private DN_ContentService contentService;
-    private DN_CommentService commentService;
+    private final DN_ContentService contentService;
+    private final DN_CommentService commentService;
+    private final DN_CategoryService categoryService;
     @Autowired
-    public SNS1011Controller(DN_ContentService _contentService, DN_CommentService _commentService){
+    public SNS1011Controller(DN_ContentService _contentService, DN_CommentService _commentService, DN_CategoryService _categoryService){
         this.contentService = _contentService;
         this.commentService = _commentService;
+        this.categoryService = _categoryService;
     }
 
 
@@ -67,24 +70,59 @@ public class SNS1011Controller extends BaseController {
     @GetMapping(value = "/mains/")
     public ResponseEntity<?> mains(@PageableDefault(size = 10) Pageable pageable, 
                                   @RequestParam(required = false) String Title, 
-                                  @RequestParam(required = false) OsEnum Categories,
+                                  @RequestParam(required = false) String Categories,
                                   @RequestParam(required = false) String sort){
 
         Map<String, Object> map = new HashMap<>();
         
-        // Handle sorting - convert "latest" to actual field name
-        if ("latest".equals(sort)) {
-            // Create new pageable with proper sorting by inDate descending
-            pageable = org.springframework.data.domain.PageRequest.of(
-                pageable.getPageNumber(), 
-                pageable.getPageSize(), 
-                org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "inDate")
-            );
+        try {
+            // Convert Categories string to OsEnum using the fromValue method
+            OsEnum categoryEnum = null;
+            if (Categories != null && !Categories.trim().isEmpty()) {
+                categoryEnum = OsEnum.fromValue(Categories.trim());
+            }
+            
+            // Handle sorting - convert "latest" to actual field name
+            if ("latest".equals(sort)) {
+                // Create new pageable with proper sorting by publishedDate descending
+                pageable = org.springframework.data.domain.PageRequest.of(
+                    pageable.getPageNumber(), 
+                    pageable.getPageSize(), 
+                    org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "publishedDate")
+                );
+            } else if ("views".equals(sort)) {
+                // Sort by views descending
+                pageable = org.springframework.data.domain.PageRequest.of(
+                    pageable.getPageNumber(), 
+                    pageable.getPageSize(), 
+                    org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "views")
+                );
+            } else if ("comments".equals(sort)) {
+                // Sort by comment count (this would require a custom query, for now use views)
+                pageable = org.springframework.data.domain.PageRequest.of(
+                    pageable.getPageNumber(), 
+                    pageable.getPageSize(), 
+                    org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "views")
+                );
+            }
+            
+            map.put("data",contentService.findPage(pageable, Title, categoryEnum));
+            ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid category parameter: " + Categories, e);
+            // If category is invalid, return all content without category filter
+            map.put("data",contentService.findPage(pageable, Title, null));
+            ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            log.error("Error loading main content", e);
+            ResponseDTO responseDTO = ResponseDTO.builder()
+                .result(jelog.server.main.Global.ResponseResult.FAIL)
+                .message("콘텐츠를 불러오는데 실패했습니다.")
+                .build();
+            return ResponseEntity.badRequest().body(responseDTO);
         }
-        
-        map.put("data",contentService.findPage(pageable, Title, Categories));
-        ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
-        return ResponseEntity.ok().body(responseDTO);
     }
 
     /**
@@ -163,6 +201,129 @@ public class SNS1011Controller extends BaseController {
             ResponseDTO responseDTO = ResponseDTO.builder()
                 .result(jelog.server.main.Global.ResponseResult.FAIL)
                 .message("댓글 등록 중 오류가 발생했습니다.")
+                .build();
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
+    /**
+     * [Statistics]
+     * Get blog statistics
+     */
+    @GetMapping(value = "/stats")
+    public ResponseEntity<?> getStatistics() {
+        try {
+            Map<String, Object> stats = new HashMap<>();
+            
+            // Get total published posts count
+            long totalPosts = contentService.getTotalPostCount();
+            
+            // Get total views (sum of all post views)
+            long totalViews = contentService.getTotalViews();
+            
+            // Get dynamic category count
+            long totalCategories = categoryService.getActiveCategoryCount();
+            
+            stats.put("totalPosts", totalPosts);
+            stats.put("totalViews", totalViews);
+            stats.put("totalCategories", totalCategories);
+            
+            Map<String, Object> map = new HashMap<>();
+            map.put("data", stats);
+            
+            ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            log.error("Error loading statistics", e);
+            ResponseDTO responseDTO = ResponseDTO.builder()
+                .result(jelog.server.main.Global.ResponseResult.FAIL)
+                .message("통계를 불러오는데 실패했습니다.")
+                .build();
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
+    /**
+     * [Like]
+     * Toggle like for a post
+     */
+    @PostMapping(value = "/posts/{postId}/like")
+    public ResponseEntity<?> toggleLike(@PathVariable int postId, HttpServletRequest request) {
+        try {
+            // Check if the content exists and is published
+            DN_Content content = contentService.findPublishedPost(postId);
+            if (content == null) {
+                ResponseDTO responseDTO = ResponseDTO.builder()
+                    .result(jelog.server.main.Global.ResponseResult.FAIL)
+                    .message("게시글을 찾을 수 없습니다.")
+                    .build();
+                return ResponseEntity.notFound().build();
+            }
+            
+            // For now, just increment the like count (in a real app, you'd track user likes)
+            content.setLikes(content.getLikes() + 1);
+            
+            // Note: In a production app, you would:
+            // 1. Check if user already liked this post
+            // 2. Store like/unlike status per user
+            // 3. Prevent multiple likes from same user
+            
+            Map<String, Object> map = new HashMap<>();
+            map.put("liked", true);
+            map.put("likeCount", content.getLikes());
+            
+            ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+            return ResponseEntity.ok().body(responseDTO);
+            
+        } catch (Exception e) {
+            log.error("Error toggling like for post: " + postId, e);
+            ResponseDTO responseDTO = ResponseDTO.builder()
+                .result(jelog.server.main.Global.ResponseResult.FAIL)
+                .message("좋아요 처리 중 오류가 발생했습니다.")
+                .build();
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
+    /**
+     * [Categories]
+     * Get all active categories
+     */
+    @GetMapping(value = "/categories")
+    public ResponseEntity<?> getCategories() {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            map.put("data", categoryService.getAllActiveCategories());
+            
+            ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            log.error("Error loading categories", e);
+            ResponseDTO responseDTO = ResponseDTO.builder()
+                .result(jelog.server.main.Global.ResponseResult.FAIL)
+                .message("카테고리를 불러오는데 실패했습니다.")
+                .build();
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
+    /**
+     * [Categories]
+     * Get featured categories
+     */
+    @GetMapping(value = "/categories/featured")
+    public ResponseEntity<?> getFeaturedCategories() {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            map.put("data", categoryService.getFeaturedCategories());
+            
+            ResponseDTO responseDTO = ResponseDTO.builder().payload(map).build();
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            log.error("Error loading featured categories", e);
+            ResponseDTO responseDTO = ResponseDTO.builder()
+                .result(jelog.server.main.Global.ResponseResult.FAIL)
+                .message("추천 카테고리를 불러오는데 실패했습니다.")
                 .build();
             return ResponseEntity.badRequest().body(responseDTO);
         }

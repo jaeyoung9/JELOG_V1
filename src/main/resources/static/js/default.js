@@ -12,7 +12,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('custom-li-a').addEventListener('click', function (event) {
+        const customLink = document.getElementById('custom-li-a');
+        if (customLink) {
+            customLink.addEventListener('click', function (event) {
             event.preventDefault();
             const url = event.target.href;
             goFetch(url)
@@ -31,7 +33,8 @@
                 .catch(error => {
 
                 });
-        });
+            });
+        }
     });
 
     function limitContentLength(contentBody) {
